@@ -1,5 +1,8 @@
 package hr.java.production.model;
 
+/**
+ * Represents the category of an item in a production system.
+ */
 public class Category {
     private String name, description;
 

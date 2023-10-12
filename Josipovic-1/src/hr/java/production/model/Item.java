@@ -2,6 +2,9 @@ package hr.java.production.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents an item in a production system.
+ */
 public class Item {
     private String name;
     private Category category;

@@ -118,51 +118,60 @@ public class Main {
             Address address = inputAddress(scanner);
 
             System.out.println("Pick which items the factory produces: ");
-
             /*MOJA LOGIKA JE DA NAKON ŠTO SE ODABERE ITEM, DA SE ON MAKNE IZ LISTE ZA ODABIR*/
-            ///
-
-            Item[] clonedItems = items.clone();
-
             Item[] factoryItems = new Item[1];
-            int factoryItemsCounter = 0;
-
+            int factoryItemsIndex = 0;
             boolean finishedChoosing = false;
             boolean firstRun = true;
-
             do {
-
+                //Ako items ima samo jedan element, ArrayIndexOutOfBoundsException
+                Item[] clonedItems = new Item[items.length - 1];
                 System.out.println("Choose an item:");
-                for (int j = 0; j < clonedItems.length; j++) {
-                    System.out.println((j + 1) + ". " + clonedItems[j].getName());
+                for (int j = 0; j < items.length; j++) {
+                    System.out.println((j + 1) + ". " + items[j].getName());
                 }
                 if(!firstRun){
-                    System.out.println(clonedItems.length + ". " + "Finished choosing.");
+                    System.out.println(items.length + 1 + ". "  + "Finished choosing.");
                 }
                 //Exception will happen if the choice is not in range
                 System.out.print("Choice >> ");
                 int itemChoice = scanner.nextInt();
                 scanner.nextLine();
-
-                if(itemChoice != clonedItems.length) {
-                    factoryItems[factoryItemsCounter] = clonedItems[itemChoice - 1];
-                    clonedItems[itemChoice - 1] = null; // Remove chosen item from the list - This doesn't work + creates nullptrexcept
-                    factoryItemsCounter++;
+                //Add exception handling if wrong number is added --> prvi run je max length, ostali length + 1; prouči ovaj uvjet dobro da vidiš što se desi ako ima jedan element, ili ako se isprazni
+                if(itemChoice != items.length + 1) {
+                    factoryItems[factoryItemsIndex] = items[itemChoice - 1];
+                    if(items.length > 1){
+                        for (int k = 0, j = 0; k < items.length; k++) {
+                            if (k == itemChoice - 1) {
+                                continue;
+                            }
+                            clonedItems[j++] = items[k];
+                        }
+                        items = clonedItems;
+                        factoryItemsIndex++;
+                        //Povećavanje broja u arrayu
+                        Item[] tmpFactoryItems = new Item[factoryItemsIndex + 1];
+                        for (int j = 0; j < factoryItems.length; j++) {
+                            tmpFactoryItems[j] = factoryItems[j];
+                        }
+                        factoryItems = tmpFactoryItems;
+                    }
+                    else {
+                        finishedChoosing = true;
+                    }
                 } else {
                     finishedChoosing = true;
+                    //Smanjivane broja u arrayu zato sto se na kraju napravi jedan previse koji se izbrise tu u elseu
+                    Item[] tmpFactoryItems = new Item[factoryItemsIndex];
+                    for (int j = 0; j < tmpFactoryItems.length; j++) {
+                        tmpFactoryItems[j] = factoryItems[j];
+                    }
+                    factoryItems = tmpFactoryItems;
                 }
-
-
                 firstRun = false;
             }while (!finishedChoosing);
-
             factories[i] = new Factory(name, address, factoryItems);
-            ///
-
         }
-
-
-
         return factories;
     }
 

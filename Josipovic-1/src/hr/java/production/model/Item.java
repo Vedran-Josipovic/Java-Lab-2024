@@ -1,6 +1,7 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Represents an item in a production system.
@@ -88,4 +89,14 @@ public class Item {
                 ", sellingPrice=" + sellingPrice +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(getName(), item.getName()) && Objects.equals(getCategory(), item.getCategory()) && Objects.equals(getWidth(), item.getWidth()) && Objects.equals(getHeight(), item.getHeight()) && Objects.equals(getLength(), item.getLength()) && Objects.equals(getProductionCost(), item.getProductionCost()) && Objects.equals(getSellingPrice(), item.getSellingPrice());
+    }
+
+
 }

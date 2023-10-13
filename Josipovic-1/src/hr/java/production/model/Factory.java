@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import java.util.Arrays;
+
 public class Factory {
     private String name;
     private Address address;
@@ -33,5 +35,14 @@ public class Factory {
 
     public void setItems(Item[] items) {
         this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "Factory{" +
+                "name='" + name + '\'' +
+                ", address=" + address +
+                ", items=" + Arrays.toString(items) +
+                '}';
     }
 }

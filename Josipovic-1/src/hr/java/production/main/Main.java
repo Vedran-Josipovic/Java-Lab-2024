@@ -25,7 +25,7 @@ public class Main {
         categories = inputCategories(scanner);
         items = inputItems(scanner, categories);
 
-        factories = inputFactories(scanner1, items);
+        factories = inputFactories(scanner, items);
 
         for (Factory f : factories) {
             System.out.println(f.toString());
@@ -93,42 +93,27 @@ public class Main {
 
         for (int i = 0; i < factories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". factory: ");
-
             System.out.print("Enter the factory name: ");
             String name = scanner.nextLine();
-
             System.out.println("Enter the factory address information: ");
             Address address = inputAddress(scanner);
-
             System.out.println("Pick which items the factory produces: ");
 
             ///chooseFactoryItems
             Item[] factoryItems = new Item[1];
-            int factoryItemsIndex = 0;
             boolean finishedChoosing = false, isFirstRun = true;
-
             while (!finishedChoosing){
                 printAvailableItems(items, isFirstRun);
-
                 System.out.print("Choice >> ");
                 int itemChoice = scanner.nextInt(); scanner.nextLine();
 
-                //Ovo breaka kod ako se unese u prvoj iteraciji items.length + 1 - exceptions
-                if(itemChoice != items.length + 1) {
-
-                    if(factoryItemsIndex != factoryItems.length - 1){
-                        System.exit(-1);
-                    }
-
-                    factoryItems[factoryItemsIndex] = items[itemChoice - 1];
+                if(itemChoice != items.length + 1) { //Ovo breaka kod ako se unese u prvoj iteraciji items.length + 1 - handle with exceptions
+                    factoryItems[factoryItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
                     if(items.length > 1){
                         items = removeChosenItem(items, itemChoice);
-                        factoryItemsIndex++;
                         factoryItems = expandItemArray(factoryItems);
                     }
-                    else {
-                        finishedChoosing = true;
-                    }
+                    else finishedChoosing = true;
                 } else {
                     finishedChoosing = true;
                     factoryItems = trimItemArray(factoryItems);

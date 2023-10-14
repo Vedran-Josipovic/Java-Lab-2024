@@ -5,7 +5,6 @@ import hr.java.production.model.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -103,17 +102,13 @@ public class Main {
         return items;
     }
 
-    //The assignment is asking me to input the Factory before the address, but the address is the part of the factory.
-    //I think I'm going to add addresses while adding the factories.
     private static Factory[] inputFactories(Scanner scanner, Item[] items){
         Factory[] factories = new Factory[NUM_FACTORIES];
 
         for (int i = 0; i < factories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". factory: ");
-
             System.out.print("Enter the factory name: ");
             String name = scanner.nextLine();
-
             System.out.println("Enter the factory address information: ");
             Address address = inputAddress(scanner);
 
@@ -124,15 +119,18 @@ public class Main {
             boolean finishedChoosing = false;
             boolean firstRun = true;
             do {
-                //Ako items ima samo jedan element, ArrayIndexOutOfBoundsException
+                //Ako items ima samo jedan element, ArrayIndexOutOfBoundsException - riješeno sa ifom
                 Item[] clonedItems = new Item[items.length - 1];
                 System.out.println("Choose an item:");
+
                 for (int j = 0; j < items.length; j++) {
                     System.out.println((j + 1) + ". " + items[j].getName());
                 }
+
                 if(!firstRun){
                     System.out.println(items.length + 1 + ". "  + "Finished choosing.");
                 }
+
                 //Exception will happen if the choice is not in range
                 System.out.print("Choice >> ");
                 int itemChoice = scanner.nextInt();
@@ -149,12 +147,16 @@ public class Main {
                         }
                         items = clonedItems;
                         factoryItemsIndex++;
-                        //Povećavanje broja u arrayu
-                        Item[] tmpFactoryItems = new Item[factoryItemsIndex + 1];
-                        for (int j = 0; j < factoryItems.length; j++) {
-                            tmpFactoryItems[j] = factoryItems[j];
+
+
+                        if(factoryItemsIndex != factoryItems.length){
+                            System.exit(-1);
                         }
-                        factoryItems = tmpFactoryItems;
+                        //Je li factoryItemsIndex == factoryItems.length
+                        //Povećavanje broja u arrayu
+                        factoryItems = expandItemArray(factoryItems);
+
+
                     }
                     else {
                         finishedChoosing = true;
@@ -172,8 +174,19 @@ public class Main {
             }while (!finishedChoosing);
             factories[i] = new Factory(name, address, factoryItems);
         }
+
         return factories;
     }
+
+    private static Item[] expandItemArray(Item[] oldArray) {
+        Item[] newArray = new Item[oldArray.length + 1];
+        for (int i = 0; i < oldArray.length; i++) {
+            newArray[i] = oldArray[i];
+        }
+        return newArray;
+    }
+
+
 
     private static Address inputAddress(Scanner scanner){
         System.out.print("Enter the street name: ");

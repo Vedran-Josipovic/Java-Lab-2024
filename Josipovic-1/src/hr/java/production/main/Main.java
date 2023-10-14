@@ -8,11 +8,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
-    private static final Integer NUM_CATEGORIES = 3;
-    private static final Integer NUM_ITEMS = 5;
-    private static final Integer NUM_FACTORIES = 2;
-    private static final Integer NUM_STORES = 2;
-
+    private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner1 = new Scanner(System.in);
@@ -24,8 +20,6 @@ public class Main {
         Item[] items;
         Factory[] factories;
 
-
-        Address[] addresses;
         Store[] stores;
 
         categories = inputCategories(scanner);
@@ -52,7 +46,6 @@ public class Main {
 
             categories[i] = new Category(name, description);
         }
-
         return categories;
     }
     private static Item[] inputItems(Scanner scanner, Category[] categories){
@@ -65,129 +58,131 @@ public class Main {
             String name = scanner.nextLine();
 
             System.out.println("Pick the item category:");
-            for (int j = 0; j < categories.length; j++) {
+            for (int j = 0; j < categories.length; j++)
                 System.out.println((j + 1) + ". " + categories[j].getName());
-            }
-            //Exception will happen if the choice is not in range
             System.out.print("Choice >> ");
-            int categoryChoice = scanner.nextInt();
-            scanner.nextLine();
+            int categoryChoice = scanner.nextInt(); scanner.nextLine();
 
             System.out.println("Enter the item dimensions:");
 
             System.out.print("Enter the item width: ");
-            //Bigdecimal is locale sensitive and expects a comma instead of a ".". Handle with exceptions
-            BigDecimal width = scanner.nextBigDecimal();
-            scanner.nextLine();
+            BigDecimal width = scanner.nextBigDecimal(); scanner.nextLine();
 
             System.out.print("Enter the item height: ");
-            BigDecimal height = scanner.nextBigDecimal();
-            scanner.nextLine();
+            BigDecimal height = scanner.nextBigDecimal(); scanner.nextLine();
 
             System.out.print("Enter the item length: ");
-            BigDecimal length = scanner.nextBigDecimal();
-            scanner.nextLine();
+            BigDecimal length = scanner.nextBigDecimal(); scanner.nextLine();
 
             System.out.print("Enter the item production cost: ");
-            BigDecimal productionCost = scanner.nextBigDecimal();
-            scanner.nextLine();
+            BigDecimal productionCost = scanner.nextBigDecimal(); scanner.nextLine();
 
             System.out.print("Enter the item selling price: ");
-            BigDecimal sellingPrice = scanner.nextBigDecimal();
-            scanner.nextLine();
+            BigDecimal sellingPrice = scanner.nextBigDecimal(); scanner.nextLine();
 
             items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice);
         }
-
         return items;
     }
 
+    /**
+     * Nakon što se odabere item, miče se it liste za odabir.
+     */
     private static Factory[] inputFactories(Scanner scanner, Item[] items){
         Factory[] factories = new Factory[NUM_FACTORIES];
 
         for (int i = 0; i < factories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". factory: ");
+
             System.out.print("Enter the factory name: ");
             String name = scanner.nextLine();
+
             System.out.println("Enter the factory address information: ");
             Address address = inputAddress(scanner);
 
             System.out.println("Pick which items the factory produces: ");
-            /*MOJA LOGIKA JE DA NAKON ŠTO SE ODABERE ITEM, DA SE ON MAKNE IZ LISTE ZA ODABIR*/
+
+            ///chooseFactoryItems
             Item[] factoryItems = new Item[1];
             int factoryItemsIndex = 0;
-            boolean finishedChoosing = false;
-            boolean firstRun = true;
-            do {
-                //Ako items ima samo jedan element, ArrayIndexOutOfBoundsException - riješeno sa ifom
-                Item[] clonedItems = new Item[items.length - 1];
-                System.out.println("Choose an item:");
+            boolean finishedChoosing = false, isFirstRun = true;
 
-                for (int j = 0; j < items.length; j++) {
-                    System.out.println((j + 1) + ". " + items[j].getName());
-                }
+            while (!finishedChoosing){
+                printAvailableItems(items, isFirstRun);
 
-                if(!firstRun){
-                    System.out.println(items.length + 1 + ". "  + "Finished choosing.");
-                }
-
-                //Exception will happen if the choice is not in range
                 System.out.print("Choice >> ");
-                int itemChoice = scanner.nextInt();
-                scanner.nextLine();
-                //Add exception handling if wrong number is added --> prvi run je max length, ostali length + 1; prouči ovaj uvjet dobro da vidiš što se desi ako ima jedan element, ili ako se isprazni
+                int itemChoice = scanner.nextInt(); scanner.nextLine();
+
+                //Ovo breaka kod ako se unese u prvoj iteraciji items.length + 1 - exceptions
                 if(itemChoice != items.length + 1) {
+
+                    if(factoryItemsIndex != factoryItems.length - 1){
+                        System.exit(-1);
+                    }
+
                     factoryItems[factoryItemsIndex] = items[itemChoice - 1];
                     if(items.length > 1){
-                        for (int k = 0, j = 0; k < items.length; k++) {
-                            if (k == itemChoice - 1) {
-                                continue;
-                            }
-                            clonedItems[j++] = items[k];
-                        }
-                        items = clonedItems;
+                        items = removeChosenItem(items, itemChoice);
                         factoryItemsIndex++;
-
-
-                        if(factoryItemsIndex != factoryItems.length){
-                            System.exit(-1);
-                        }
-                        //Je li factoryItemsIndex == factoryItems.length
-                        //Povećavanje broja u arrayu
                         factoryItems = expandItemArray(factoryItems);
-
-
                     }
                     else {
                         finishedChoosing = true;
                     }
                 } else {
                     finishedChoosing = true;
-                    //Smanjivane broja u arrayu zato sto se na kraju napravi jedan previse koji se izbrise tu u elseu
-                    Item[] tmpFactoryItems = new Item[factoryItemsIndex];
-                    for (int j = 0; j < tmpFactoryItems.length; j++) {
-                        tmpFactoryItems[j] = factoryItems[j];
-                    }
-                    factoryItems = tmpFactoryItems;
+                    factoryItems = trimItemArray(factoryItems);
                 }
-                firstRun = false;
-            }while (!finishedChoosing);
+                isFirstRun = false;
+            }
+            ///chooseFactoryItems
+
             factories[i] = new Factory(name, address, factoryItems);
         }
-
         return factories;
     }
 
-    private static Item[] expandItemArray(Item[] oldArray) {
-        Item[] newArray = new Item[oldArray.length + 1];
-        for (int i = 0; i < oldArray.length; i++) {
-            newArray[i] = oldArray[i];
-        }
-        return newArray;
+    /**
+     * Ispisuje sve dostupne artikle. Ukoliko je već odabran jedan artikl,
+     * nudi se opcija za završavanje odabira.
+     */
+    private static void printAvailableItems(Item[] items, boolean isFirstRun) {
+        System.out.println("Choose an item:");
+        for (int j = 0; j < items.length; j++)
+            System.out.println((j + 1) + ". " + items[j].getName());
+        if (!isFirstRun)
+            System.out.println(items.length + 1 + ". " + "Finished choosing.");
     }
 
+    /**
+     * Miče objekt klase {@code Item} koji smo odabrali iz niza.
+     * Prolazi kroz niz {@code items} i ako dođe do mjesta na kojem se nalazi odabrani objekt,
+     * ne sprema ga u novi niz koji ima veličinu manju za jedan.
+     */
+    private static Item[] removeChosenItem(Item[] items, int itemChoice) {
+        Item[] clonedItems = new Item[items.length - 1];
+        for (int i = 0, j = 0; i < items.length; i++)
+            if (i != itemChoice - 1)
+                clonedItems[j++] = items[i];
+        return clonedItems;
+    }
 
-
+    /**
+     * Smanjuje veličinu niza za jedan.
+     */
+    private static Item[] trimItemArray(Item[] oldArray) {
+        Item[] newArray = new Item[oldArray.length - 1];
+        System.arraycopy(oldArray, 0, newArray, 0, newArray.length);
+        return newArray;
+    }
+    /**
+     * Povećava niz za jedan element. (koji poprima vrijednost null)
+     */
+    private static Item[] expandItemArray(Item[] oldArray) {
+        Item[] newArray = new Item[oldArray.length + 1];
+        System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
+        return newArray;
+    }
     private static Address inputAddress(Scanner scanner){
         System.out.print("Enter the street name: ");
         String street = scanner.nextLine();

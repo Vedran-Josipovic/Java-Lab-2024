@@ -77,6 +77,12 @@ public class Item {
         this.sellingPrice = sellingPrice;
     }
 
+
+    public BigDecimal calculateVolume() {
+        return width.multiply(height).multiply(length);
+    }
+
+
     @Override
     public String toString() {
         return "Item{" +

@@ -22,16 +22,46 @@ public class Main {
 
         Store[] stores;
 
-        categories = inputCategories(scanner);
-        items = inputItems(scanner, categories);
+        categories = inputCategories(scanner1);
+        items = inputItems(scanner1, categories);
+        factories = inputFactories(scanner1, items);
+        stores = inputStores(scanner1, items);
 
-        factories = inputFactories(scanner, items);
+        Factory bestFactory = findFactoryWithLargestVolumeOfAnItem(factories);
+        System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");
 
-        for (Factory f : factories) {
-            System.out.println(f.toString());
-        }
+        Store bestStore = findStoreWithCheapestItem(stores);
+        System.out.println("The store that sells an item with the cheapest price is: '" + bestStore.getName() + "'.");
 
     }
+
+    private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories){
+        Factory bestFactory = factories[0];
+        BigDecimal largestVolume = BigDecimal.valueOf(0);
+        for (int i = 0; i < factories.length; i++)
+            for (int j = 0; j < factories[i].getItems().length; j++)
+                if (factories[i].getItems()[j].calculateVolume().compareTo(largestVolume) == 1) {
+                    bestFactory = factories[i]; largestVolume = factories[i].getItems()[j].calculateVolume();
+                }
+        //System.out.println(largestVolume);
+        return bestFactory;
+    }
+
+    private static Store findStoreWithCheapestItem(Store[] stores){
+        Store bestStore = stores[0];
+        BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
+
+        for (int i = 0; i < stores.length; i++)
+            for (int j = 0; j < stores[i].getItems().length; j++)
+                if(stores[i].getItems()[j].getSellingPrice().compareTo(cheapestSellingPrice) == -1){
+                    bestStore = stores[i]; cheapestSellingPrice = stores[i].getItems()[j].getSellingPrice();
+                }
+        //System.out.println("Cheapest Price: " + cheapestSellingPrice);
+        return bestStore;
+    }
+
+
+
 
     private static Category[] inputCategories(Scanner scanner){
         Category[] categories = new Category[NUM_CATEGORIES];
@@ -84,7 +114,6 @@ public class Main {
         }
         return items;
     }
-
     /**
      * Nakon što se odabere item, miče se it liste za odabir.
      */
@@ -99,7 +128,7 @@ public class Main {
             Address address = inputAddress(scanner);
             System.out.println("Pick which items the factory produces: ");
 
-            ///chooseFactoryItems
+            ///chooseFactoryItems - Kod se ponavlja i s dućanima, ali pošto za funkciju mi treba i factoryItems i items, treba mi mapa, pa cu poslije u 4.lab
             Item[] factoryItems = new Item[1];
             boolean finishedChoosing = false, isFirstRun = true;
             while (!finishedChoosing){
@@ -126,6 +155,44 @@ public class Main {
         }
         return factories;
     }
+    private static Store[] inputStores(Scanner scanner, Item[] items){
+        Store[] stores = new Store[NUM_STORES];
+
+        for (int i = 0; i < stores.length; i++) {
+            System.out.println("Enter the information about the " + (i + 1) + ". store: ");
+            System.out.print("Enter the store name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter the store web address: ");
+            String webAddress = scanner.nextLine();
+
+            System.out.println("Pick which items the store sells: ");
+
+            ///chooseFactoryItems - Kod se ponavlja i s dućanima, ali pošto za funkciju mi treba i factoryItems i items, treba mi mapa, pa cu poslije u 4.lab
+            Item[] storeItems = new Item[1];
+            boolean finishedChoosing = false, isFirstRun = true;
+            while (!finishedChoosing){
+                printAvailableItems(items, isFirstRun);
+                System.out.print("Choice >> ");
+                int itemChoice = scanner.nextInt(); scanner.nextLine();
+
+                if(itemChoice != items.length + 1) { //Ovo breaka kod ako se unese u prvoj iteraciji items.length + 1 - handle with exceptions
+                    storeItems[storeItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
+                    if(items.length > 1){
+                        items = removeChosenItem(items, itemChoice);
+                        storeItems = expandItemArray(storeItems);
+                    }
+                    else finishedChoosing = true;
+                } else {
+                    finishedChoosing = true;
+                    storeItems = trimItemArray(storeItems);
+                }
+                isFirstRun = false;
+            }
+            ///chooseFactoryItems
+            stores[i] = new Store(name, webAddress, storeItems);
+        }
+        return stores;
+    }
 
     /**
      * Ispisuje sve dostupne artikle. Ukoliko je već odabran jedan artikl,
@@ -138,7 +205,6 @@ public class Main {
         if (!isFirstRun)
             System.out.println(items.length + 1 + ". " + "Finished choosing.");
     }
-
     /**
      * Miče objekt klase {@code Item} koji smo odabrali iz niza.
      * Prolazi kroz niz {@code items} i ako dođe do mjesta na kojem se nalazi odabrani objekt,
@@ -151,7 +217,6 @@ public class Main {
                 clonedItems[j++] = items[i];
         return clonedItems;
     }
-
     /**
      * Smanjuje veličinu niza za jedan.
      */
@@ -183,5 +248,6 @@ public class Main {
 
         return new Address(street, houseNumber, city, postalCode);
     }
+
 
 }

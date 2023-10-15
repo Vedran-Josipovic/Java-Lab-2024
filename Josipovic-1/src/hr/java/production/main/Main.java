@@ -11,28 +11,20 @@ public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
 
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner scanner1 = new Scanner(System.in);
-
         File file = new File("Josipovic-1/src/hr/java/production/files/currentInput");
         Scanner scanner = new Scanner(file);
+        Scanner scanner1 = new Scanner(System.in);
 
-        Category[] categories;
-        Item[] items;
-        Factory[] factories;
-
-        Store[] stores;
-
-        categories = inputCategories(scanner1);
-        items = inputItems(scanner1, categories);
-        factories = inputFactories(scanner1, items);
-        stores = inputStores(scanner1, items);
+        Category[] categories = inputCategories(scanner);
+        Item[] items = inputItems(scanner, categories);
+        Factory[] factories = inputFactories(scanner1, items);
+        Store[] stores = inputStores(scanner1, items);
 
         Factory bestFactory = findFactoryWithLargestVolumeOfAnItem(factories);
         System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");
 
         Store bestStore = findStoreWithCheapestItem(stores);
         System.out.println("The store that sells an item with the cheapest price is: '" + bestStore.getName() + "'.");
-
     }
 
     private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories){
@@ -46,7 +38,6 @@ public class Main {
         //System.out.println(largestVolume);
         return bestFactory;
     }
-
     private static Store findStoreWithCheapestItem(Store[] stores){
         Store bestStore = stores[0];
         BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
@@ -60,6 +51,51 @@ public class Main {
         return bestStore;
     }
 
+
+
+    /**
+     * Obrađuje korisnikov numerički unos. Provjerava je li unos cijeli broj i nalazi li se unutar određenog raspona.
+     * Ako unos nije cijeli broj ili je izvan raspona, traži od korisnika da unese valjani broj.
+     *
+     * @param scanner  Scanner objekt koji se koristi za dobivanje korisnikovog unosa.
+     * @param message  Poruka koja se prikazuje korisniku prilikom traženja unosa.
+     * @param minValue Minimalna prihvatljiva vrijednost za unos.
+     * @param maxValue Maksimalna prihvatljiva vrijednost za unos.
+     * @return         Valjani broj koji je unio korisnik.
+     */
+    private static int numInputHandler(Scanner scanner, String message, int minValue, int maxValue){
+        int enteredNumber;
+        boolean badFormat = false;
+        do {
+            System.out.print(message);
+            while (!scanner.hasNextInt()) {
+                System.out.println("Entered a string instead of a number. Please enter a number:");
+                System.out.print(message);
+                scanner.nextLine();
+            }
+            enteredNumber = scanner.nextInt();
+            scanner.nextLine();
+
+            if(isNumInRange(enteredNumber, minValue, maxValue) == false){
+                System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
+                badFormat = true;
+            } else badFormat = false;
+        }while (badFormat);
+        return enteredNumber;
+    }
+
+    /**
+     * Provjerava je li uneseni broj unutar zadanih granica.
+     *
+     * @param enteredNumber Broj koji se provjerava.
+     * @param minValue Minimalna dopuštena vrijednost (Uključujući).
+     * @param maxValue Maksimalna dopuštena vrijednost (Uključujući)
+     * @return True ako je broj unutar raspona, false ako nije.
+     */
+    private static boolean isNumInRange(int enteredNumber, int minValue, int maxValue) {
+        if (enteredNumber < minValue || enteredNumber > maxValue) return false;
+        return true;
+    }
 
 
 
@@ -90,8 +126,14 @@ public class Main {
             System.out.println("Pick the item category:");
             for (int j = 0; j < categories.length; j++)
                 System.out.println((j + 1) + ". " + categories[j].getName());
-            System.out.print("Choice >> ");
-            int categoryChoice = scanner.nextInt(); scanner.nextLine();
+
+
+            //error handling
+//            System.out.print("Choice >> ");
+//            int categoryChoice = scanner.nextInt(); scanner.nextLine();
+            int categoryChoice = numInputHandler(scanner, "Choice >> ", 1, categories.length);
+            //error handling
+
 
             System.out.println("Enter the item dimensions:");
 
@@ -133,10 +175,21 @@ public class Main {
             boolean finishedChoosing = false, isFirstRun = true;
             while (!finishedChoosing){
                 printAvailableItems(items, isFirstRun);
-                System.out.print("Choice >> ");
-                int itemChoice = scanner.nextInt(); scanner.nextLine();
 
-                if(itemChoice != items.length + 1) { //Ovo breaka kod ako se unese u prvoj iteraciji items.length + 1 - handle with exceptions
+
+
+
+                //error handling
+//                System.out.print("Choice >> ");
+//                int itemChoice = scanner.nextInt(); scanner.nextLine();
+                //error handling
+
+                int itemChoice;
+                if(isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
+                else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
+
+
+                if(itemChoice != items.length + 1) {
                     factoryItems[factoryItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
                     if(items.length > 1){
                         items = removeChosenItem(items, itemChoice);
@@ -172,10 +225,14 @@ public class Main {
             boolean finishedChoosing = false, isFirstRun = true;
             while (!finishedChoosing){
                 printAvailableItems(items, isFirstRun);
-                System.out.print("Choice >> ");
-                int itemChoice = scanner.nextInt(); scanner.nextLine();
+//                System.out.print("Choice >> ");
+//                int itemChoice = scanner.nextInt(); scanner.nextLine();
 
-                if(itemChoice != items.length + 1) { //Ovo breaka kod ako se unese u prvoj iteraciji items.length + 1 - handle with exceptions
+                int itemChoice;
+                if(isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
+                else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
+
+                if(itemChoice != items.length + 1) {
                     storeItems[storeItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
                     if(items.length > 1){
                         items = removeChosenItem(items, itemChoice);

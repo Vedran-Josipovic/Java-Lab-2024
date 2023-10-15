@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
-
     public static void main(String[] args) throws FileNotFoundException {
         File file = new File("Josipovic-1/src/hr/java/production/files/currentInput");
         Scanner scanner = new Scanner(file);
@@ -17,8 +16,8 @@ public class Main {
 
         Category[] categories = inputCategories(scanner);
         Item[] items = inputItems(scanner, categories);
-        Factory[] factories = inputFactories(scanner1, items);
-        Store[] stores = inputStores(scanner1, items);
+        Factory[] factories = inputFactories(scanner, items);
+        Store[] stores = inputStores(scanner, items);
 
         Factory bestFactory = findFactoryWithLargestVolumeOfAnItem(factories);
         System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");
@@ -30,29 +29,26 @@ public class Main {
     private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories){
         Factory bestFactory = factories[0];
         BigDecimal largestVolume = BigDecimal.valueOf(0);
-        for (int i = 0; i < factories.length; i++)
-            for (int j = 0; j < factories[i].getItems().length; j++)
-                if (factories[i].getItems()[j].calculateVolume().compareTo(largestVolume) == 1) {
-                    bestFactory = factories[i]; largestVolume = factories[i].getItems()[j].calculateVolume();
+        for (Factory f : factories)
+            for (int i = 0; i < f.getItems().length; i++)
+                if (f.getItems()[i].calculateVolume().compareTo(largestVolume) > 0) {
+                    bestFactory = f;
+                    largestVolume = f.getItems()[i].calculateVolume();
                 }
-        //System.out.println(largestVolume);
         return bestFactory;
     }
     private static Store findStoreWithCheapestItem(Store[] stores){
         Store bestStore = stores[0];
         BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
 
-        for (int i = 0; i < stores.length; i++)
-            for (int j = 0; j < stores[i].getItems().length; j++)
-                if(stores[i].getItems()[j].getSellingPrice().compareTo(cheapestSellingPrice) == -1){
-                    bestStore = stores[i]; cheapestSellingPrice = stores[i].getItems()[j].getSellingPrice();
+        for (Store s : stores)
+            for (int i = 0; i < s.getItems().length; i++)
+                if (s.getItems()[i].getSellingPrice().compareTo(cheapestSellingPrice) < 0) {
+                    bestStore = s;
+                    cheapestSellingPrice = s.getItems()[i].getSellingPrice();
                 }
-        //System.out.println("Cheapest Price: " + cheapestSellingPrice);
         return bestStore;
     }
-
-
-
     /**
      * Obrađuje korisnikov numerički unos. Provjerava je li unos cijeli broj i nalazi li se unutar određenog raspona.
      * Ako unos nije cijeli broj ili je izvan raspona, traži od korisnika da unese valjani broj.
@@ -65,7 +61,7 @@ public class Main {
      */
     private static int numInputHandler(Scanner scanner, String message, int minValue, int maxValue){
         int enteredNumber;
-        boolean badFormat = false;
+        boolean badFormat;
         do {
             System.out.print(message);
             while (!scanner.hasNextInt()) {
@@ -73,17 +69,15 @@ public class Main {
                 System.out.print(message);
                 scanner.nextLine();
             }
-            enteredNumber = scanner.nextInt();
-            scanner.nextLine();
+            enteredNumber = scanner.nextInt(); scanner.nextLine();
 
-            if(isNumInRange(enteredNumber, minValue, maxValue) == false){
+            if(!isNumInRange(enteredNumber, minValue, maxValue)){
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
             } else badFormat = false;
         }while (badFormat);
         return enteredNumber;
     }
-
     /**
      * Provjerava je li uneseni broj unutar zadanih granica.
      *
@@ -93,12 +87,48 @@ public class Main {
      * @return True ako je broj unutar raspona, false ako nije.
      */
     private static boolean isNumInRange(int enteredNumber, int minValue, int maxValue) {
-        if (enteredNumber < minValue || enteredNumber > maxValue) return false;
-        return true;
+        return enteredNumber >= minValue && enteredNumber <= maxValue;
     }
+    /**
+     * Obrađuje korisnikov numerički unos. Provjerava je li unos {@code BigDecimal} i nalazi li se unutar određenog raspona.
+     * Ako unos nije {@code BigDecimal} ili je izvan raspona, traži od korisnika da unese valjani broj.
+     *
+     * @param scanner  Scanner objekt koji se koristi za dobivanje korisnikovog unosa.
+     * @param message  Poruka koja se prikazuje korisniku prilikom traženja unosa.
+     * @param minValue Minimalna prihvatljiva vrijednost za unos.
+     * @param maxValue Maksimalna prihvatljiva vrijednost za unos.
+     * @return         Valjani broj koji je unio korisnik.
+     */
+    private static BigDecimal numInputHandler(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue){
+        BigDecimal enteredNumber;
+        boolean badFormat;
+        do {
+            System.out.print(message);
+            while (!scanner.hasNextBigDecimal()) {
+                System.out.println("Invalid input. Please enter a valid number:");
+                System.out.print(message);
+                scanner.nextLine();
+            }
+            enteredNumber = scanner.nextBigDecimal(); scanner.nextLine();
 
-
-
+            if(!isNumInRange(enteredNumber, minValue, maxValue)){
+                System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
+                badFormat = true;
+            } else badFormat = false;
+        }while (badFormat);
+        return enteredNumber;
+    }
+    /**
+     * Provjerava je li uneseni broj unutar zadanih granica.
+     *
+     * @param enteredNumber Broj koji se provjerava.
+     * @param minValue Minimalna dopuštena vrijednost (Uključujući).
+     * @param maxValue Maksimalna dopuštena vrijednost (Uključujući)
+     * @return True ako je broj unutar raspona, false ako nije.
+     */
+    private static boolean isNumInRange(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) {
+        return enteredNumber.compareTo(minValue) >= 0 && enteredNumber.compareTo(maxValue) <= 0;
+    }
     private static Category[] inputCategories(Scanner scanner){
         Category[] categories = new Category[NUM_CATEGORIES];
         for (int i = 0; i < categories.length; i++) {
@@ -127,30 +157,16 @@ public class Main {
             for (int j = 0; j < categories.length; j++)
                 System.out.println((j + 1) + ". " + categories[j].getName());
 
-
-            //error handling
-//            System.out.print("Choice >> ");
-//            int categoryChoice = scanner.nextInt(); scanner.nextLine();
             int categoryChoice = numInputHandler(scanner, "Choice >> ", 1, categories.length);
-            //error handling
-
 
             System.out.println("Enter the item dimensions:");
 
-            System.out.print("Enter the item width: ");
-            BigDecimal width = scanner.nextBigDecimal(); scanner.nextLine();
-
-            System.out.print("Enter the item height: ");
-            BigDecimal height = scanner.nextBigDecimal(); scanner.nextLine();
-
-            System.out.print("Enter the item length: ");
-            BigDecimal length = scanner.nextBigDecimal(); scanner.nextLine();
-
-            System.out.print("Enter the item production cost: ");
-            BigDecimal productionCost = scanner.nextBigDecimal(); scanner.nextLine();
-
-            System.out.print("Enter the item selling price: ");
-            BigDecimal sellingPrice = scanner.nextBigDecimal(); scanner.nextLine();
+            //Granice su najmanji pozitivan broj i najveći broj
+            BigDecimal width = numInputHandler(scanner, "Enter the item width: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal height = numInputHandler(scanner, "Enter the item height: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal length = numInputHandler(scanner, "Enter the item length: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal productionCost = numInputHandler(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal sellingPrice = numInputHandler(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
 
             items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice);
         }
@@ -176,18 +192,9 @@ public class Main {
             while (!finishedChoosing){
                 printAvailableItems(items, isFirstRun);
 
-
-
-
-                //error handling
-//                System.out.print("Choice >> ");
-//                int itemChoice = scanner.nextInt(); scanner.nextLine();
-                //error handling
-
                 int itemChoice;
                 if(isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
                 else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
-
 
                 if(itemChoice != items.length + 1) {
                     factoryItems[factoryItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
@@ -225,8 +232,6 @@ public class Main {
             boolean finishedChoosing = false, isFirstRun = true;
             while (!finishedChoosing){
                 printAvailableItems(items, isFirstRun);
-//                System.out.print("Choice >> ");
-//                int itemChoice = scanner.nextInt(); scanner.nextLine();
 
                 int itemChoice;
                 if(isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
@@ -250,7 +255,6 @@ public class Main {
         }
         return stores;
     }
-
     /**
      * Ispisuje sve dostupne artikle. Ukoliko je već odabran jedan artikl,
      * nudi se opcija za završavanje odabira.
@@ -305,6 +309,4 @@ public class Main {
 
         return new Address(street, houseNumber, city, postalCode);
     }
-
-
 }

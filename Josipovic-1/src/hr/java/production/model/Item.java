@@ -24,65 +24,49 @@ public class Item {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public Category getCategory() {
         return category;
     }
-
     public void setCategory(Category category) {
         this.category = category;
     }
-
     public BigDecimal getWidth() {
         return width;
     }
-
     public void setWidth(BigDecimal width) {
         this.width = width;
     }
-
     public BigDecimal getHeight() {
         return height;
     }
-
     public void setHeight(BigDecimal height) {
         this.height = height;
     }
-
     public BigDecimal getLength() {
         return length;
     }
-
     public void setLength(BigDecimal length) {
         this.length = length;
     }
-
     public BigDecimal getProductionCost() {
         return productionCost;
     }
-
     public void setProductionCost(BigDecimal productionCost) {
         this.productionCost = productionCost;
     }
-
     public BigDecimal getSellingPrice() {
         return sellingPrice;
     }
-
     public void setSellingPrice(BigDecimal sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 
-
     public BigDecimal calculateVolume() {
         return width.multiply(height).multiply(length);
     }
-
-
     @Override
     public String toString() {
         return "Item{" +
@@ -95,7 +79,6 @@ public class Item {
                 ", sellingPrice=" + sellingPrice +
                 '}';
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,6 +86,4 @@ public class Item {
         Item item = (Item) o;
         return Objects.equals(getName(), item.getName()) && Objects.equals(getCategory(), item.getCategory()) && Objects.equals(getWidth(), item.getWidth()) && Objects.equals(getHeight(), item.getHeight()) && Objects.equals(getLength(), item.getLength()) && Objects.equals(getProductionCost(), item.getProductionCost()) && Objects.equals(getSellingPrice(), item.getSellingPrice());
     }
-
-
 }

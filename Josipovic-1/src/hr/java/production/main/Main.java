@@ -19,6 +19,7 @@ public class Main {
         Factory[] factories = inputFactories(scanner, items);
         Store[] stores = inputStores(scanner, items);
 
+        System.out.println();
         Factory bestFactory = findFactoryWithLargestVolumeOfAnItem(factories);
         System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");
 

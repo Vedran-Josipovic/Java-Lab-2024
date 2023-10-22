@@ -2,23 +2,14 @@ package hr.java.production.model;
 
 import java.util.Arrays;
 
-public class Store {
-    private String name;
+public class Store extends NamedEntity{
     private String webAddress;
     private Item[] items;
 
     public Store(String name, String webAddress, Item[] items) {
-        this.name = name;
+        super(name);
         this.webAddress = webAddress;
         this.items = items;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getWebAddress() {
@@ -40,9 +31,9 @@ public class Store {
     @Override
     public String toString() {
         return "Store{" +
-                "name='" + name + '\'' +
-                ", webAddress='" + webAddress + '\'' +
+                "webAddress='" + webAddress + '\'' +
                 ", items=" + Arrays.toString(items) +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

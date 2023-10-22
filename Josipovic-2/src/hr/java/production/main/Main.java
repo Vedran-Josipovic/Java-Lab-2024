@@ -9,13 +9,14 @@ import java.util.Scanner;
 
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
+    private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
     public static void main(String[] args) throws FileNotFoundException {
         File file = new File("Josipovic-2/src/hr/java/production/files/currentInput");
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
         Category[] categories = inputCategories(scanner);
-        Item[] items = inputItems(scanner, categories);
+        Item[] items = inputItems(scanner1, categories);
         Factory[] factories = inputFactories(scanner, items);
         Store[] stores = inputStores(scanner, items);
 
@@ -29,6 +30,12 @@ public class Main {
         System.out.println("\n\n");
 
     }
+
+
+
+
+
+
 
     private static Category[] inputCategories(Scanner scanner){
         Category[] categories = new Category[NUM_CATEGORIES];
@@ -68,7 +75,24 @@ public class Main {
             BigDecimal productionCost = numInputHandler(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
             BigDecimal sellingPrice = numInputHandler(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
 
-            items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice);
+
+            Boolean isEdible = isItemEdible(scanner);
+            if(isEdible){
+                System.out.println("Pick an available food product:");
+                System.out.println("1. Pizza\n2. Chicken nuggets");
+                Integer foodChoice = numInputHandler(scanner, "Choice >> ", PIZZA, CHICKEN_NUGGETS);
+
+                BigDecimal weightInKG = numInputHandler(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+                if(foodChoice.equals(PIZZA)){
+                    items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, weightInKG);
+                }
+                else if(foodChoice.equals(CHICKEN_NUGGETS)){
+                    items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, weightInKG);
+                }
+            }
+            else {
+                items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice);
+            }
         }
         return items;
     }
@@ -331,4 +355,8 @@ public class Main {
         return bestStore;
     }
 
+    private static Boolean isItemEdible(Scanner scanner){
+        System.out.println("Is this item edible?\n1. Yes\n2. No");
+        return numInputHandler(scanner, "Choice >> ", 1, 2) == 1;
+    }
 }

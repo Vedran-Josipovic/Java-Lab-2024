@@ -27,13 +27,32 @@ public class Main {
         Store bestStore = findStoreWithCheapestItem(stores);
         System.out.println("The store that sells an item with the cheapest price is: '" + bestStore.getName() + "'.");
 
+
+        Item mostCaloricItem = findFoodWithMostCalories(items);
+        if (mostCaloricItem instanceof Edible e){
+            System.out.println("The food product with the most calories is " + mostCaloricItem.getName() + "[" + e.calculateKilocalories() + "]");
+        }
+
+
         System.out.println("\n\n");
 
     }
 
-
-
-
+    //Nisam još testirao kod za ovu metodu
+    private static Item findFoodWithMostCalories(Item[] items){
+        Item mostCaloric = items[0];
+        int maxCalories = -1;
+        for (Item i : items) {
+            if (i instanceof Edible edible){
+                int calories = edible.calculateKilocalories();
+                if(calories > maxCalories){
+                    maxCalories = calories; mostCaloric = i;
+                }
+            }
+        }
+        if(maxCalories == -1) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        return mostCaloric;
+    }
 
 
 

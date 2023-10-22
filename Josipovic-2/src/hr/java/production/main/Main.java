@@ -28,10 +28,13 @@ public class Main {
         System.out.println("The store that sells an item with the cheapest price is: '" + bestStore.getName() + "'.");
 
 
-        Item mostCaloricItem = findFoodWithMostCalories(items);
-        if (mostCaloricItem instanceof Edible e){
-            System.out.println("The food product with the most calories is " + mostCaloricItem.getName() + "[" + e.calculateKilocalories() + "]");
-        }
+        Item mostCaloricFood = findMostCaloricFood(items);
+        if (mostCaloricFood instanceof Edible e)
+            System.out.println("The food product with the most calories is " + mostCaloricFood.getName() + " [" + e.calculateKilocalories() + "]");
+
+        Item highestPricedFood = findHighestPricedFood(items);
+        if (highestPricedFood instanceof Edible e)
+            System.out.println("The food product with the highest price is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
 
 
         System.out.println("\n\n");
@@ -39,7 +42,23 @@ public class Main {
     }
 
     //Nisam još testirao kod za ovu metodu
-    private static Item findFoodWithMostCalories(Item[] items){
+    private static Item findHighestPricedFood(Item[] items){
+        Item mostExpensive = items[0];
+        BigDecimal highestPrice = BigDecimal.valueOf(-1);
+        for (Item i : items) {
+            if (i instanceof Edible edible){
+                BigDecimal price = edible.calculatePrice();
+                if(price.compareTo(highestPrice) > 0){
+                    highestPrice = price; mostExpensive = i;
+                }
+            }
+        }
+        if(highestPrice.equals(BigDecimal.valueOf(-1))) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        return mostExpensive;
+    }
+
+    //Nisam još testirao kod za ovu metodu
+    private static Item findMostCaloricFood(Item[] items){
         Item mostCaloric = items[0];
         int maxCalories = -1;
         for (Item i : items) {
@@ -53,8 +72,6 @@ public class Main {
         if(maxCalories == -1) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostCaloric;
     }
-
-
 
     private static Category[] inputCategories(Scanner scanner){
         Category[] categories = new Category[NUM_CATEGORIES];

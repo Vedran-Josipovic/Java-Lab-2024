@@ -7,8 +7,8 @@ import java.util.Objects;
  * Represents an item in a production system.
  */
 public class Item extends NamedEntity {
-    private Category category;
-    private BigDecimal width, height, length, productionCost, sellingPrice;
+    protected Category category;
+    protected BigDecimal width, height, length, productionCost, sellingPrice;
 
     public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice) {
         super(name);

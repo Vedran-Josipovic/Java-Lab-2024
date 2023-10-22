@@ -93,6 +93,12 @@ public class Main {
             else {
                 items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice);
             }
+
+            if(items[i] instanceof Edible e){
+                System.out.println("Kilocalories in " + items[i].getName() + ": " + e.calculateKilocalories());
+                System.out.println("Price for " + items[i].getName() +": " + e.calculatePrice());
+            }
+
         }
         return items;
     }

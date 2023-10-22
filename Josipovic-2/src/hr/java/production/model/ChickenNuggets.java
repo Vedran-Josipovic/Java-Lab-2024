@@ -23,12 +23,13 @@ public class ChickenNuggets extends Item implements Edible {
 
     @Override
     public Integer calculateKilocalories() {
-        return null;
+        BigDecimal totalCalories = weightInKG.multiply(BigDecimal.valueOf(caloriesPerKilo));
+        return totalCalories.toBigInteger().intValue();
     }
 
     @Override
     public BigDecimal calculatePrice() {
-        return null;
+        return weightInKG.multiply(getSellingPrice());
     }
 
     @Override

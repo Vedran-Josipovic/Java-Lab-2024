@@ -11,6 +11,7 @@ public interface Edible {
 
     /**
      * Vraća cijenu za namirnicu koja će se izračunavati prema težini.
+     * Također uračunava popust.
      */
     BigDecimal calculatePrice();
 

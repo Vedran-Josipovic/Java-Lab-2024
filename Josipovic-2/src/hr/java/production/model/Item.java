@@ -1,7 +1,6 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Represents an item in a production system.
@@ -11,7 +10,7 @@ public class Item extends NamedEntity {
     protected BigDecimal width, height, length, productionCost, sellingPrice;
     protected Discount discount;
 
-    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice) {
+    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount) {
         super(name);
         this.category = category;
         this.width = width;
@@ -19,6 +18,7 @@ public class Item extends NamedEntity {
         this.length = length;
         this.productionCost = productionCost;
         this.sellingPrice = sellingPrice;
+        this.discount = discount;
     }
 
     public Category getCategory() {
@@ -69,22 +69,35 @@ public class Item extends NamedEntity {
         this.sellingPrice = sellingPrice;
     }
 
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    //Didn't test this yet
+    public BigDecimal getDiscountedSellingPrice(){
+        return sellingPrice.subtract(discount.discountAmount().divide(BigDecimal.valueOf(100)).multiply(sellingPrice));
+    }
+
 
     public BigDecimal calculateVolume() {
         return width.multiply(height).multiply(length);
     }
 
-
     @Override
     public String toString() {
-        return "Item{" + "category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", name='" + name + '\'' + '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Item item = (Item) o;
-        return Objects.equals(getName(), item.getName()) && Objects.equals(getCategory(), item.getCategory()) && Objects.equals(getWidth(), item.getWidth()) && Objects.equals(getHeight(), item.getHeight()) && Objects.equals(getLength(), item.getLength()) && Objects.equals(getProductionCost(), item.getProductionCost()) && Objects.equals(getSellingPrice(), item.getSellingPrice());
+        return "Item{" +
+                "category=" + category +
+                ", width=" + width +
+                ", height=" + height +
+                ", length=" + length +
+                ", productionCost=" + productionCost +
+                ", sellingPrice=" + sellingPrice +
+                ", discount=" + discount + "%" +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

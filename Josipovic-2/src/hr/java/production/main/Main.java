@@ -34,7 +34,7 @@ public class Main {
 
         Item highestPricedFood = findHighestPricedFood(items);
         if (highestPricedFood instanceof Edible e)
-            System.out.println("The food product with the highest price is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
+            System.out.println("The food product with the highest price (with discount) is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
 
 
         System.out.println("\n\n");
@@ -112,6 +112,9 @@ public class Main {
             BigDecimal sellingPrice = numInputHandler(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
 
 
+            BigDecimal discountAmount = numInputHandler(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
+            Discount discount = new Discount(discountAmount);
+
             Boolean isEdible = isItemEdible(scanner);
             if(isEdible){
                 System.out.println("Pick an available food product:");
@@ -120,19 +123,19 @@ public class Main {
 
                 BigDecimal weightInKG = numInputHandler(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
                 if(foodChoice.equals(PIZZA)){
-                    items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, weightInKG);
+                    items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
                 }
                 else if(foodChoice.equals(CHICKEN_NUGGETS)){
-                    items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, weightInKG);
+                    items[i] = new ChickenNuggets(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
                 }
             }
             else {
-                items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice);
+                items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount);
             }
 
             if(items[i] instanceof Edible e){
                 System.out.println("Kilocalories in " + items[i].getName() + ": " + e.calculateKilocalories());
-                System.out.println("Price for " + items[i].getName() +": " + e.calculatePrice());
+                System.out.println("Price (with " + items[i].getDiscount().discountAmount() + "% discount) for " + items[i].getName() +": " + e.calculatePrice());
             }
 
         }

@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
+    private static final Integer FOOD = 1, LAPTOP = 2, OTHER = 3;
     public static void main(String[] args) throws FileNotFoundException {
         File file = new File("Josipovic-2/src/hr/java/production/files/currentInput");
         Scanner scanner = new Scanner(file);

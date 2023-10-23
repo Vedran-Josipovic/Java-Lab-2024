@@ -269,7 +269,12 @@ public class Main {
         System.out.print("Enter the postal code: ");
         String postalCode = scanner.nextLine();
 
-        return new Address(street, houseNumber, city, postalCode);
+        return new Address.Builder()
+                .atStreet(street)
+                .atHouseNumber(houseNumber)
+                .atCity(city)
+                .atPostalCode(postalCode)
+                .build();
     }
 
 

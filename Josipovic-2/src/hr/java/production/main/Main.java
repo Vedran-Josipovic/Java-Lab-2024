@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
-    private static final Integer FOOD = 1, LAPTOP = 2, OTHER = 3;
+    private static final Integer FOOD = 1, LAPTOP = 2;
     public static void main(String[] args) throws FileNotFoundException {
         File file = new File("Josipovic-2/src/hr/java/production/files/currentInput");
         Scanner scanner = new Scanner(file);
@@ -116,8 +116,10 @@ public class Main {
             BigDecimal discountAmount = numInputHandler(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
             Discount discount = new Discount(discountAmount);
 
-            Boolean isEdible = isItemEdible(scanner);
-            if(isEdible){
+            //Boolean isEdible = isItemEdible(scanner);
+            int itemSubclassChoice = numInputHandler(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other", 1, 3);
+
+            if(itemSubclassChoice == FOOD){
                 System.out.println("Pick an available food product:");
                 System.out.println("1. Pizza\n2. Chicken nuggets");
                 Integer foodChoice = numInputHandler(scanner, "Choice >> ", PIZZA, CHICKEN_NUGGETS);
@@ -129,6 +131,10 @@ public class Main {
                 else if(foodChoice.equals(CHICKEN_NUGGETS)){
                     items[i] = new ChickenNuggets(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
                 }
+            }
+            else if(itemSubclassChoice == LAPTOP){
+                Integer warrantyYears = numInputHandler(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
+                items[i] = new Laptop(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, warrantyYears);
             }
             else {
                 items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount);

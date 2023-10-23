@@ -9,6 +9,7 @@ import java.util.Objects;
 public class Item extends NamedEntity {
     protected Category category;
     protected BigDecimal width, height, length, productionCost, sellingPrice;
+    protected Discount discount;
 
     public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice) {
         super(name);
@@ -76,15 +77,7 @@ public class Item extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", name='" + name + '\'' +
-                '}';
+        return "Item{" + "category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", name='" + name + '\'' + '}';
     }
 
     @Override

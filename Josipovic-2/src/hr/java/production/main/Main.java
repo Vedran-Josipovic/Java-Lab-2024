@@ -11,13 +11,14 @@ public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
     private static final Integer FOOD = 1, LAPTOP = 2;
+
     public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("Josipovic-2/src/hr/java/production/files/currentInput");
+        File file = new File("Josipovic-2/src/hr/java/production/files/lab-2-input");
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
         Category[] categories = inputCategories(scanner);
-        Item[] items = inputItems(scanner1, categories);
+        Item[] items = inputItems(scanner, categories);
         Factory[] factories = inputFactories(scanner, items);
         Store[] stores = inputStores(scanner, items);
 
@@ -28,7 +29,6 @@ public class Main {
         Store bestStore = findStoreWithCheapestItem(stores);
         System.out.println("The store that sells an item with the cheapest price is: '" + bestStore.getName() + "'.");
 
-
         Item mostCaloricFood = findMostCaloricFood(items);
         if (mostCaloricFood instanceof Edible e)
             System.out.println("The food product with the most calories is " + mostCaloricFood.getName() + " [" + e.calculateKilocalories() + "]");
@@ -37,68 +37,69 @@ public class Main {
         if (highestPricedFood instanceof Edible e)
             System.out.println("The food product with the highest price (with discount) is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
 
-
-
         Item shortestWarrantyLaptop = findLaptopWithShortestWarranty(items);
         if (shortestWarrantyLaptop instanceof Technical t)
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
-
-
-
 
         System.out.println("\n\n");
 
     }
 
-    private static Item findLaptopWithShortestWarranty(Item[] items){
+    private static Item findLaptopWithShortestWarranty(Item[] items) {
         Item shortestWarrantyLaptop = items[0];
         Integer minWarranty = Integer.MAX_VALUE;
 
         for (Item i : items) {
-            if(i instanceof Technical t){
+            if (i instanceof Technical t) {
                 Integer warranty = t.getRemainingWarrantyInMonths();
-                if(warranty < minWarranty){
-                    minWarranty = warranty; shortestWarrantyLaptop = i;
+                if (warranty < minWarranty) {
+                    minWarranty = warranty;
+                    shortestWarrantyLaptop = i;
                 }
             }
         }
-        if(minWarranty == Integer.MAX_VALUE) System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
+        if (minWarranty == Integer.MAX_VALUE)
+            System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
         return shortestWarrantyLaptop;
     }
 
     //Nisam još testirao kod za ovu metodu
-    private static Item findHighestPricedFood(Item[] items){
+    private static Item findHighestPricedFood(Item[] items) {
         Item mostExpensive = items[0];
         BigDecimal highestPrice = BigDecimal.valueOf(-1);
         for (Item i : items) {
-            if (i instanceof Edible edible){
+            if (i instanceof Edible edible) {
                 BigDecimal price = edible.calculatePrice();
-                if(price.compareTo(highestPrice) > 0){
-                    highestPrice = price; mostExpensive = i;
+                if (price.compareTo(highestPrice) > 0) {
+                    highestPrice = price;
+                    mostExpensive = i;
                 }
             }
         }
-        if(highestPrice.equals(BigDecimal.valueOf(-1))) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (highestPrice.equals(BigDecimal.valueOf(-1)))
+            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostExpensive;
     }
 
     //Nisam još testirao kod za ovu metodu
-    private static Item findMostCaloricFood(Item[] items){
+    private static Item findMostCaloricFood(Item[] items) {
         Item mostCaloric = items[0];
         int maxCalories = -1;
         for (Item i : items) {
-            if (i instanceof Edible edible){
+            if (i instanceof Edible edible) {
                 int calories = edible.calculateKilocalories();
-                if(calories > maxCalories){
-                    maxCalories = calories; mostCaloric = i;
+                if (calories > maxCalories) {
+                    maxCalories = calories;
+                    mostCaloric = i;
                 }
             }
         }
-        if(maxCalories == -1) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (maxCalories == -1)
+            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostCaloric;
     }
 
-    private static Category[] inputCategories(Scanner scanner){
+    private static Category[] inputCategories(Scanner scanner) {
         Category[] categories = new Category[NUM_CATEGORIES];
         for (int i = 0; i < categories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". category: ");
@@ -114,7 +115,7 @@ public class Main {
         return categories;
     }
 
-    private static Item[] inputItems(Scanner scanner, Category[] categories){
+    private static Item[] inputItems(Scanner scanner, Category[] categories) {
         Item[] items = new Item[NUM_ITEMS];
         for (int i = 0; i < items.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". item: ");
@@ -135,38 +136,31 @@ public class Main {
             BigDecimal length = numInputHandler(scanner, "Enter the item length: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
             BigDecimal productionCost = numInputHandler(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
             BigDecimal sellingPrice = numInputHandler(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-
-            //Novo, testirati
             BigDecimal discountAmount = numInputHandler(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
             Discount discount = new Discount(discountAmount);
 
-            //Boolean isEdible = isItemEdible(scanner);
-            int itemSubclassChoice = numInputHandler(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other", 1, 3);
-
-            if(itemSubclassChoice == FOOD){
+            int itemSubclassChoice = numInputHandler(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other\nChoice >> ", 1, 3);
+            if (itemSubclassChoice == FOOD) {
                 System.out.println("Pick an available food product:");
                 System.out.println("1. Pizza\n2. Chicken nuggets");
                 Integer foodChoice = numInputHandler(scanner, "Choice >> ", PIZZA, CHICKEN_NUGGETS);
 
                 BigDecimal weightInKG = numInputHandler(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-                if(foodChoice.equals(PIZZA)){
+                if (foodChoice.equals(PIZZA)) {
                     items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
-                }
-                else if(foodChoice.equals(CHICKEN_NUGGETS)){
+                } else if (foodChoice.equals(CHICKEN_NUGGETS)) {
                     items[i] = new ChickenNuggets(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
                 }
-            }
-            else if(itemSubclassChoice == LAPTOP){
+            } else if (itemSubclassChoice == LAPTOP) {
                 Integer warrantyYears = numInputHandler(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
                 items[i] = new Laptop(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, warrantyYears);
-            }
-            else {
+            } else {
                 items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount);
             }
 
-            if(items[i] instanceof Edible e){
+            if (items[i] instanceof Edible e) {
                 System.out.println("Kilocalories in " + items[i].getName() + ": " + e.calculateKilocalories());
-                System.out.println("Price (with " + items[i].getDiscount().discountAmount() + "% discount) for " + items[i].getName() +": " + e.calculatePrice());
+                System.out.println("Price (with " + items[i].getDiscount().discountAmount() + "% discount) for " + items[i].getName() + ": " + e.calculatePrice());
             }
 
         }
@@ -176,7 +170,7 @@ public class Main {
     /**
      * Unosi tvornice. Nakon što se odabere item, uklanja se it liste za odabir.
      */
-    private static Factory[] inputFactories(Scanner scanner, Item[] items){
+    private static Factory[] inputFactories(Scanner scanner, Item[] items) {
         Factory[] factories = new Factory[NUM_FACTORIES];
         for (int i = 0; i < factories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". factory: ");
@@ -189,20 +183,19 @@ public class Main {
             ///chooseFactoryItems - Kod se ponavlja i s dućanima, ali pošto za funkciju mi treba i factoryItems i items, treba mi mapa, pa cu poslije u 4.lab
             Item[] factoryItems = new Item[1];
             boolean finishedChoosing = false, isFirstRun = true;
-            while (!finishedChoosing){
+            while (!finishedChoosing) {
                 printAvailableItems(items, isFirstRun);
 
                 int itemChoice;
-                if(isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
+                if (isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
                 else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
 
-                if(itemChoice != items.length + 1) {
+                if (itemChoice != items.length + 1) {
                     factoryItems[factoryItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
-                    if(items.length > 1){
+                    if (items.length > 1) {
                         items = removeChosenItem(items, itemChoice);
                         factoryItems = expandItemArray(factoryItems);
-                    }
-                    else finishedChoosing = true;
+                    } else finishedChoosing = true;
                 } else {
                     finishedChoosing = true;
                     factoryItems = trimItemArray(factoryItems);
@@ -216,7 +209,7 @@ public class Main {
         return factories;
     }
 
-    private static Store[] inputStores(Scanner scanner, Item[] items){
+    private static Store[] inputStores(Scanner scanner, Item[] items) {
         Store[] stores = new Store[NUM_STORES];
         for (int i = 0; i < stores.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". store: ");
@@ -230,20 +223,19 @@ public class Main {
             ///chooseFactoryItems
             Item[] storeItems = new Item[1];
             boolean finishedChoosing = false, isFirstRun = true;
-            while (!finishedChoosing){
+            while (!finishedChoosing) {
                 printAvailableItems(items, isFirstRun);
 
                 int itemChoice;
-                if(isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
+                if (isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
                 else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
 
-                if(itemChoice != items.length + 1) {
+                if (itemChoice != items.length + 1) {
                     storeItems[storeItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto storeItems-a
-                    if(items.length > 1){
+                    if (items.length > 1) {
                         items = removeChosenItem(items, itemChoice);
                         storeItems = expandItemArray(storeItems);
-                    }
-                    else finishedChoosing = true;
+                    } else finishedChoosing = true;
                 } else {
                     finishedChoosing = true;
                     storeItems = trimItemArray(storeItems);
@@ -256,7 +248,7 @@ public class Main {
         return stores;
     }
 
-    private static Address inputAddress(Scanner scanner){
+    private static Address inputAddress(Scanner scanner) {
         System.out.print("Enter the street name: ");
         String street = scanner.nextLine();
 
@@ -269,14 +261,8 @@ public class Main {
         System.out.print("Enter the postal code: ");
         String postalCode = scanner.nextLine();
 
-        return new Address.Builder()
-                .atStreet(street)
-                .atHouseNumber(houseNumber)
-                .atCity(city)
-                .atPostalCode(postalCode)
-                .build();
+        return new Address.Builder().atStreet(street).atHouseNumber(houseNumber).atCity(city).atPostalCode(postalCode).build();
     }
-
 
 
     /**
@@ -287,10 +273,8 @@ public class Main {
         System.out.println("Choose an item:");
         for (int i = 0; i < items.length; i++)
             System.out.println((i + 1) + ". " + items[i].getName());
-        if (!isFirstRun)
-            System.out.println(items.length + 1 + ". " + "Finished choosing.");
+        if (!isFirstRun) System.out.println(items.length + 1 + ". " + "Finished choosing.");
     }
-
 
 
     /**
@@ -301,9 +285,9 @@ public class Main {
      * @param message  Poruka koja se prikazuje korisniku prilikom traženja unosa.
      * @param minValue Minimalna prihvatljiva vrijednost za unos.
      * @param maxValue Maksimalna prihvatljiva vrijednost za unos.
-     * @return         Valjani broj koji je unio korisnik.
+     * @return Valjani broj koji je unio korisnik.
      */
-    private static int numInputHandler(Scanner scanner, String message, int minValue, int maxValue){
+    private static int numInputHandler(Scanner scanner, String message, int minValue, int maxValue) {
         int enteredNumber;
         boolean badFormat;
         do {
@@ -313,13 +297,14 @@ public class Main {
                 System.out.print(message);
                 scanner.nextLine();
             }
-            enteredNumber = scanner.nextInt(); scanner.nextLine();
+            enteredNumber = scanner.nextInt();
+            scanner.nextLine();
 
-            if(!isNumInRange(enteredNumber, minValue, maxValue)){
+            if (!isNumInRange(enteredNumber, minValue, maxValue)) {
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
             } else badFormat = false;
-        }while (badFormat);
+        } while (badFormat);
         return enteredNumber;
     }
 
@@ -331,9 +316,9 @@ public class Main {
      * @param message  Poruka koja se prikazuje korisniku prilikom traženja unosa.
      * @param minValue Minimalna prihvatljiva vrijednost za unos.
      * @param maxValue Maksimalna prihvatljiva vrijednost za unos.
-     * @return         Valjani broj koji je unio korisnik.
+     * @return Valjani broj koji je unio korisnik.
      */
-    private static BigDecimal numInputHandler(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue){
+    private static BigDecimal numInputHandler(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue) {
         BigDecimal enteredNumber;
         boolean badFormat;
         do {
@@ -343,13 +328,14 @@ public class Main {
                 System.out.print(message);
                 scanner.nextLine();
             }
-            enteredNumber = scanner.nextBigDecimal(); scanner.nextLine();
+            enteredNumber = scanner.nextBigDecimal();
+            scanner.nextLine();
 
-            if(!isNumInRange(enteredNumber, minValue, maxValue)){
+            if (!isNumInRange(enteredNumber, minValue, maxValue)) {
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
             } else badFormat = false;
-        }while (badFormat);
+        } while (badFormat);
         return enteredNumber;
     }
 
@@ -357,8 +343,8 @@ public class Main {
      * Provjerava je li uneseni broj unutar zadanih granica.
      *
      * @param enteredNumber Broj koji se provjerava.
-     * @param minValue Minimalna dopuštena vrijednost (Uključujući).
-     * @param maxValue Maksimalna dopuštena vrijednost (Uključujući)
+     * @param minValue      Minimalna dopuštena vrijednost (Uključujući).
+     * @param maxValue      Maksimalna dopuštena vrijednost (Uključujući)
      * @return True ako je broj unutar raspona, false ako nije.
      */
     private static boolean isNumInRange(int enteredNumber, int minValue, int maxValue) {
@@ -369,14 +355,13 @@ public class Main {
      * Provjerava je li uneseni broj unutar zadanih granica.
      *
      * @param enteredNumber Broj koji se provjerava.
-     * @param minValue Minimalna dopuštena vrijednost (Uključujući).
-     * @param maxValue Maksimalna dopuštena vrijednost (Uključujući)
+     * @param minValue      Minimalna dopuštena vrijednost (Uključujući).
+     * @param maxValue      Maksimalna dopuštena vrijednost (Uključujući)
      * @return True ako je broj unutar raspona, false ako nije.
      */
     private static boolean isNumInRange(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) {
         return enteredNumber.compareTo(minValue) >= 0 && enteredNumber.compareTo(maxValue) <= 0;
     }
-
 
 
     /**
@@ -387,8 +372,7 @@ public class Main {
     private static Item[] removeChosenItem(Item[] items, int itemChoice) {
         Item[] clonedItems = new Item[items.length - 1];
         for (int i = 0, j = 0; i < items.length; i++)
-            if (i != itemChoice - 1)
-                clonedItems[j++] = items[i];
+            if (i != itemChoice - 1) clonedItems[j++] = items[i];
         return clonedItems;
     }
 
@@ -411,8 +395,7 @@ public class Main {
     }
 
 
-
-    private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories){
+    private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories) {
         Factory bestFactory = factories[0];
         BigDecimal largestVolume = BigDecimal.valueOf(0);
         for (Factory f : factories)
@@ -423,7 +406,8 @@ public class Main {
                 }
         return bestFactory;
     }
-    private static Store findStoreWithCheapestItem(Store[] stores){
+
+    private static Store findStoreWithCheapestItem(Store[] stores) {
         Store bestStore = stores[0];
         BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
 
@@ -436,7 +420,7 @@ public class Main {
         return bestStore;
     }
 
-    private static Boolean isItemEdible(Scanner scanner){
+    private static Boolean isItemEdible(Scanner scanner) {
         System.out.println("Is this item edible?\n1. Yes\n2. No");
         return numInputHandler(scanner, "Choice >> ", 1, 2) == 1;
     }

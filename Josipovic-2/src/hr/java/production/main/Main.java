@@ -38,8 +38,32 @@ public class Main {
             System.out.println("The food product with the highest price (with discount) is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
 
 
+
+        Item shortestWarrantyLaptop = findLaptopWithShortestWarranty(items);
+        if (shortestWarrantyLaptop instanceof Technical t)
+            System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
+
+
+
+
         System.out.println("\n\n");
 
+    }
+
+    private static Item findLaptopWithShortestWarranty(Item[] items){
+        Item shortestWarrantyLaptop = items[0];
+        Integer minWarranty = Integer.MAX_VALUE;
+
+        for (Item i : items) {
+            if(i instanceof Technical t){
+                Integer warranty = t.getRemainingWarrantyInMonths();
+                if(warranty < minWarranty){
+                    minWarranty = warranty; shortestWarrantyLaptop = i;
+                }
+            }
+        }
+        if(minWarranty == Integer.MAX_VALUE) System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
+        return shortestWarrantyLaptop;
     }
 
     //Nisam još testirao kod za ovu metodu

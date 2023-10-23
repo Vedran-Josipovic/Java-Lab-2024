@@ -3,7 +3,8 @@ package hr.java.production.model;
 public class Address {
     private String street, houseNumber, city, postalCode;
 
-    private Address(){}
+    private Address() {
+    }
 
     public static class Builder {
         private String street, houseNumber, city, postalCode;
@@ -72,11 +73,6 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "street='" + street + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                '}';
+        return "Address{" + "street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city='" + city + '\'' + ", postalCode='" + postalCode + '\'' + '}';
     }
 }

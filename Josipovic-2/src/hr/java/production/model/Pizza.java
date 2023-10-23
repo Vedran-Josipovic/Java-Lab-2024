@@ -1,8 +1,9 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-public class Pizza extends Item implements Edible{
+public class Pizza extends Item implements Edible {
     private static final Integer caloriesPerKilo = 2200;
     private BigDecimal weightInKG;
 
@@ -19,11 +20,9 @@ public class Pizza extends Item implements Edible{
         this.weightInKG = weightInKG;
     }
 
-
     @Override
     public Integer calculateKilocalories() {
-        BigDecimal totalCalories = weightInKG.multiply(BigDecimal.valueOf(caloriesPerKilo));
-        return totalCalories.toBigInteger().intValue();
+        return weightInKG.multiply(BigDecimal.valueOf(caloriesPerKilo)).setScale(0, RoundingMode.HALF_UP).intValue();
     }
 
     /**
@@ -32,21 +31,11 @@ public class Pizza extends Item implements Edible{
      */
     @Override
     public BigDecimal calculatePrice() {
-        return weightInKG.multiply(getDiscountedSellingPrice());
+        return weightInKG.multiply(getDiscountedSellingPrice()).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public String toString() {
-        return "Pizza{" +
-                "weightInKG=" + weightInKG +
-                ", category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", discount=" + discount + "%" +
-                ", name='" + name + '\'' +
-                '}';
+        return "Pizza{" + "weightInKG=" + weightInKG + ", category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + "%" + ", name='" + name + '\'' + '}';
     }
 }

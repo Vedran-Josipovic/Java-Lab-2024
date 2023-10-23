@@ -3,7 +3,6 @@ package hr.java.production.model;
 import java.math.BigDecimal;
 
 public interface Edible {
-
     /**
      * Vraća broj kilokalorija (cijeli broj) koji ima navedena namirnica koja je jestiva.
      */
@@ -14,5 +13,4 @@ public interface Edible {
      * Također uračunava popust.
      */
     BigDecimal calculatePrice();
-
 }

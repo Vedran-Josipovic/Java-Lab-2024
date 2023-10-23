@@ -41,8 +41,6 @@ public class Main {
         if (shortestWarrantyLaptop instanceof Technical t)
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
 
-        System.out.println("\n\n");
-
     }
 
     private static Item findLaptopWithShortestWarranty(Item[] items) {
@@ -53,17 +51,14 @@ public class Main {
             if (i instanceof Technical t) {
                 Integer warranty = t.getRemainingWarrantyInMonths();
                 if (warranty < minWarranty) {
-                    minWarranty = warranty;
-                    shortestWarrantyLaptop = i;
+                    minWarranty = warranty; shortestWarrantyLaptop = i;
                 }
             }
         }
-        if (minWarranty == Integer.MAX_VALUE)
-            System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
+        if (minWarranty == Integer.MAX_VALUE) System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
         return shortestWarrantyLaptop;
     }
 
-    //Nisam još testirao kod za ovu metodu
     private static Item findHighestPricedFood(Item[] items) {
         Item mostExpensive = items[0];
         BigDecimal highestPrice = BigDecimal.valueOf(-1);
@@ -71,17 +66,14 @@ public class Main {
             if (i instanceof Edible edible) {
                 BigDecimal price = edible.calculatePrice();
                 if (price.compareTo(highestPrice) > 0) {
-                    highestPrice = price;
-                    mostExpensive = i;
+                    highestPrice = price; mostExpensive = i;
                 }
             }
         }
-        if (highestPrice.equals(BigDecimal.valueOf(-1)))
-            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (highestPrice.equals(BigDecimal.valueOf(-1))) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostExpensive;
     }
 
-    //Nisam još testirao kod za ovu metodu
     private static Item findMostCaloricFood(Item[] items) {
         Item mostCaloric = items[0];
         int maxCalories = -1;
@@ -89,13 +81,11 @@ public class Main {
             if (i instanceof Edible edible) {
                 int calories = edible.calculateKilocalories();
                 if (calories > maxCalories) {
-                    maxCalories = calories;
-                    mostCaloric = i;
+                    maxCalories = calories; mostCaloric = i;
                 }
             }
         }
-        if (maxCalories == -1)
-            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (maxCalories == -1) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostCaloric;
     }
 
@@ -141,16 +131,13 @@ public class Main {
 
             int itemSubclassChoice = numInputHandler(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other\nChoice >> ", 1, 3);
             if (itemSubclassChoice == FOOD) {
-                System.out.println("Pick an available food product:");
-                System.out.println("1. Pizza\n2. Chicken nuggets");
-                Integer foodChoice = numInputHandler(scanner, "Choice >> ", PIZZA, CHICKEN_NUGGETS);
-
+                Integer foodChoice = numInputHandler(scanner, "Pick an available food product:\n1. Pizza\n2. Chicken nuggets\nChoice >> ", PIZZA, CHICKEN_NUGGETS);
                 BigDecimal weightInKG = numInputHandler(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-                if (foodChoice.equals(PIZZA)) {
+
+                if (foodChoice.equals(PIZZA))
                     items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
-                } else if (foodChoice.equals(CHICKEN_NUGGETS)) {
+                else if (foodChoice.equals(CHICKEN_NUGGETS))
                     items[i] = new ChickenNuggets(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
-                }
             } else if (itemSubclassChoice == LAPTOP) {
                 Integer warrantyYears = numInputHandler(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
                 items[i] = new Laptop(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, warrantyYears);
@@ -162,7 +149,6 @@ public class Main {
                 System.out.println("Kilocalories in " + items[i].getName() + ": " + e.calculateKilocalories());
                 System.out.println("Price (with " + items[i].getDiscount().discountAmount() + "% discount) for " + items[i].getName() + ": " + e.calculatePrice());
             }
-
         }
         return items;
     }
@@ -401,8 +387,7 @@ public class Main {
         for (Factory f : factories)
             for (int i = 0; i < f.getItems().length; i++)
                 if (f.getItems()[i].calculateVolume().compareTo(largestVolume) > 0) {
-                    bestFactory = f;
-                    largestVolume = f.getItems()[i].calculateVolume();
+                    bestFactory = f; largestVolume = f.getItems()[i].calculateVolume();
                 }
         return bestFactory;
     }
@@ -410,18 +395,11 @@ public class Main {
     private static Store findStoreWithCheapestItem(Store[] stores) {
         Store bestStore = stores[0];
         BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
-
         for (Store s : stores)
             for (int i = 0; i < s.getItems().length; i++)
                 if (s.getItems()[i].getSellingPrice().compareTo(cheapestSellingPrice) < 0) {
-                    bestStore = s;
-                    cheapestSellingPrice = s.getItems()[i].getSellingPrice();
+                    bestStore = s; cheapestSellingPrice = s.getItems()[i].getSellingPrice();
                 }
         return bestStore;
-    }
-
-    private static Boolean isItemEdible(Scanner scanner) {
-        System.out.println("Is this item edible?\n1. Yes\n2. No");
-        return numInputHandler(scanner, "Choice >> ", 1, 2) == 1;
     }
 }

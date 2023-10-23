@@ -17,12 +17,6 @@ public abstract class NamedEntity {
 
     @Override
     public String toString() {
-        return "NamedEntity{" +
-                "name='" + name + '\'' +
-                '}';
+        return "NamedEntity{" + "name='" + name + '\'' + '}';
     }
-
-
-
-
 }

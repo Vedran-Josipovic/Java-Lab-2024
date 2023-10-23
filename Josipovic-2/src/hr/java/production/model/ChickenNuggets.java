@@ -1,10 +1,10 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class ChickenNuggets extends Item implements Edible {
     private static final Integer caloriesPerKilo = 2970;
-
     private BigDecimal weightInKG;
 
     public ChickenNuggets(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, BigDecimal weightInKG) {
@@ -20,11 +20,9 @@ public class ChickenNuggets extends Item implements Edible {
         this.weightInKG = weightInKG;
     }
 
-
     @Override
     public Integer calculateKilocalories() {
-        BigDecimal totalCalories = weightInKG.multiply(BigDecimal.valueOf(caloriesPerKilo));
-        return totalCalories.toBigInteger().intValue();
+        return weightInKG.multiply(BigDecimal.valueOf(caloriesPerKilo)).setScale(0, RoundingMode.HALF_UP).intValue();
     }
 
     /**
@@ -33,21 +31,11 @@ public class ChickenNuggets extends Item implements Edible {
      */
     @Override
     public BigDecimal calculatePrice() {
-        return weightInKG.multiply(getDiscountedSellingPrice());
+        return weightInKG.multiply(getDiscountedSellingPrice()).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public String toString() {
-        return "ChickenNuggets{" +
-                "weightInKG=" + weightInKG +
-                ", category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", discount=" + discount + "%" +
-                ", name='" + name + '\'' +
-                '}';
+        return "ChickenNuggets{" + "weightInKG=" + weightInKG + ", category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + "%" + ", name='" + name + '\'' + '}';
     }
 }

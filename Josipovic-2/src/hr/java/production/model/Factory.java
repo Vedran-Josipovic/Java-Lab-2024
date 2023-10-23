@@ -30,10 +30,6 @@ public class Factory extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Factory{" +
-                "address=" + address +
-                ", items=" + Arrays.toString(items) +
-                ", name='" + name + '\'' +
-                '}';
+        return "Factory{" + "address=" + address + ", items=" + Arrays.toString(items) + ", name='" + name + '\'' + '}';
     }
 }

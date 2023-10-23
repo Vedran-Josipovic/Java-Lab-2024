@@ -2,7 +2,7 @@ package hr.java.production.model;
 
 import java.util.Arrays;
 
-public class Store extends NamedEntity{
+public class Store extends NamedEntity {
     private String webAddress;
     private Item[] items;
 
@@ -30,10 +30,6 @@ public class Store extends NamedEntity{
 
     @Override
     public String toString() {
-        return "Store{" +
-                "webAddress='" + webAddress + '\'' +
-                ", items=" + Arrays.toString(items) +
-                ", name='" + name + '\'' +
-                '}';
+        return "Store{" + "webAddress='" + webAddress + '\'' + ", items=" + Arrays.toString(items) + ", name='" + name + '\'' + '}';
     }
 }

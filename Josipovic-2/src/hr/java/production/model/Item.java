@@ -1,6 +1,7 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Represents an item in a production system.
@@ -77,11 +78,9 @@ public class Item extends NamedEntity {
         this.discount = discount;
     }
 
-    //Didn't test this yet
-    public BigDecimal getDiscountedSellingPrice(){
-        return sellingPrice.subtract(discount.discountAmount().divide(BigDecimal.valueOf(100)).multiply(sellingPrice));
+    public BigDecimal getDiscountedSellingPrice() {
+        return sellingPrice.subtract(discount.discountAmount().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP).multiply(sellingPrice));
     }
-
 
     public BigDecimal calculateVolume() {
         return width.multiply(height).multiply(length);
@@ -89,15 +88,6 @@ public class Item extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", discount=" + discount + "%" +
-                ", name='" + name + '\'' +
-                '}';
+        return "Item{" + "category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + "%" + ", name='" + name + '\'' + '}';
     }
 }

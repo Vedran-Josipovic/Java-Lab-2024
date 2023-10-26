@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Josipovic-3" />
         <module name="Josipovic-1" />
         <module name="Josipovic-2" />
       </profile>

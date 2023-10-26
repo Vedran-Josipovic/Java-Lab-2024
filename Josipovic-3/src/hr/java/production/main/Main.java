@@ -1,10 +1,12 @@
 package hr.java.production.main;
 
+import hr.java.production.exception.InvalidRangeException;
 import hr.java.production.model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -117,29 +119,29 @@ public class Main {
             for (int j = 0; j < categories.length; j++)
                 System.out.println((j + 1) + ". " + categories[j].getName());
 
-            int categoryChoice = numInputHandler(scanner, "Choice >> ", 1, categories.length);
+            int categoryChoice = numInputHandlerEx(scanner, "Choice >> ", 1, categories.length);
 
             System.out.println("Enter the item dimensions:");
 
-            BigDecimal width = numInputHandler(scanner, "Enter the item width: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal height = numInputHandler(scanner, "Enter the item height: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal length = numInputHandler(scanner, "Enter the item length: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal productionCost = numInputHandler(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal sellingPrice = numInputHandler(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal discountAmount = numInputHandler(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
+            BigDecimal width = numInputHandlerEx(scanner, "Enter the item width: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal height = numInputHandlerEx(scanner, "Enter the item height: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal length = numInputHandlerEx(scanner, "Enter the item length: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal productionCost = numInputHandlerEx(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal sellingPrice = numInputHandlerEx(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal discountAmount = numInputHandlerEx(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
             Discount discount = new Discount(discountAmount);
 
-            int itemSubclassChoice = numInputHandler(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other\nChoice >> ", 1, 3);
+            int itemSubclassChoice = numInputHandlerEx(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other\nChoice >> ", 1, 3);
             if (itemSubclassChoice == FOOD) {
-                Integer foodChoice = numInputHandler(scanner, "Pick an available food product:\n1. Pizza\n2. Chicken nuggets\nChoice >> ", PIZZA, CHICKEN_NUGGETS);
-                BigDecimal weightInKG = numInputHandler(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+                Integer foodChoice = numInputHandlerEx(scanner, "Pick an available food product:\n1. Pizza\n2. Chicken nuggets\nChoice >> ", PIZZA, CHICKEN_NUGGETS);
+                BigDecimal weightInKG = numInputHandlerEx(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
 
                 if (foodChoice.equals(PIZZA))
                     items[i] = new Pizza(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
                 else if (foodChoice.equals(CHICKEN_NUGGETS))
                     items[i] = new ChickenNuggets(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, weightInKG);
             } else if (itemSubclassChoice == LAPTOP) {
-                Integer warrantyYears = numInputHandler(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
+                Integer warrantyYears = numInputHandlerEx(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
                 items[i] = new Laptop(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount, warrantyYears);
             } else {
                 items[i] = new Item(name, categories[categoryChoice - 1], width, height, length, productionCost, sellingPrice, discount);
@@ -173,8 +175,8 @@ public class Main {
                 printAvailableItems(items, isFirstRun);
 
                 int itemChoice;
-                if (isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
-                else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
+                if (isFirstRun) itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length);
+                else itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length + 1);
 
                 if (itemChoice != items.length + 1) {
                     factoryItems[factoryItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
@@ -213,8 +215,8 @@ public class Main {
                 printAvailableItems(items, isFirstRun);
 
                 int itemChoice;
-                if (isFirstRun) itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length);
-                else itemChoice = numInputHandler(scanner, "Choice >> ", 1, items.length + 1);
+                if (isFirstRun) itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length);
+                else itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length + 1);
 
                 if (itemChoice != items.length + 1) {
                     storeItems[storeItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto storeItems-a
@@ -263,92 +265,65 @@ public class Main {
     }
 
 
-    /**
-     * Obrađuje korisnikov numerički unos. Provjerava je li unos cijeli broj i nalazi li se unutar određenog raspona.
-     * Ako unos nije cijeli broj ili je izvan raspona, traži od korisnika da unese valjani broj.
-     *
-     * @param scanner  Scanner objekt koji se koristi za dobivanje korisnikovog unosa.
-     * @param message  Poruka koja se prikazuje korisniku prilikom traženja unosa.
-     * @param minValue Minimalna prihvatljiva vrijednost za unos.
-     * @param maxValue Maksimalna prihvatljiva vrijednost za unos.
-     * @return Valjani broj koji je unio korisnik.
-     */
-    private static int numInputHandler(Scanner scanner, String message, int minValue, int maxValue) {
-        int enteredNumber;
+    private static int numInputHandlerEx(Scanner scanner, String message, int minValue, int maxValue){
+        int enteredNumber = 0;
         boolean badFormat;
         do {
-            System.out.print(message);
-            while (!scanner.hasNextInt()) {
+            try {
+                System.out.print(message);
+                enteredNumber = scanner.nextInt();
+                isNumInRangeEx(enteredNumber, minValue, maxValue);
+                badFormat = false;
+            }catch (InputMismatchException e){
+                //logger.error("Entered a string instead of a number " + e);
                 System.out.println("Entered a string instead of a number. Please enter a number:");
-                System.out.print(message);
-                scanner.nextLine();
-            }
-            enteredNumber = scanner.nextInt();
-            scanner.nextLine();
-
-            if (!isNumInRange(enteredNumber, minValue, maxValue)) {
+                badFormat = true;
+            }catch (InvalidRangeException e){
+                //logger.error(e.getMessage() + e);
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
-            } else badFormat = false;
-        } while (badFormat);
+            }
+            finally {
+                scanner.nextLine();
+            }
+        }while (badFormat);
         return enteredNumber;
     }
-
-    /**
-     * Obrađuje korisnikov numerički unos. Provjerava je li unos {@code BigDecimal} i nalazi li se unutar određenog raspona.
-     * Ako unos nije {@code BigDecimal} ili je izvan raspona, traži od korisnika da unese valjani broj.
-     *
-     * @param scanner  Scanner objekt koji se koristi za dobivanje korisnikovog unosa.
-     * @param message  Poruka koja se prikazuje korisniku prilikom traženja unosa.
-     * @param minValue Minimalna prihvatljiva vrijednost za unos.
-     * @param maxValue Maksimalna prihvatljiva vrijednost za unos.
-     * @return Valjani broj koji je unio korisnik.
-     */
-    private static BigDecimal numInputHandler(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue) {
-        BigDecimal enteredNumber;
+    private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException{
+        if (enteredNumber < minValue || enteredNumber > maxValue){
+            throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
+        }
+    }
+    private static BigDecimal numInputHandlerEx(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue){
+        BigDecimal enteredNumber = BigDecimal.ZERO;
         boolean badFormat;
-        do {
-            System.out.print(message);
-            while (!scanner.hasNextBigDecimal()) {
-                System.out.println("Invalid input. Please enter a valid number:");
-                System.out.print(message);
-                scanner.nextLine();
-            }
-            enteredNumber = scanner.nextBigDecimal();
-            scanner.nextLine();
 
-            if (!isNumInRange(enteredNumber, minValue, maxValue)) {
+        do {
+            try {
+                System.out.print(message);
+                enteredNumber = scanner.nextBigDecimal();
+                isNumInRangeEx(enteredNumber, minValue, maxValue);
+                badFormat = false;
+            }catch (InputMismatchException e){
+                //logger.error("Entered a string instead of a number " + e);
+                System.out.println("Entered a string instead of a number. Please enter a number:");
+                badFormat = true;
+            }catch (InvalidRangeException e){
+                //logger.error(e.getMessage() + e);
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
-            } else badFormat = false;
-        } while (badFormat);
+            }
+            finally {
+                scanner.nextLine();
+            }
+        }while (badFormat);
         return enteredNumber;
     }
-
-    /**
-     * Provjerava je li uneseni broj unutar zadanih granica.
-     *
-     * @param enteredNumber Broj koji se provjerava.
-     * @param minValue      Minimalna dopuštena vrijednost (Uključujući).
-     * @param maxValue      Maksimalna dopuštena vrijednost (Uključujući)
-     * @return True ako je broj unutar raspona, false ako nije.
-     */
-    private static boolean isNumInRange(int enteredNumber, int minValue, int maxValue) {
-        return enteredNumber >= minValue && enteredNumber <= maxValue;
+    private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException{
+        if (enteredNumber.compareTo(minValue) < 0 || enteredNumber.compareTo(maxValue) > 0){
+            throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
+        }
     }
-
-    /**
-     * Provjerava je li uneseni broj unutar zadanih granica.
-     *
-     * @param enteredNumber Broj koji se provjerava.
-     * @param minValue      Minimalna dopuštena vrijednost (Uključujući).
-     * @param maxValue      Maksimalna dopuštena vrijednost (Uključujući)
-     * @return True ako je broj unutar raspona, false ako nije.
-     */
-    private static boolean isNumInRange(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) {
-        return enteredNumber.compareTo(minValue) >= 0 && enteredNumber.compareTo(maxValue) <= 0;
-    }
-
 
     /**
      * Uklanja objekt klase {@code Item} koji smo odabrali iz niza.

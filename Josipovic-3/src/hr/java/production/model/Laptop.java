@@ -1,6 +1,7 @@
 package hr.java.production.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public final class Laptop extends Item implements Technical {
     private Integer warrantyYears;
@@ -21,6 +22,20 @@ public final class Laptop extends Item implements Technical {
 
     public void setWarrantyYears(Integer warrantyYears) {
         this.warrantyYears = warrantyYears;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Laptop laptop = (Laptop) o;
+        return Objects.equals(getWarrantyYears(), laptop.getWarrantyYears());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getWarrantyYears());
     }
 
     @Override

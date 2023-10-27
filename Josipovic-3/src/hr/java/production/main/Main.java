@@ -1,13 +1,17 @@
 package hr.java.production.main;
 
+import hr.java.production.exception.IdenticalItemChoiceException;
 import hr.java.production.exception.InvalidRangeException;
 import hr.java.production.model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
@@ -15,7 +19,7 @@ public class Main {
     private static final Integer FOOD = 1, LAPTOP = 2;
 
     public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("josipovic-3/src/hr/java/production/files/lab-2-input");
+        File file = new File("josipovic-3/src/hr/java/production/files/lab-3-input");
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
@@ -53,11 +57,13 @@ public class Main {
             if (i instanceof Technical t) {
                 Integer warranty = t.getRemainingWarrantyInMonths();
                 if (warranty < minWarranty) {
-                    minWarranty = warranty; shortestWarrantyLaptop = i;
+                    minWarranty = warranty;
+                    shortestWarrantyLaptop = i;
                 }
             }
         }
-        if (minWarranty == Integer.MAX_VALUE) System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
+        if (minWarranty == Integer.MAX_VALUE)
+            System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
         return shortestWarrantyLaptop;
     }
 
@@ -68,11 +74,13 @@ public class Main {
             if (i instanceof Edible edible) {
                 BigDecimal price = edible.calculatePrice();
                 if (price.compareTo(highestPrice) > 0) {
-                    highestPrice = price; mostExpensive = i;
+                    highestPrice = price;
+                    mostExpensive = i;
                 }
             }
         }
-        if (highestPrice.equals(BigDecimal.valueOf(-1))) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (highestPrice.equals(BigDecimal.valueOf(-1)))
+            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostExpensive;
     }
 
@@ -83,11 +91,13 @@ public class Main {
             if (i instanceof Edible edible) {
                 int calories = edible.calculateKilocalories();
                 if (calories > maxCalories) {
-                    maxCalories = calories; mostCaloric = i;
+                    maxCalories = calories;
+                    mostCaloric = i;
                 }
             }
         }
-        if (maxCalories == -1) System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (maxCalories == -1)
+            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
         return mostCaloric;
     }
 
@@ -160,6 +170,7 @@ public class Main {
      */
     private static Factory[] inputFactories(Scanner scanner, Item[] items) {
         Factory[] factories = new Factory[NUM_FACTORIES];
+        List<Item> addedItems = new ArrayList<>();
         for (int i = 0; i < factories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". factory: ");
             System.out.print("Enter the factory name: ");
@@ -168,37 +179,52 @@ public class Main {
             Address address = inputAddress(scanner);
             System.out.println("Pick which items the factory produces: ");
 
-            ///chooseFactoryItems - Kod se ponavlja i s dućanima, ali pošto za funkciju mi treba i factoryItems i items, treba mi mapa, pa cu poslije u 4.lab
-            Item[] factoryItems = new Item[1];
-            boolean finishedChoosing = false, isFirstRun = true;
-            while (!finishedChoosing) {
-                printAvailableItems(items, isFirstRun);
-
-                int itemChoice;
-                if (isFirstRun) itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length);
-                else itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length + 1);
-
-                if (itemChoice != items.length + 1) {
-                    factoryItems[factoryItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto factoryItems-a
-                    if (items.length > 1) {
-                        items = removeChosenItem(items, itemChoice);
-                        factoryItems = expandItemArray(factoryItems);
-                    } else finishedChoosing = true;
-                } else {
-                    finishedChoosing = true;
-                    factoryItems = trimItemArray(factoryItems);
-                }
-                isFirstRun = false;
-            }
-            ///chooseFactoryItems
-
+            Item[] factoryItems = chooseItems(scanner, items, addedItems);
             factories[i] = new Factory(name, address, factoryItems);
         }
         return factories;
     }
 
+    private static Item[] chooseItems(Scanner scanner, Item[] items, List<Item> addedItems) {
+        List<Item> factoryItems = new ArrayList<>();
+        boolean finishedChoosing = false, isFirstRun = true;
+        while (!finishedChoosing) {
+            if (items.length == addedItems.size()) {
+                //logger.error("All available items have been added. Possibly returning empty array.");
+                System.out.println("All available items have been added.");
+                break;
+            }
+            printAvailableItems(items, isFirstRun);
+            int itemChoice;
+            if (isFirstRun) itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length);
+            else itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length + 1);
+
+            if (itemChoice != items.length + 1) {
+                try {
+                    checkForIdenticalItems(items[itemChoice - 1], addedItems);
+                } catch (IdenticalItemChoiceException e) {
+                    //logger.warning(e.getMessage());
+                    System.out.println("This item [" + items[itemChoice - 1].getName() + "] has already been added. Please choose an item that isn't in this list: " + addedItems.stream().map(Item::getName).collect(Collectors.joining(", ")));
+                    continue;
+                }
+                factoryItems.add(items[itemChoice - 1]);
+                //addedItems mijenja se i van metode
+                addedItems.add(items[itemChoice - 1]);
+            } else finishedChoosing = true;
+            isFirstRun = false;
+        }
+        return factoryItems.toArray(new Item[0]);
+    }
+
+    private static void checkForIdenticalItems(Item itemChoice, List<Item> addedItems) throws IdenticalItemChoiceException {
+        if (addedItems.contains(itemChoice))
+            throw new IdenticalItemChoiceException("Chosen item [" + itemChoice + "] has already been added. Added Items: " + addedItems);
+    }
+
+
     private static Store[] inputStores(Scanner scanner, Item[] items) {
         Store[] stores = new Store[NUM_STORES];
+        List<Item> addedItems = new ArrayList<>();
         for (int i = 0; i < stores.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". store: ");
             System.out.print("Enter the store name: ");
@@ -208,29 +234,7 @@ public class Main {
 
             System.out.println("Pick which items the store sells: ");
 
-            ///chooseFactoryItems
-            Item[] storeItems = new Item[1];
-            boolean finishedChoosing = false, isFirstRun = true;
-            while (!finishedChoosing) {
-                printAvailableItems(items, isFirstRun);
-
-                int itemChoice;
-                if (isFirstRun) itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length);
-                else itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.length + 1);
-
-                if (itemChoice != items.length + 1) {
-                    storeItems[storeItems.length - 1] = items[itemChoice - 1]; //Dodaje se na zadnje mjesto storeItems-a
-                    if (items.length > 1) {
-                        items = removeChosenItem(items, itemChoice);
-                        storeItems = expandItemArray(storeItems);
-                    } else finishedChoosing = true;
-                } else {
-                    finishedChoosing = true;
-                    storeItems = trimItemArray(storeItems);
-                }
-                isFirstRun = false;
-            }
-            ///chooseFactoryItems
+            Item[] storeItems = chooseItems(scanner, items, addedItems);
             stores[i] = new Store(name, webAddress, storeItems);
         }
         return stores;
@@ -265,7 +269,7 @@ public class Main {
     }
 
 
-    private static int numInputHandlerEx(Scanner scanner, String message, int minValue, int maxValue){
+    private static int numInputHandlerEx(Scanner scanner, String message, int minValue, int maxValue) {
         int enteredNumber = 0;
         boolean badFormat;
         do {
@@ -274,27 +278,28 @@ public class Main {
                 enteredNumber = scanner.nextInt();
                 isNumInRangeEx(enteredNumber, minValue, maxValue);
                 badFormat = false;
-            }catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 //logger.error("Entered a string instead of a number " + e);
                 System.out.println("Entered a string instead of a number. Please enter a number:");
                 badFormat = true;
-            }catch (InvalidRangeException e){
+            } catch (InvalidRangeException e) {
                 //logger.error(e.getMessage() + e);
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
-            }
-            finally {
+            } finally {
                 scanner.nextLine();
             }
-        }while (badFormat);
+        } while (badFormat);
         return enteredNumber;
     }
-    private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException{
-        if (enteredNumber < minValue || enteredNumber > maxValue){
+
+    private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException {
+        if (enteredNumber < minValue || enteredNumber > maxValue) {
             throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
         }
     }
-    private static BigDecimal numInputHandlerEx(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue){
+
+    private static BigDecimal numInputHandlerEx(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue) {
         BigDecimal enteredNumber = BigDecimal.ZERO;
         boolean badFormat;
 
@@ -304,55 +309,25 @@ public class Main {
                 enteredNumber = scanner.nextBigDecimal();
                 isNumInRangeEx(enteredNumber, minValue, maxValue);
                 badFormat = false;
-            }catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 //logger.error("Entered a string instead of a number " + e);
                 System.out.println("Entered a string instead of a number. Please enter a number:");
                 badFormat = true;
-            }catch (InvalidRangeException e){
+            } catch (InvalidRangeException e) {
                 //logger.error(e.getMessage() + e);
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
-            }
-            finally {
+            } finally {
                 scanner.nextLine();
             }
-        }while (badFormat);
+        } while (badFormat);
         return enteredNumber;
     }
-    private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException{
-        if (enteredNumber.compareTo(minValue) < 0 || enteredNumber.compareTo(maxValue) > 0){
+
+    private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException {
+        if (enteredNumber.compareTo(minValue) < 0 || enteredNumber.compareTo(maxValue) > 0) {
             throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
         }
-    }
-
-    /**
-     * Uklanja objekt klase {@code Item} koji smo odabrali iz niza.
-     * Prolazi kroz niz {@code items} i ako dođe do mjesta na kojem se nalazi odabrani objekt,
-     * ne sprema ga u novi niz koji ima veličinu manju za jedan.
-     */
-    private static Item[] removeChosenItem(Item[] items, int itemChoice) {
-        Item[] clonedItems = new Item[items.length - 1];
-        for (int i = 0, j = 0; i < items.length; i++)
-            if (i != itemChoice - 1) clonedItems[j++] = items[i];
-        return clonedItems;
-    }
-
-    /**
-     * Povećava niz za jedan element. (koji poprima vrijednost null)
-     */
-    private static Item[] expandItemArray(Item[] oldArray) {
-        Item[] newArray = new Item[oldArray.length + 1];
-        System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
-        return newArray;
-    }
-
-    /**
-     * Smanjuje veličinu niza za jedan.
-     */
-    private static Item[] trimItemArray(Item[] oldArray) {
-        Item[] newArray = new Item[oldArray.length - 1];
-        System.arraycopy(oldArray, 0, newArray, 0, newArray.length);
-        return newArray;
     }
 
 
@@ -362,7 +337,8 @@ public class Main {
         for (Factory f : factories)
             for (int i = 0; i < f.getItems().length; i++)
                 if (f.getItems()[i].calculateVolume().compareTo(largestVolume) > 0) {
-                    bestFactory = f; largestVolume = f.getItems()[i].calculateVolume();
+                    bestFactory = f;
+                    largestVolume = f.getItems()[i].calculateVolume();
                 }
         return bestFactory;
     }
@@ -373,7 +349,8 @@ public class Main {
         for (Store s : stores)
             for (int i = 0; i < s.getItems().length; i++)
                 if (s.getItems()[i].getSellingPrice().compareTo(cheapestSellingPrice) < 0) {
-                    bestStore = s; cheapestSellingPrice = s.getItems()[i].getSellingPrice();
+                    bestStore = s;
+                    cheapestSellingPrice = s.getItems()[i].getSellingPrice();
                 }
         return bestStore;
     }

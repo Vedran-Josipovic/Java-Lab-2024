@@ -2,6 +2,7 @@ package hr.java.production.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 public class Pizza extends Item implements Edible {
     private static final Integer caloriesPerKilo = 2200;
@@ -32,6 +33,20 @@ public class Pizza extends Item implements Edible {
     @Override
     public BigDecimal calculatePrice() {
         return weightInKG.multiply(getDiscountedSellingPrice()).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Pizza pizza = (Pizza) o;
+        return Objects.equals(getWeightInKG(), pizza.getWeightInKG());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getWeightInKG());
     }
 
     @Override

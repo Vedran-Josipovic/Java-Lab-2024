@@ -1,8 +1,11 @@
 package hr.java.production.main;
 
+import hr.java.production.exception.IdenticalCategoryInputException;
 import hr.java.production.exception.IdenticalItemChoiceException;
 import hr.java.production.exception.InvalidRangeException;
 import hr.java.production.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,8 +21,12 @@ public class Main {
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
     private static final Integer FOOD = 1, LAPTOP = 2;
 
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("josipovic-3/src/hr/java/production/files/lab-3-input");
+        logger.info("Aplikacija započela s radom.");
+
+        File file = new File("josipovic-3/src/main/src/hr/java/production/files/lab-3-input");
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
@@ -38,15 +45,19 @@ public class Main {
         Item mostCaloricFood = findMostCaloricFood(items);
         if (mostCaloricFood instanceof Edible e)
             System.out.println("The food product with the most calories is " + mostCaloricFood.getName() + " [" + e.calculateKilocalories() + "]");
+        else logger.warn("Can't calculate the food product with the most calories because no instances of Interface Edible have been added.");
 
         Item highestPricedFood = findHighestPricedFood(items);
         if (highestPricedFood instanceof Edible e)
             System.out.println("The food product with the highest price (with discount) is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
+        else logger.warn("Can't calculate the food product with the highest price because no instances of Interface Edible have been added.");
 
         Item shortestWarrantyLaptop = findLaptopWithShortestWarranty(items);
         if (shortestWarrantyLaptop instanceof Technical t)
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
+        else logger.warn("Can't calculate the laptop with the shortest warranty because no instances of Interface Technical have been added.");
 
+        logger.info("Aplikacija završila.");
     }
 
     private static Item findLaptopWithShortestWarranty(Item[] items) {
@@ -101,21 +112,40 @@ public class Main {
         return mostCaloric;
     }
 
+
     private static Category[] inputCategories(Scanner scanner) {
         Category[] categories = new Category[NUM_CATEGORIES];
         for (int i = 0; i < categories.length; i++) {
-            System.out.println("Enter the information about the " + (i + 1) + ". category: ");
+            while (true) {
+                System.out.println("Enter the information about the " + (i + 1) + ". category: ");
 
-            System.out.print("Enter the category name: ");
-            String name = scanner.nextLine();
+                System.out.print("Enter the category name: ");
+                String name = scanner.nextLine();
 
-            System.out.print("Enter the category description: ");
-            String description = scanner.nextLine();
+                System.out.print("Enter the category description: ");
+                String description = scanner.nextLine();
 
-            categories[i] = new Category(name, description);
+                try {
+                    checkForIdenticalCategories(new Category(name, description), categories, i);
+                } catch (IdenticalCategoryInputException e) {
+                    logger.warn(e.getMessage());
+                    System.out.println("This category [" + name + "] has already been added. Please choose a category that hasn't been added.");
+                    continue;
+                }
+                categories[i] = new Category(name, description);
+                break;
+            }
         }
         return categories;
     }
+
+    private static void checkForIdenticalCategories(Category categoryInput, Category[] categories, int categoriesSize) throws IdenticalCategoryInputException {
+        for (int i = 0; i < categoriesSize; i++) {
+            if (categories[i].equals(categoryInput))
+                throw new IdenticalCategoryInputException("Entered category [" + categoryInput + "] has already been added. Added Categories: " + categories);
+        }
+    }
+
 
     private static Item[] inputItems(Scanner scanner, Category[] categories) {
         Item[] items = new Item[NUM_ITEMS];
@@ -190,7 +220,7 @@ public class Main {
         boolean finishedChoosing = false, isFirstRun = true;
         while (!finishedChoosing) {
             if (items.length == addedItems.size()) {
-                //logger.error("All available items have been added. Possibly returning empty array.");
+                logger.warn("All available items have been added. Possibly returning empty array.");
                 System.out.println("All available items have been added.");
                 break;
             }
@@ -203,7 +233,7 @@ public class Main {
                 try {
                     checkForIdenticalItems(items[itemChoice - 1], addedItems);
                 } catch (IdenticalItemChoiceException e) {
-                    //logger.warning(e.getMessage());
+                    logger.warn(e.getMessage());
                     System.out.println("This item [" + items[itemChoice - 1].getName() + "] has already been added. Please choose an item that isn't in this list: " + addedItems.stream().map(Item::getName).collect(Collectors.joining(", ")));
                     continue;
                 }
@@ -279,11 +309,11 @@ public class Main {
                 isNumInRangeEx(enteredNumber, minValue, maxValue);
                 badFormat = false;
             } catch (InputMismatchException e) {
-                //logger.error("Entered a string instead of a number " + e);
+                logger.error("Entered a string instead of a number " + e);
                 System.out.println("Entered a string instead of a number. Please enter a number:");
                 badFormat = true;
             } catch (InvalidRangeException e) {
-                //logger.error(e.getMessage() + e);
+                logger.error(e.getMessage() + e);
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
             } finally {
@@ -310,11 +340,11 @@ public class Main {
                 isNumInRangeEx(enteredNumber, minValue, maxValue);
                 badFormat = false;
             } catch (InputMismatchException e) {
-                //logger.error("Entered a string instead of a number " + e);
+                logger.error("Entered a string instead of a number " + e);
                 System.out.println("Entered a string instead of a number. Please enter a number:");
                 badFormat = true;
             } catch (InvalidRangeException e) {
-                //logger.error(e.getMessage() + e);
+                logger.error(e.getMessage() + e);
                 System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
                 badFormat = true;
             } finally {

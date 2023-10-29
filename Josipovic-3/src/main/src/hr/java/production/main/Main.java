@@ -345,13 +345,13 @@ public class Main {
     }
 
     /**
-     * Checks if an item has already been added to a list.
+     * Checks if an item has already been added to a array.
      * Throws an {@code IdenticalItemChoiceException} if the item has already been added.
      *
      * @param itemChoice      The {@code Item} object to check.
      * @param addedItems      An array of {@code Item} objects that have already been added.
      * @param addedItemsCount The count of items that have already been added.
-     * @throws IdenticalItemChoiceException If the item has already been added to the list.
+     * @throws IdenticalItemChoiceException If the item has already been added to the array.
      */
     private static void checkForIdenticalItems(Item itemChoice, Item[] addedItems, int addedItemsCount) throws IdenticalItemChoiceException {
         for (int i = 0; i < addedItemsCount; i++) {

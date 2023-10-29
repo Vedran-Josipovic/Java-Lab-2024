@@ -25,6 +25,8 @@ public class Main {
 
         Store bestStore = findStoreWithCheapestItem(stores);
         System.out.println("The store that sells an item with the cheapest price is: '" + bestStore.getName() + "'.");
+
+        System.out.println("Finished");
     }
 
     private static Category[] inputCategories(Scanner scanner){

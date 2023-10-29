@@ -1,11 +1,13 @@
 package hr.java.production.model;
 
 /**
- * Predstavlja tehničku robu kao artikl.
+ * Provides a method for calculating the remaining warranty in months for technical goods.
  */
 public sealed interface Technical permits Laptop {
     /**
-     * @return Trajanje garantnog roka tehničke robe kao artikla (cjelobrojnu vrijednost u mjesecima).
+     * Calculates the remaining warranty for the technical good in months.
+     *
+     * @return The remaining warranty for the technical good in months.
      */
     Integer getRemainingWarrantyInMonths();
 }

@@ -10,11 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  * Contains the logic for the main method as well as all other methods used in it. Also contains constants used throughout the entire class.
@@ -28,7 +26,7 @@ public class Main {
 
     /**
      * The main method of the application.
-     *
+     * <p>
      * Starts the application, reads input data from a file, and performs several operations. It creates categories, items, factories, and stores based on the input data.
      * It then finds and prints information about the factory that produces the item with the largest volume, the store that sells the cheapest item, the most caloric food item,
      * the highest priced food item, and the laptop with the shortest warranty.
@@ -152,7 +150,6 @@ public class Main {
     }
 
 
-
     /**
      * Prompts the user to input information for a specified number of categories.
      * It ensures that no two categories have the same name and description.
@@ -191,15 +188,15 @@ public class Main {
      * Checks if a category already exists in an array of categories.
      * It throws an {@code IdenticalCategoryInputException} if the category already exists.
      *
-     * @param categoryInput The Category object to check.
-     * @param categories An array of Category objects.
+     * @param categoryInput  The Category object to check.
+     * @param categories     An array of Category objects.
      * @param categoriesSize The number of categories currently in the array.
      * @throws IdenticalCategoryInputException If the category already exists in the array.
      */
     private static void checkForIdenticalCategories(Category categoryInput, Category[] categories, int categoriesSize) throws IdenticalCategoryInputException {
         for (int i = 0; i < categoriesSize; i++) {
             if (categories[i].equals(categoryInput))
-                throw new IdenticalCategoryInputException("Entered category [" + categoryInput + "] has already been added. Added Categories: " + categories);
+                throw new IdenticalCategoryInputException("Entered category [" + categoryInput + "] has already been added. Added Categories: " + Arrays.toString(categories));
         }
     }
 
@@ -211,7 +208,7 @@ public class Main {
      * If the item is a laptop, the user can input its warranty duration.
      * After each item is created, if it's edible, it prints out its kilocalories and price with discount.
      *
-     * @param scanner A Scanner object for user input.
+     * @param scanner    A Scanner object for user input.
      * @param categories An array of {@code Category} objects to choose from when creating an item.
      * @return An array of Item objects.
      */
@@ -264,19 +261,18 @@ public class Main {
     }
 
 
-
     /**
      * Prompts the user to input information for a specified number of factories.
      * The user can choose the name, address, and items produced by each factory.
-     * It ensures that no two factories produce the same item.
+     * Ensures that no two factories produce the same item.
      *
-     * @param scanner A Scanner object for user input.
-     * @param items An array of Item objects to choose from when creating a factory.
-     * @return An array of Factory objects.
+     * @param scanner A {@code Scanner} object for user input.
+     * @param items   An array of {@code Item} objects to choose from when creating a factory.
+     * @return An array of {@code Factory} objects.
      */
     private static Factory[] inputFactories(Scanner scanner, Item[] items) {
         Factory[] factories = new Factory[NUM_FACTORIES];
-        List<Item> addedItems = new ArrayList<>();
+        Item[] addedItems = new Item[items.length];
         for (int i = 0; i < factories.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". factory: ");
             System.out.print("Enter the factory name: ");
@@ -285,7 +281,7 @@ public class Main {
             Address address = inputAddress(scanner);
             System.out.println("Pick which items the factory produces: ");
 
-            Item[] factoryItems = chooseItems(scanner, items, addedItems);
+            Item[] factoryItems = chooseItems(scanner, items, addedItems, itemsSize(addedItems));
             factories[i] = new Factory(name, address, factoryItems);
         }
         return factories;
@@ -293,20 +289,35 @@ public class Main {
 
 
     /**
+     * Counts the number of non-null items in an array.
+     *
+     * @param items An array of {@code Item} objects.
+     * @return The count of non-null items in the array.
+     */
+    public static int itemsSize(Item[] items) {
+        int count = 0;
+        for (Item i : items) if (i != null) count++;
+        return count;
+    }
+
+
+    /**
      * Allows the user to choose items from a given array.
      * The user can't choose an item that has already been added.
-     * It offers an option to finish choosing after the first run.
+     * Offers an option to finish choosing after the first run.
      *
-     * @param scanner A Scanner object for user input.
-     * @param items An array of Item objects to choose from.
-     * @param addedItems A list of Item objects that have already been added.
-     * @return An array of chosen Item objects.
+     * @param scanner         A {@code Scanner} object for user input.
+     * @param items           An array of {@code Item} objects to choose from.
+     * @param addedItems      An array of {@code Item} objects that have already been added.
+     * @param addedItemsCount The count of items that have already been added.
+     * @return An array of chosen {@code Item} objects.
      */
-    private static Item[] chooseItems(Scanner scanner, Item[] items, List<Item> addedItems) {
-        List<Item> factoryItems = new ArrayList<>();
+    private static Item[] chooseItems(Scanner scanner, Item[] items, Item[] addedItems, int addedItemsCount) {
+        Item[] factoryItems = new Item[items.length];
+        int storeItemsCount = 0;
         boolean finishedChoosing = false, isFirstRun = true;
         while (!finishedChoosing) {
-            if (items.length == addedItems.size()) {
+            if (items.length == addedItemsCount) {
                 logger.warn("All available items have been added. Possibly returning empty array.");
                 System.out.println("All available items have been added.");
                 break;
@@ -318,48 +329,50 @@ public class Main {
 
             if (itemChoice != items.length + 1) {
                 try {
-                    checkForIdenticalItems(items[itemChoice - 1], addedItems);
+                    checkForIdenticalItems(items[itemChoice - 1], addedItems, addedItemsCount);
                 } catch (IdenticalItemChoiceException e) {
                     logger.warn(e.getMessage());
-                    System.out.println("This item [" + items[itemChoice - 1].getName() + "] has already been added. Please choose an item that isn't in this list: " + addedItems.stream().map(Item::getName).collect(Collectors.joining(", ")));
+                    System.out.println("This item [" + items[itemChoice - 1].getName() + "] has already been added.");
                     continue;
                 }
-                factoryItems.add(items[itemChoice - 1]);
+                factoryItems[storeItemsCount++] = items[itemChoice - 1];
                 //addedItems mijenja se i van metode
-                addedItems.add(items[itemChoice - 1]);
+                addedItems[addedItemsCount++] = items[itemChoice - 1];
             } else finishedChoosing = true;
             isFirstRun = false;
         }
-        return factoryItems.toArray(new Item[0]);
+        return Arrays.copyOf(factoryItems, storeItemsCount);
     }
 
     /**
      * Checks if an item has already been added to a list.
-     * It throws an IdenticalItemChoiceException if the item has already been added.
+     * Throws an {@code IdenticalItemChoiceException} if the item has already been added.
      *
-     * @param itemChoice The Item object to check.
-     * @param addedItems A list of Item objects that have already been added.
+     * @param itemChoice      The {@code Item} object to check.
+     * @param addedItems      An array of {@code Item} objects that have already been added.
+     * @param addedItemsCount The count of items that have already been added.
      * @throws IdenticalItemChoiceException If the item has already been added to the list.
      */
-    private static void checkForIdenticalItems(Item itemChoice, List<Item> addedItems) throws IdenticalItemChoiceException {
-        if (addedItems.contains(itemChoice))
-            throw new IdenticalItemChoiceException("Chosen item [" + itemChoice + "] has already been added. Added Items: " + addedItems);
+    private static void checkForIdenticalItems(Item itemChoice, Item[] addedItems, int addedItemsCount) throws IdenticalItemChoiceException {
+        for (int i = 0; i < addedItemsCount; i++) {
+            if (itemChoice.equals(addedItems[i])) {
+                throw new IdenticalItemChoiceException("Chosen item [" + itemChoice + "] has already been added. Added Items: " + Arrays.toString(Arrays.copyOf(addedItems, addedItemsCount)));
+            }
+        }
     }
-
-
 
     /**
      * Prompts the user to input information for a specified number of stores.
-     * The user can choose the name, web address, and items sold by each store.
-     * It ensures that no two stores sell the same item.
+     * User can choose the name, web address, and items sold by each store.
+     * Ensures that no two stores sell the same item.
      *
-     * @param scanner A Scanner object for user input.
-     * @param items An array of Item objects to choose from when creating a store.
-     * @return An array of Store objects.
+     * @param scanner A {@code Scanner} object for user input.
+     * @param items   An array of {@code Item} objects to choose from when creating a store.
+     * @return An array of {@code Store} objects.
      */
     private static Store[] inputStores(Scanner scanner, Item[] items) {
         Store[] stores = new Store[NUM_STORES];
-        List<Item> addedItems = new ArrayList<>();
+        Item[] addedItems = new Item[items.length];
         for (int i = 0; i < stores.length; i++) {
             System.out.println("Enter the information about the " + (i + 1) + ". store: ");
             System.out.print("Enter the store name: ");
@@ -369,7 +382,7 @@ public class Main {
 
             System.out.println("Pick which items the store sells: ");
 
-            Item[] storeItems = chooseItems(scanner, items, addedItems);
+            Item[] storeItems = chooseItems(scanner, items, addedItems, itemsSize(addedItems));
             stores[i] = new Store(name, webAddress, storeItems);
         }
         return stores;
@@ -401,11 +414,11 @@ public class Main {
 
     /**
      * Prints all available items for selection.
-     *
+     * <p>
      * This method iterates over all items and prints them for the user to choose from. If at least one item has already been chosen,
      * it also provides an option to finish choosing.
      *
-     * @param items An array of {@code Item} objects to be printed.
+     * @param items      An array of {@code Item} objects to be printed.
      * @param isFirstRun A boolean flag indicating whether this is the first run of item selection. If it's not the first run,
      *                   an option to finish choosing is printed.
      */
@@ -417,17 +430,15 @@ public class Main {
     }
 
 
-
-
     /**
      * Handles the input of an integer number from the user.
-     *
+     * <p>
      * This method prompts the user to enter an integer number within a specified range. If the user enters a string instead of a number,
      * or a number outside the specified range, they are asked to enter the number again
      * and an error is logged.
      *
-     * @param scanner The {@code Scanner} object used for user input.
-     * @param message The prompt message displayed to the user.
+     * @param scanner  The {@code Scanner} object used for user input.
+     * @param message  The prompt message displayed to the user.
      * @param minValue The minimum acceptable value for the input number (including).
      * @param maxValue The maximum acceptable value for the input number (including).
      * @return The valid integer number entered by the user.
@@ -458,12 +469,12 @@ public class Main {
 
     /**
      * Checks if an entered integer number is within a specified range.
-     *
+     * <p>
      * This method throws an {@code InvalidRangeException} if the entered number is not within the specified range.
      *
      * @param enteredNumber The integer number to check.
-     * @param minValue The minimum acceptable value for the entered number (including).
-     * @param maxValue The maximum acceptable value for the entered number (including).
+     * @param minValue      The minimum acceptable value for the entered number (including).
+     * @param maxValue      The maximum acceptable value for the entered number (including).
      * @throws InvalidRangeException If the entered number is not within the specified range.
      */
     private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException {
@@ -475,13 +486,13 @@ public class Main {
 
     /**
      * Handles the input of a BigDecimal number from the user.
-     *
+     * <p>
      * This method prompts the user to enter a BigDecimal number within a specified range. If the user enters a string instead of a number,
      * or a number outside the specified range, they are asked to enter the number again
      * and an error is logged.
      *
-     * @param scanner The {@code Scanner} object used for user input.
-     * @param message The prompt message displayed to the user.
+     * @param scanner  The {@code Scanner} object used for user input.
+     * @param message  The prompt message displayed to the user.
      * @param minValue The minimum acceptable value for the input number (including).
      * @param maxValue The maximum acceptable value for the input number (including).
      * @return The valid BigDecimal number entered by the user.
@@ -513,12 +524,12 @@ public class Main {
 
     /**
      * Checks if an entered BigDecimal number is within a specified range.
-     *
+     * <p>
      * This method throws an {@code InvalidRangeException} if the entered number is not within the specified range.
      *
      * @param enteredNumber The BigDecimal number to check.
-     * @param minValue The minimum acceptable value for the entered number (including).
-     * @param maxValue The maximum acceptable value for the entered number (including).
+     * @param minValue      The minimum acceptable value for the entered number (including).
+     * @param maxValue      The maximum acceptable value for the entered number (including).
      * @throws InvalidRangeException If the entered number is not within the specified range.
      */
     private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException {
@@ -530,13 +541,13 @@ public class Main {
 
     /**
      * Finds the factory that produces the item with the largest volume.
-     *
+     * <p>
      * This method iterates over all factories and their items, and keeps track of the factory that produces the item with the largest volume.
      * The volume of an item is calculated using the {@code calculateVolume()} method of the {@code Item} class.
      *
      * @param factories An array of {@code Factory} objects to search through.
      * @return The {@code Factory} object that produces the item with the largest volume. If multiple factories produce items with the same largest volume,
-     *         it returns the first one encountered.
+     * it returns the first one encountered.
      */
     private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories) {
         Factory bestFactory = factories[0];
@@ -553,13 +564,13 @@ public class Main {
 
     /**
      * Finds the store that sells the cheapest item.
-     *
+     * <p>
      * This method iterates over all stores and their items, and keeps track of the store that sells the item with the cheapest selling price.
      * The selling price of an item is obtained using the {@code getSellingPrice()} method of the {@code Item} class which means the discount isn't applied.
      *
      * @param stores An array of {@code Store} objects to search through.
      * @return The {@code Store} object that sells the item with the cheapest price. If multiple stores sell items at the same cheapest price,
-     *         it returns the first one encountered.
+     * it returns the first one encountered.
      */
     private static Store findStoreWithCheapestItem(Store[] stores) {
         Store bestStore = stores[0];

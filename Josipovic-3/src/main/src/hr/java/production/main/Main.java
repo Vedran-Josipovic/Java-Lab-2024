@@ -16,13 +16,26 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * Contains the logic for the main method as well as all other methods used in it. Also contains constants used throughout the entire class.
+ */
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
     private static final Integer FOOD = 1, LAPTOP = 2;
-
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
+
+    /**
+     * The main method of the application.
+     *
+     * Starts the application, reads input data from a file, and performs several operations. It creates categories, items, factories, and stores based on the input data.
+     * It then finds and prints information about the factory that produces the item with the largest volume, the store that sells the cheapest item, the most caloric food item,
+     * the highest priced food item, and the laptop with the shortest warranty.
+     *
+     * @param args Command line arguments. Not used in this application.
+     * @throws FileNotFoundException If the input file cannot be found.
+     */
     public static void main(String[] args) throws FileNotFoundException {
         logger.info("Aplikacija započela s radom.");
 
@@ -45,21 +58,26 @@ public class Main {
         Item mostCaloricFood = findMostCaloricFood(items);
         if (mostCaloricFood instanceof Edible e)
             System.out.println("The food product with the most calories is " + mostCaloricFood.getName() + " [" + e.calculateKilocalories() + "]");
-        else logger.warn("Can't calculate the food product with the most calories because no instances of Interface Edible have been added.");
 
         Item highestPricedFood = findHighestPricedFood(items);
         if (highestPricedFood instanceof Edible e)
             System.out.println("The food product with the highest price (with discount) is " + highestPricedFood.getName() + " [" + e.calculatePrice() + "]");
-        else logger.warn("Can't calculate the food product with the highest price because no instances of Interface Edible have been added.");
 
         Item shortestWarrantyLaptop = findLaptopWithShortestWarranty(items);
         if (shortestWarrantyLaptop instanceof Technical t)
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
-        else logger.warn("Can't calculate the laptop with the shortest warranty because no instances of Interface Technical have been added.");
 
         logger.info("Aplikacija završila.");
     }
 
+
+    /**
+     * Searches for the laptop with the shortest warranty among a given array of items.
+     * If no laptops are found in the array, it returns the first item in the array and logs an error.
+     *
+     * @param items An array of Item objects to search through.
+     * @return The laptop with the shortest warranty. If no laptops are found, returns the first item in the array.
+     */
     private static Item findLaptopWithShortestWarranty(Item[] items) {
         Item shortestWarrantyLaptop = items[0];
         Integer minWarranty = Integer.MAX_VALUE;
@@ -73,11 +91,20 @@ public class Main {
                 }
             }
         }
-        if (minWarranty == Integer.MAX_VALUE)
-            System.out.println("[ERROR] There are no laptops among items. Returning the first item in array.");
+        if (minWarranty == Integer.MAX_VALUE) {
+            System.out.println("There are no laptops among items. Returning the first item in array.");
+            logger.error("There are no laptops among items. Returning the first item in array. " + "Can't find the laptop with the shortest warranty because no instances of Interface Technical have been added.");
+        }
         return shortestWarrantyLaptop;
     }
 
+    /**
+     * Searches for the food product with the highest price among a given array of items.
+     * If no food products are found in the array, it returns the first item in the array and logs an error.
+     *
+     * @param items An array of Item objects to search through.
+     * @return The food product with the highest price. If no food products are found, returns the first item in the array.
+     */
     private static Item findHighestPricedFood(Item[] items) {
         Item mostExpensive = items[0];
         BigDecimal highestPrice = BigDecimal.valueOf(-1);
@@ -90,11 +117,21 @@ public class Main {
                 }
             }
         }
-        if (highestPrice.equals(BigDecimal.valueOf(-1)))
-            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (highestPrice.equals(BigDecimal.valueOf(-1))) {
+            System.out.println("There are no food products among items. Returning the first item in array.");
+            logger.error("There are no food products among items. Returning the first item in array. " + "Can't calculate the food product with the highest price because no instances of Interface Edible have been added.");
+        }
+
         return mostExpensive;
     }
 
+    /**
+     * Searches for the food product with the most calories among a given array of items.
+     * If no food products are found in the array, it returns the first item in the array and logs an error.
+     *
+     * @param items An array of Item objects to search through.
+     * @return The food product with the most calories. If no food products are found, returns the first item in the array.
+     */
     private static Item findMostCaloricFood(Item[] items) {
         Item mostCaloric = items[0];
         int maxCalories = -1;
@@ -107,12 +144,23 @@ public class Main {
                 }
             }
         }
-        if (maxCalories == -1)
-            System.out.println("[ERROR] There are no food products among items. Returning the first item in array.");
+        if (maxCalories == -1) {
+            System.out.println("There are no food products among items. Returning the first item in array.");
+            logger.error("There are no food products among items. Returning the first item in array. " + "Can't calculate the food product with the most calories because no instances of Interface Edible have been added.");
+        }
         return mostCaloric;
     }
 
 
+
+    /**
+     * Prompts the user to input information for a specified number of categories.
+     * It ensures that no two categories have the same name and description.
+     * If a category already exists, it prompts the user to input a new category.
+     *
+     * @param scanner A Scanner object for user input.
+     * @return An array of Category objects.
+     */
     private static Category[] inputCategories(Scanner scanner) {
         Category[] categories = new Category[NUM_CATEGORIES];
         for (int i = 0; i < categories.length; i++) {
@@ -139,6 +187,15 @@ public class Main {
         return categories;
     }
 
+    /**
+     * Checks if a category already exists in an array of categories.
+     * It throws an {@code IdenticalCategoryInputException} if the category already exists.
+     *
+     * @param categoryInput The Category object to check.
+     * @param categories An array of Category objects.
+     * @param categoriesSize The number of categories currently in the array.
+     * @throws IdenticalCategoryInputException If the category already exists in the array.
+     */
     private static void checkForIdenticalCategories(Category categoryInput, Category[] categories, int categoriesSize) throws IdenticalCategoryInputException {
         for (int i = 0; i < categoriesSize; i++) {
             if (categories[i].equals(categoryInput))
@@ -147,6 +204,17 @@ public class Main {
     }
 
 
+    /**
+     * Prompts the user to input information for a specified number of items.
+     * The user can choose the category and dimensions of each item, as well as specify whether the item is food, a laptop, or other.
+     * If the item is food, the user can specify whether it's pizza or chicken nuggets and input its weight.
+     * If the item is a laptop, the user can input its warranty duration.
+     * After each item is created, if it's edible, it prints out its kilocalories and price with discount.
+     *
+     * @param scanner A Scanner object for user input.
+     * @param categories An array of {@code Category} objects to choose from when creating an item.
+     * @return An array of Item objects.
+     */
     private static Item[] inputItems(Scanner scanner, Category[] categories) {
         Item[] items = new Item[NUM_ITEMS];
         for (int i = 0; i < items.length; i++) {
@@ -195,8 +263,16 @@ public class Main {
         return items;
     }
 
+
+
     /**
-     * Unosi tvornice. Nakon što se odabere item, uklanja se it liste za odabir.
+     * Prompts the user to input information for a specified number of factories.
+     * The user can choose the name, address, and items produced by each factory.
+     * It ensures that no two factories produce the same item.
+     *
+     * @param scanner A Scanner object for user input.
+     * @param items An array of Item objects to choose from when creating a factory.
+     * @return An array of Factory objects.
      */
     private static Factory[] inputFactories(Scanner scanner, Item[] items) {
         Factory[] factories = new Factory[NUM_FACTORIES];
@@ -215,6 +291,17 @@ public class Main {
         return factories;
     }
 
+
+    /**
+     * Allows the user to choose items from a given array.
+     * The user can't choose an item that has already been added.
+     * It offers an option to finish choosing after the first run.
+     *
+     * @param scanner A Scanner object for user input.
+     * @param items An array of Item objects to choose from.
+     * @param addedItems A list of Item objects that have already been added.
+     * @return An array of chosen Item objects.
+     */
     private static Item[] chooseItems(Scanner scanner, Item[] items, List<Item> addedItems) {
         List<Item> factoryItems = new ArrayList<>();
         boolean finishedChoosing = false, isFirstRun = true;
@@ -246,12 +333,30 @@ public class Main {
         return factoryItems.toArray(new Item[0]);
     }
 
+    /**
+     * Checks if an item has already been added to a list.
+     * It throws an IdenticalItemChoiceException if the item has already been added.
+     *
+     * @param itemChoice The Item object to check.
+     * @param addedItems A list of Item objects that have already been added.
+     * @throws IdenticalItemChoiceException If the item has already been added to the list.
+     */
     private static void checkForIdenticalItems(Item itemChoice, List<Item> addedItems) throws IdenticalItemChoiceException {
         if (addedItems.contains(itemChoice))
             throw new IdenticalItemChoiceException("Chosen item [" + itemChoice + "] has already been added. Added Items: " + addedItems);
     }
 
 
+
+    /**
+     * Prompts the user to input information for a specified number of stores.
+     * The user can choose the name, web address, and items sold by each store.
+     * It ensures that no two stores sell the same item.
+     *
+     * @param scanner A Scanner object for user input.
+     * @param items An array of Item objects to choose from when creating a store.
+     * @return An array of Store objects.
+     */
     private static Store[] inputStores(Scanner scanner, Item[] items) {
         Store[] stores = new Store[NUM_STORES];
         List<Item> addedItems = new ArrayList<>();
@@ -270,6 +375,13 @@ public class Main {
         return stores;
     }
 
+    /**
+     * Prompts the user to input information for an address.
+     * The user can input the street name, house number, city, and postal code.
+     *
+     * @param scanner A Scanner object for user input.
+     * @return An Address object built with the provided information.
+     */
     private static Address inputAddress(Scanner scanner) {
         System.out.print("Enter the street name: ");
         String street = scanner.nextLine();
@@ -288,8 +400,14 @@ public class Main {
 
 
     /**
-     * Ispisuje sve dostupne artikle. Ukoliko je već odabran jedan artikl,
-     * nudi se opcija za završavanje odabira.
+     * Prints all available items for selection.
+     *
+     * This method iterates over all items and prints them for the user to choose from. If at least one item has already been chosen,
+     * it also provides an option to finish choosing.
+     *
+     * @param items An array of {@code Item} objects to be printed.
+     * @param isFirstRun A boolean flag indicating whether this is the first run of item selection. If it's not the first run,
+     *                   an option to finish choosing is printed.
      */
     private static void printAvailableItems(Item[] items, boolean isFirstRun) {
         System.out.println("Choose an item:");
@@ -299,6 +417,21 @@ public class Main {
     }
 
 
+
+
+    /**
+     * Handles the input of an integer number from the user.
+     *
+     * This method prompts the user to enter an integer number within a specified range. If the user enters a string instead of a number,
+     * or a number outside the specified range, they are asked to enter the number again
+     * and an error is logged.
+     *
+     * @param scanner The {@code Scanner} object used for user input.
+     * @param message The prompt message displayed to the user.
+     * @param minValue The minimum acceptable value for the input number (including).
+     * @param maxValue The maximum acceptable value for the input number (including).
+     * @return The valid integer number entered by the user.
+     */
     private static int numInputHandlerEx(Scanner scanner, String message, int minValue, int maxValue) {
         int enteredNumber = 0;
         boolean badFormat;
@@ -323,12 +456,36 @@ public class Main {
         return enteredNumber;
     }
 
+    /**
+     * Checks if an entered integer number is within a specified range.
+     *
+     * This method throws an {@code InvalidRangeException} if the entered number is not within the specified range.
+     *
+     * @param enteredNumber The integer number to check.
+     * @param minValue The minimum acceptable value for the entered number (including).
+     * @param maxValue The maximum acceptable value for the entered number (including).
+     * @throws InvalidRangeException If the entered number is not within the specified range.
+     */
     private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException {
         if (enteredNumber < minValue || enteredNumber > maxValue) {
             throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
         }
     }
 
+
+    /**
+     * Handles the input of a BigDecimal number from the user.
+     *
+     * This method prompts the user to enter a BigDecimal number within a specified range. If the user enters a string instead of a number,
+     * or a number outside the specified range, they are asked to enter the number again
+     * and an error is logged.
+     *
+     * @param scanner The {@code Scanner} object used for user input.
+     * @param message The prompt message displayed to the user.
+     * @param minValue The minimum acceptable value for the input number (including).
+     * @param maxValue The maximum acceptable value for the input number (including).
+     * @return The valid BigDecimal number entered by the user.
+     */
     private static BigDecimal numInputHandlerEx(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue) {
         BigDecimal enteredNumber = BigDecimal.ZERO;
         boolean badFormat;
@@ -354,6 +511,16 @@ public class Main {
         return enteredNumber;
     }
 
+    /**
+     * Checks if an entered BigDecimal number is within a specified range.
+     *
+     * This method throws an {@code InvalidRangeException} if the entered number is not within the specified range.
+     *
+     * @param enteredNumber The BigDecimal number to check.
+     * @param minValue The minimum acceptable value for the entered number (including).
+     * @param maxValue The maximum acceptable value for the entered number (including).
+     * @throws InvalidRangeException If the entered number is not within the specified range.
+     */
     private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException {
         if (enteredNumber.compareTo(minValue) < 0 || enteredNumber.compareTo(maxValue) > 0) {
             throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
@@ -361,6 +528,16 @@ public class Main {
     }
 
 
+    /**
+     * Finds the factory that produces the item with the largest volume.
+     *
+     * This method iterates over all factories and their items, and keeps track of the factory that produces the item with the largest volume.
+     * The volume of an item is calculated using the {@code calculateVolume()} method of the {@code Item} class.
+     *
+     * @param factories An array of {@code Factory} objects to search through.
+     * @return The {@code Factory} object that produces the item with the largest volume. If multiple factories produce items with the same largest volume,
+     *         it returns the first one encountered.
+     */
     private static Factory findFactoryWithLargestVolumeOfAnItem(Factory[] factories) {
         Factory bestFactory = factories[0];
         BigDecimal largestVolume = BigDecimal.valueOf(0);
@@ -373,6 +550,17 @@ public class Main {
         return bestFactory;
     }
 
+
+    /**
+     * Finds the store that sells the cheapest item.
+     *
+     * This method iterates over all stores and their items, and keeps track of the store that sells the item with the cheapest selling price.
+     * The selling price of an item is obtained using the {@code getSellingPrice()} method of the {@code Item} class which means the discount isn't applied.
+     *
+     * @param stores An array of {@code Store} objects to search through.
+     * @return The {@code Store} object that sells the item with the cheapest price. If multiple stores sell items at the same cheapest price,
+     *         it returns the first one encountered.
+     */
     private static Store findStoreWithCheapestItem(Store[] stores) {
         Store bestStore = stores[0];
         BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);

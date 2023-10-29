@@ -41,6 +41,7 @@ public class Main {
         if (shortestWarrantyLaptop instanceof Technical t)
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
 
+        System.out.println("Finished");
     }
 
     private static Item findLaptopWithShortestWarranty(Item[] items) {

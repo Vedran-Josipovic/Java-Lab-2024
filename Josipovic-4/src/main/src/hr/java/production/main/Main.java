@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static hr.java.production.utility.InputHandler.numInputHandler;
+import static hr.java.production.utility.ObjectFinder.*;
 
 /**
  * Contains the logic for the main method as well as all other methods used in it. Also contains constants used throughout the entire class.
@@ -253,94 +254,6 @@ public class Main {
         String postalCode = scanner.nextLine();
 
         return new Address.Builder().atStreet(street).atHouseNumber(houseNumber).atCity(city).atPostalCode(postalCode).build();
-    }
-
-
-    private static Factory findFactoryWithLargestVolumeOfAnItem(List<Factory> factories) {
-        Factory bestFactory = factories.getFirst();
-        BigDecimal largestVolume = BigDecimal.valueOf(0);
-        for (Factory f : factories) {
-            for (Item i : f.getItems()) {
-                if (i.calculateVolume().compareTo(largestVolume) > 0) {
-                    bestFactory = f;
-                    largestVolume = i.calculateVolume();
-                }
-            }
-        }
-        return bestFactory;
-    }
-
-    private static Store findStoreWithCheapestItem(List<Store> stores) {
-        Store bestStore = stores.getFirst();
-        BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
-
-        for (Store s : stores) {
-            for (Item i : s.getItems()) {
-                if (i.getSellingPrice().compareTo(cheapestSellingPrice) < 0) {
-                    bestStore = s;
-                    cheapestSellingPrice = i.getSellingPrice();
-                }
-            }
-        }
-        return bestStore;
-    }
-
-    private static Item findMostCaloricFood(List<Item> items) {
-        Item mostCaloric = items.getFirst();
-        int maxCalories = -1;
-        for (Item i : items) {
-            if (i instanceof Edible edible) {
-                int calories = edible.calculateKilocalories();
-                if (calories > maxCalories) {
-                    maxCalories = calories;
-                    mostCaloric = i;
-                }
-            }
-        }
-        if (maxCalories == -1) {
-            System.out.println("There are no food products among items. Returning the first item in array.");
-            logger.error("There are no food products among items. Returning the first item in array. " + "Can't calculate the food product with the most calories because no instances of Interface Edible have been added.");
-        }
-        return mostCaloric;
-    }
-
-    private static Item findHighestPricedFood(List<Item> items) {
-        Item mostExpensive = items.getFirst();
-        BigDecimal highestPrice = BigDecimal.valueOf(-1);
-        for (Item i : items) {
-            if (i instanceof Edible edible) {
-                BigDecimal price = edible.calculatePrice();
-                if (price.compareTo(highestPrice) > 0) {
-                    highestPrice = price;
-                    mostExpensive = i;
-                }
-            }
-        }
-        if (highestPrice.equals(BigDecimal.valueOf(-1))) {
-            System.out.println("There are no food products among items. Returning the first item in array.");
-            logger.error("There are no food products among items. Returning the first item in array. " + "Can't calculate the food product with the highest price because no instances of Interface Edible have been added.");
-        }
-        return mostExpensive;
-    }
-
-    private static Item findLaptopWithShortestWarranty(List<Item> items) {
-        Item shortestWarrantyLaptop = items.getFirst();
-        Integer minWarranty = Integer.MAX_VALUE;
-
-        for (Item i : items) {
-            if (i instanceof Technical t) {
-                Integer warranty = t.getRemainingWarrantyInMonths();
-                if (warranty < minWarranty) {
-                    minWarranty = warranty;
-                    shortestWarrantyLaptop = i;
-                }
-            }
-        }
-        if (minWarranty == Integer.MAX_VALUE) {
-            System.out.println("There are no laptops among items. Returning the first item in array.");
-            logger.error("There are no laptops among items. Returning the first item in array. " + "Can't find the laptop with the shortest warranty because no instances of Interface Technical have been added.");
-        }
-        return shortestWarrantyLaptop;
     }
 
 }

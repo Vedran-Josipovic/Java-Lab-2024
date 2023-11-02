@@ -62,14 +62,6 @@ public class Pizza extends Item implements Edible {
         return weightInKG.multiply(getDiscountedSellingPrice()).setScale(2, RoundingMode.HALF_UP);
     }
 
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     * It first checks if the super class's equals method returns {@code true},
-     * and then checks if the weight is equal.
-     *
-     * @param o The reference object with which to compare.
-     * @return {@code true} if this object is the same as the obj argument; {@code false} otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,23 +71,23 @@ public class Pizza extends Item implements Edible {
         return Objects.equals(getWeightInKG(), pizza.getWeightInKG());
     }
 
-    /**
-     * Returns a hash code value for the object. This method is supported for the benefit of hash tables such as those provided by {@code HashMap}.
-     *
-     * @return A hash code value for this object.
-     */
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getWeightInKG());
     }
 
-    /**
-     * Returns a string representation of this Pizza instance.
-     *
-     * @return A string representation of this Pizza instance.
-     */
     @Override
     public String toString() {
-        return "Pizza{" + "weightInKG=" + weightInKG + ", category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + "%" + ", name='" + name + '\'' + '}';
+        return "Pizza{" +
+                "weightInKG=" + weightInKG +
+                ", category=" + category +
+                ", width=" + width +
+                ", height=" + height +
+                ", length=" + length +
+                ", productionCost=" + productionCost +
+                ", sellingPrice=" + sellingPrice +
+                ", discount=" + discount +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

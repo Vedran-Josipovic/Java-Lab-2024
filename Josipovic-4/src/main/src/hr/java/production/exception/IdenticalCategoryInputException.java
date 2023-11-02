@@ -42,4 +42,6 @@ public class IdenticalCategoryInputException extends RuntimeException{
     public IdenticalCategoryInputException(Throwable cause) {
         super(cause);
     }
+
+
 }

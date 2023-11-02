@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import java.util.Objects;
+
 /**
  * Represents an address with a street, house number, city, and postal code.
  * This class uses the Builder pattern to create instances.
@@ -110,13 +112,26 @@ public class Address {
         this.postalCode = postalCode;
     }
 
-    /**
-     * Returns a string representation of the Address instance.
-     *
-     * @return A string representation of this Address.
-     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && Objects.equals(getCity(), address.getCity()) && Objects.equals(getPostalCode(), address.getPostalCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStreet(), getHouseNumber(), getCity(), getPostalCode());
+    }
+
     @Override
     public String toString() {
-        return "Address{" + "street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city='" + city + '\'' + ", postalCode='" + postalCode + '\'' + '}';
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                '}';
     }
 }

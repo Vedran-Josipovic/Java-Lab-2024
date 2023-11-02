@@ -46,14 +46,6 @@ public final class Laptop extends Item implements Technical {
         return warrantyYears * 12;
     }
 
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     * It first checks if the super class's equals method returns {@code true},
-     * and then checks if the warranty years are equal.
-     *
-     * @param o The reference object with which to compare.
-     * @return {@code true} if this object is the same as the obj argument; {@code false} otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,23 +55,23 @@ public final class Laptop extends Item implements Technical {
         return Objects.equals(getWarrantyYears(), laptop.getWarrantyYears());
     }
 
-    /**
-     * Returns a hash code value for the object. This method is supported for the benefit of hash tables such as those provided by {@code HashMap}.
-     *
-     * @return A hash code value for this object.
-     */
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getWarrantyYears());
     }
 
-    /**
-     * Returns a string representation of this Laptop instance.
-     *
-     * @return A string representation of this Laptop instance.
-     */
     @Override
     public String toString() {
-        return "Laptop{" + "warrantyYears=" + warrantyYears + ", category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + ", name='" + name + '\'' + '}';
+        return "Laptop{" +
+                "warrantyYears=" + warrantyYears +
+                ", category=" + category +
+                ", width=" + width +
+                ", height=" + height +
+                ", length=" + length +
+                ", productionCost=" + productionCost +
+                ", sellingPrice=" + sellingPrice +
+                ", discount=" + discount +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

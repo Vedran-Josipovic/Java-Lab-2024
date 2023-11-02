@@ -2,8 +2,8 @@ package hr.java.production.main;
 
 import hr.java.production.exception.IdenticalCategoryInputException;
 import hr.java.production.exception.IdenticalItemChoiceException;
-import hr.java.production.exception.InvalidRangeException;
 import hr.java.production.model.*;
+import hr.java.production.utility.InputHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +12,8 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static hr.java.production.utility.InputHandler.numInputHandler;
 
 /**
  * Contains the logic for the main method as well as all other methods used in it. Also contains constants used throughout the entire class.
@@ -70,7 +72,6 @@ public class Main {
     }
 
 
-    //Dovršio
     private static List<Category> inputCategories(Scanner scanner) {
         ArrayList<Category> categories = new ArrayList<>();
         for (int i = 0; i < NUM_CATEGORIES; i++) {
@@ -116,28 +117,28 @@ public class Main {
 
             for (int j = 0; j < categories.size(); j++)
                 System.out.println((j + 1) + ". " + categories.get(j).getName());
-            int categoryChoice = numInputHandlerEx(scanner, "Choice >> ", 1, categories.size());
+            int categoryChoice = InputHandler.numInputHandler(scanner, "Choice >> ", 1, categories.size());
 
             System.out.println("Enter the item dimensions:");
-            BigDecimal width = numInputHandlerEx(scanner, "Enter the item width: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal height = numInputHandlerEx(scanner, "Enter the item height: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal length = numInputHandlerEx(scanner, "Enter the item length: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal productionCost = numInputHandlerEx(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal sellingPrice = numInputHandlerEx(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
-            BigDecimal discountAmount = numInputHandlerEx(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
+            BigDecimal width = numInputHandler(scanner, "Enter the item width: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal height = numInputHandler(scanner, "Enter the item height: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal length = numInputHandler(scanner, "Enter the item length: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal productionCost = numInputHandler(scanner, "Enter the item production cost: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal sellingPrice = numInputHandler(scanner, "Enter the item selling price: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+            BigDecimal discountAmount = numInputHandler(scanner, "Enter the discount percentage for this item: ", BigDecimal.ZERO, BigDecimal.valueOf(100));
             Discount discount = new Discount(discountAmount);
 
-            int itemSubclassChoice = numInputHandlerEx(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other\nChoice >> ", 1, 3);
+            int itemSubclassChoice = InputHandler.numInputHandler(scanner, "Is this item food, a laptop, or other:\n1. Food\n2. Laptop\n3. Other\nChoice >> ", 1, 3);
             if (itemSubclassChoice == FOOD) {
-                Integer foodChoice = numInputHandlerEx(scanner, "Pick an available food product:\n1. Pizza\n2. Chicken nuggets\nChoice >> ", PIZZA, CHICKEN_NUGGETS);
-                BigDecimal weightInKG = numInputHandlerEx(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
+                Integer foodChoice = InputHandler.numInputHandler(scanner, "Pick an available food product:\n1. Pizza\n2. Chicken nuggets\nChoice >> ", PIZZA, CHICKEN_NUGGETS);
+                BigDecimal weightInKG = numInputHandler(scanner, "Enter the weight (in kg) of the food packet: ", BigDecimal.valueOf(1E-99), BigDecimal.valueOf(1E+99));
 
                 if (foodChoice.equals(PIZZA))
                     items.add(new Pizza(name, categories.get(categoryChoice - 1), width, height, length, productionCost, sellingPrice, discount, weightInKG));
                 else if (foodChoice.equals(CHICKEN_NUGGETS))
                     items.add(new ChickenNuggets(name, categories.get(categoryChoice - 1), width, height, length, productionCost, sellingPrice, discount, weightInKG));
             } else if (itemSubclassChoice == LAPTOP) {
-                Integer warrantyYears = numInputHandlerEx(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
+                Integer warrantyYears = InputHandler.numInputHandler(scanner, "Enter the warranty duration (in years) of the laptop: ", 0, 100);
                 items.add(new Laptop(name, categories.get(categoryChoice - 1), width, height, length, productionCost, sellingPrice, discount, warrantyYears));
             } else {
                 items.add(new Item(name, categories.get(categoryChoice - 1), width, height, length, productionCost, sellingPrice, discount));
@@ -150,10 +151,8 @@ public class Main {
         }
         return items;
     }
-    //Dovršio
 
 
-    //Dovršio
     private static List<Factory> inputFactories(Scanner scanner, List<Item> items) {
         List<Factory> factories = new ArrayList<>();
         List<Item> addedItems = new ArrayList<>();
@@ -200,8 +199,8 @@ public class Main {
             }
             printAvailableItems(items, isFirstRun);
             int itemChoice;
-            if (isFirstRun) itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.size());
-            else itemChoice = numInputHandlerEx(scanner, "Choice >> ", 1, items.size() + 1);
+            if (isFirstRun) itemChoice = InputHandler.numInputHandler(scanner, "Choice >> ", 1, items.size());
+            else itemChoice = InputHandler.numInputHandler(scanner, "Choice >> ", 1, items.size() + 1);
 
             if (itemChoice != items.size() + 1) {
                 try {
@@ -255,7 +254,6 @@ public class Main {
 
         return new Address.Builder().atStreet(street).atHouseNumber(houseNumber).atCity(city).atPostalCode(postalCode).build();
     }
-    //Dovršio
 
 
     private static Factory findFactoryWithLargestVolumeOfAnItem(List<Factory> factories) {
@@ -325,7 +323,6 @@ public class Main {
         return mostExpensive;
     }
 
-
     private static Item findLaptopWithShortestWarranty(List<Item> items) {
         Item shortestWarrantyLaptop = items.getFirst();
         Integer minWarranty = Integer.MAX_VALUE;
@@ -345,115 +342,5 @@ public class Main {
         }
         return shortestWarrantyLaptop;
     }
-
-
-    /**
-     * Handles the input of an integer number from the user.
-     * <p>
-     * This method prompts the user to enter an integer number within a specified range. If the user enters a string instead of a number,
-     * or a number outside the specified range, they are asked to enter the number again
-     * and an error is logged.
-     *
-     * @param scanner  The {@code Scanner} object used for user input.
-     * @param message  The prompt message displayed to the user.
-     * @param minValue The minimum acceptable value for the input number (including).
-     * @param maxValue The maximum acceptable value for the input number (including).
-     * @return The valid integer number entered by the user.
-     */
-    private static int numInputHandlerEx(Scanner scanner, String message, int minValue, int maxValue) {
-        int enteredNumber = 0;
-        boolean badFormat;
-        do {
-            try {
-                System.out.print(message);
-                enteredNumber = scanner.nextInt();
-                isNumInRangeEx(enteredNumber, minValue, maxValue);
-                badFormat = false;
-            } catch (InputMismatchException e) {
-                logger.error("Entered a string instead of a number " + e);
-                System.out.println("Entered a string instead of a number. Please enter a number:");
-                badFormat = true;
-            } catch (InvalidRangeException e) {
-                logger.error(e.getMessage() + e);
-                System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
-                badFormat = true;
-            } finally {
-                scanner.nextLine();
-            }
-        } while (badFormat);
-        return enteredNumber;
-    }
-
-    /**
-     * Checks if an entered integer number is within a specified range.
-     * <p>
-     * This method throws an {@code InvalidRangeException} if the entered number is not within the specified range.
-     *
-     * @param enteredNumber The integer number to check.
-     * @param minValue      The minimum acceptable value for the entered number (including).
-     * @param maxValue      The maximum acceptable value for the entered number (including).
-     * @throws InvalidRangeException If the entered number is not within the specified range.
-     */
-    private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException {
-        if (enteredNumber < minValue || enteredNumber > maxValue) {
-            throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
-        }
-    }
-
-
-    /**
-     * Handles the input of a BigDecimal number from the user.
-     * <p>
-     * This method prompts the user to enter a BigDecimal number within a specified range. If the user enters a string instead of a number,
-     * or a number outside the specified range, they are asked to enter the number again
-     * and an error is logged.
-     *
-     * @param scanner  The {@code Scanner} object used for user input.
-     * @param message  The prompt message displayed to the user.
-     * @param minValue The minimum acceptable value for the input number (including).
-     * @param maxValue The maximum acceptable value for the input number (including).
-     * @return The valid BigDecimal number entered by the user.
-     */
-    private static BigDecimal numInputHandlerEx(Scanner scanner, String message, BigDecimal minValue, BigDecimal maxValue) {
-        BigDecimal enteredNumber = BigDecimal.ZERO;
-        boolean badFormat;
-
-        do {
-            try {
-                System.out.print(message);
-                enteredNumber = scanner.nextBigDecimal();
-                isNumInRangeEx(enteredNumber, minValue, maxValue);
-                badFormat = false;
-            } catch (InputMismatchException e) {
-                logger.error("Entered a string instead of a number " + e);
-                System.out.println("Entered a string instead of a number. Please enter a number:");
-                badFormat = true;
-            } catch (InvalidRangeException e) {
-                logger.error(e.getMessage() + e);
-                System.out.println("Please enter a number in range: [" + minValue + "," + maxValue + "].");
-                badFormat = true;
-            } finally {
-                scanner.nextLine();
-            }
-        } while (badFormat);
-        return enteredNumber;
-    }
-
-    /**
-     * Checks if an entered BigDecimal number is within a specified range.
-     * <p>
-     * This method throws an {@code InvalidRangeException} if the entered number is not within the specified range.
-     *
-     * @param enteredNumber The BigDecimal number to check.
-     * @param minValue      The minimum acceptable value for the entered number (including).
-     * @param maxValue      The maximum acceptable value for the entered number (including).
-     * @throws InvalidRangeException If the entered number is not within the specified range.
-     */
-    private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException {
-        if (enteredNumber.compareTo(minValue) < 0 || enteredNumber.compareTo(maxValue) > 0) {
-            throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
-        }
-    }
-
 
 }

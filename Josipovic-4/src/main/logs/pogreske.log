@@ -3,3 +3,9 @@
 2023-11-02 22:57:25,208 WARN [main] h.j.p.m.Main [Main.java:210] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
 2023-11-02 22:57:25,211 WARN [main] h.j.p.m.Main [Main.java:197] All available items have been added. Possibly returning empty array.
 2023-11-02 22:57:25,214 INFO [main] h.j.p.m.Main [Main.java:69] Aplikacija završila.
+//////////
+2023-11-02 23:12:38,611 INFO [main] h.j.p.m.Main [Main.java:39] Aplikacija započela s radom.
+2023-11-02 23:12:38,632 WARN [main] h.j.p.m.Main [Main.java:90] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-02 23:12:38,664 WARN [main] h.j.p.m.Main [Main.java:209] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-02 23:12:38,666 WARN [main] h.j.p.m.Main [Main.java:196] All available items have been added. Possibly returning empty array.
+2023-11-02 23:12:38,669 INFO [main] h.j.p.m.Main [Main.java:71] Aplikacija završila.

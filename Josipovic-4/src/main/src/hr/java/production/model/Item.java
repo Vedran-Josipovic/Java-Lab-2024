@@ -99,7 +99,7 @@ public class Item extends NamedEntity {
      * @return The discounted selling price of the item.
      */
     public BigDecimal getDiscountedSellingPrice() {
-        return sellingPrice.subtract(discount.discountAmount().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP).multiply(sellingPrice));
+        return sellingPrice.subtract(discount.discountAmount().divide(BigDecimal.valueOf(100)).multiply(sellingPrice)).setScale(2, RoundingMode.HALF_UP);
     }
 
     /**

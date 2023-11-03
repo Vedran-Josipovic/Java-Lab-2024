@@ -5,6 +5,7 @@ import hr.java.production.exception.CityNotSupportedException;
 import hr.java.production.exception.IdenticalCategoryInputException;
 import hr.java.production.exception.IdenticalItemChoiceException;
 import hr.java.production.model.*;
+import hr.java.production.sort.ProductionSorter;
 import hr.java.production.utility.InputHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,6 @@ public class Main {
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
-        Map<Category, Item> itemsPerCategoryMap = new HashMap<>();
 
         List<Category> categories = inputCategories(scanner);
         List<Item> items = inputItems(scanner, categories);
@@ -73,7 +73,44 @@ public class Main {
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
 
 
-        factories.stream().map(f->f.getAddress().getCity()).forEach(System.out::println);
+        //Zadatak 8
+        factories.stream().map(f -> f.getAddress().getCity()).forEach(System.out::println);
+
+        Map<Category, List<Item>> itemsPerCategoryMap = new HashMap<>();
+
+        /*
+        for (var i : items) {
+            var key = i.getCategory();
+            if(itemsPerCategoryMap.containsKey(key) == false) itemsPerCategoryMap.put(key, new ArrayList<>());
+            itemsPerCategoryMap.get(key).add(i); //Dohvaćam ključ i u vrijednost tog ključa dodajem u listu item.
+            //Ovo je duža verzija linije koda ispod
+        }*/
+        for (var i : items) itemsPerCategoryMap.computeIfAbsent(i.getCategory(), k -> new ArrayList<>()).add(i);
+
+        itemsPerCategoryMap.entrySet()
+                .forEach(i -> {
+                    String listNames = i.getValue().stream().map(f -> f.getName()).collect(Collectors.joining(", "));
+                    System.out.println("Key = [" + i.getKey().getName() + "]: Values = [" + listNames + "]");
+                });
+
+        System.out.println("ASCENDING");
+        items.stream().sorted(new ProductionSorter()).map(f -> "Name [" + f.getName() + "], Price [" + f.getDiscountedSellingPrice() + "]").forEach(System.out::println);
+        System.out.println("DESCENDING");
+        items.stream().sorted(new ProductionSorter().reversed()).map(f -> "Name [" + f.getName() + "], Price [" + f.getDiscountedSellingPrice() + "]").forEach(System.out::println);
+
+        System.out.println("//////////////");
+        for (var i : itemsPerCategoryMap.entrySet()) {
+            List<Item> categoryItems = i.getValue();
+            categoryItems.sort(new ProductionSorter());
+            Item mostExpensive = categoryItems.getLast(), leastExpensive = categoryItems.getFirst();
+
+            String mostExpensiveString = mostExpensive.getName() + " [" + mostExpensive.getDiscountedSellingPrice() + "]";
+            String leastExpensiveString = leastExpensive.getName() + " [" + leastExpensive.getDiscountedSellingPrice() + "]";
+
+            System.out.println("Category: " + i.getKey().getName() + " -> Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString);
+        }
+
+        //Zadatak 8
 
         logger.info("Aplikacija završila.");
     }
@@ -254,7 +291,7 @@ public class Main {
         String houseNumber = scanner.nextLine();
 
         Cities city;
-        while (true){
+        while (true) {
             try {
                 city = inputCity(scanner);
                 break;
@@ -271,7 +308,7 @@ public class Main {
         System.out.print("Enter the city name: ");
         String name = scanner.nextLine();
 
-        return switch (name){
+        return switch (name) {
             case "Zagreb" -> Cities.ZAGREB;
             case "Split" -> Cities.SPLIT;
             case "Rijeka" -> Cities.RIJEKA;
@@ -279,7 +316,8 @@ public class Main {
             case "Zadar" -> Cities.ZADAR;
             case "Slavonski Brod" -> Cities.SLAVONSKI_BROD;
             case "Velika Gorica" -> Cities.VELIKA_GORICA;
-            default -> throw new CityNotSupportedException("City not in the database: [" + name + "]. Cities in enums: [" + Arrays.stream(Cities.values()).map(Cities::getName).collect(Collectors.joining(", ")) + "]");
+            default ->
+                    throw new CityNotSupportedException("City not in the database: [" + name + "]. Cities in enums: [" + Arrays.stream(Cities.values()).map(Cities::getName).collect(Collectors.joining(", ")) + "]");
         };
     }
 

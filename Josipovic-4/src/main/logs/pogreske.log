@@ -76,3 +76,146 @@
 2023-11-03 14:56:50,571 WARN [main] h.j.p.m.Main [Main.java:215] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
 2023-11-03 14:56:50,574 WARN [main] h.j.p.m.Main [Main.java:202] All available items have been added. Possibly returning empty array.
 2023-11-03 14:56:50,579 INFO [main] h.j.p.m.Main [Main.java:77] Aplikacija završila.
+2023-11-03 22:02:33,802 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:02:33,826 WARN [main] h.j.p.m.Main [Main.java:108] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:02:33,846 ERROR [main] h.j.p.m.Main [Main.java:273] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:02:33,848 WARN [main] h.j.p.m.Main [Main.java:227] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:02:33,850 WARN [main] h.j.p.m.Main [Main.java:214] All available items have been added. Possibly returning empty array.
+2023-11-03 22:02:57,219 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:02:57,242 WARN [main] h.j.p.m.Main [Main.java:108] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:02:57,264 ERROR [main] h.j.p.m.Main [Main.java:273] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:02:57,266 WARN [main] h.j.p.m.Main [Main.java:227] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:02:57,268 WARN [main] h.j.p.m.Main [Main.java:214] All available items have been added. Possibly returning empty array.
+2023-11-03 22:02:57,281 INFO [main] h.j.p.m.Main [Main.java:89] Aplikacija završila.
+2023-11-03 22:03:32,750 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:03:32,772 WARN [main] h.j.p.m.Main [Main.java:108] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:03:32,796 ERROR [main] h.j.p.m.Main [Main.java:273] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:03:32,799 WARN [main] h.j.p.m.Main [Main.java:227] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:03:32,801 WARN [main] h.j.p.m.Main [Main.java:214] All available items have been added. Possibly returning empty array.
+2023-11-03 22:03:32,813 INFO [main] h.j.p.m.Main [Main.java:89] Aplikacija završila.
+2023-11-03 22:09:11,115 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:09:11,134 WARN [main] h.j.p.m.Main [Main.java:110] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:09:11,156 ERROR [main] h.j.p.m.Main [Main.java:275] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:09:11,161 WARN [main] h.j.p.m.Main [Main.java:229] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:09:11,165 WARN [main] h.j.p.m.Main [Main.java:216] All available items have been added. Possibly returning empty array.
+2023-11-03 22:09:11,174 INFO [main] h.j.p.m.Main [Main.java:91] Aplikacija završila.
+2023-11-03 22:09:47,273 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:09:47,293 WARN [main] h.j.p.m.Main [Main.java:110] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:09:47,313 ERROR [main] h.j.p.m.Main [Main.java:275] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:09:47,315 WARN [main] h.j.p.m.Main [Main.java:229] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:09:47,316 WARN [main] h.j.p.m.Main [Main.java:216] All available items have been added. Possibly returning empty array.
+2023-11-03 22:09:47,322 INFO [main] h.j.p.m.Main [Main.java:91] Aplikacija završila.
+2023-11-03 22:12:27,293 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:12:27,315 WARN [main] h.j.p.m.Main [Main.java:112] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:12:27,335 ERROR [main] h.j.p.m.Main [Main.java:277] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:12:27,338 WARN [main] h.j.p.m.Main [Main.java:231] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:12:27,340 WARN [main] h.j.p.m.Main [Main.java:218] All available items have been added. Possibly returning empty array.
+2023-11-03 22:12:27,345 INFO [main] h.j.p.m.Main [Main.java:93] Aplikacija završila.
+2023-11-03 22:14:35,213 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:14:35,235 WARN [main] h.j.p.m.Main [Main.java:112] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:14:35,257 ERROR [main] h.j.p.m.Main [Main.java:277] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:14:35,259 WARN [main] h.j.p.m.Main [Main.java:231] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:14:35,261 WARN [main] h.j.p.m.Main [Main.java:218] All available items have been added. Possibly returning empty array.
+2023-11-03 22:14:35,268 INFO [main] h.j.p.m.Main [Main.java:93] Aplikacija završila.
+2023-11-03 22:15:34,810 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:15:34,832 WARN [main] h.j.p.m.Main [Main.java:112] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:15:34,853 ERROR [main] h.j.p.m.Main [Main.java:277] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:15:34,855 WARN [main] h.j.p.m.Main [Main.java:231] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:15:34,857 WARN [main] h.j.p.m.Main [Main.java:218] All available items have been added. Possibly returning empty array.
+2023-11-03 22:15:34,862 INFO [main] h.j.p.m.Main [Main.java:93] Aplikacija završila.
+2023-11-03 22:15:49,454 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-03 22:15:49,476 WARN [main] h.j.p.m.Main [Main.java:112] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:15:49,499 ERROR [main] h.j.p.m.Main [Main.java:277] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:15:49,502 WARN [main] h.j.p.m.Main [Main.java:231] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:15:49,504 WARN [main] h.j.p.m.Main [Main.java:218] All available items have been added. Possibly returning empty array.
+2023-11-03 22:15:49,509 INFO [main] h.j.p.m.Main [Main.java:93] Aplikacija završila.
+2023-11-03 22:21:47,093 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:21:47,115 WARN [main] h.j.p.m.Main [Main.java:112] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:21:47,135 ERROR [main] h.j.p.m.Main [Main.java:277] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:21:47,137 WARN [main] h.j.p.m.Main [Main.java:231] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:21:47,139 WARN [main] h.j.p.m.Main [Main.java:218] All available items have been added. Possibly returning empty array.
+2023-11-03 22:21:47,146 INFO [main] h.j.p.m.Main [Main.java:93] Aplikacija završila.
+2023-11-03 22:24:36,868 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:24:36,888 WARN [main] h.j.p.m.Main [Main.java:115] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:24:36,906 ERROR [main] h.j.p.m.Main [Main.java:280] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:24:36,909 WARN [main] h.j.p.m.Main [Main.java:234] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:24:36,911 WARN [main] h.j.p.m.Main [Main.java:221] All available items have been added. Possibly returning empty array.
+2023-11-03 22:24:36,919 INFO [main] h.j.p.m.Main [Main.java:96] Aplikacija završila.
+2023-11-03 22:35:36,698 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:35:36,717 WARN [main] h.j.p.m.Main [Main.java:120] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:35:36,736 ERROR [main] h.j.p.m.Main [Main.java:285] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:35:36,739 WARN [main] h.j.p.m.Main [Main.java:239] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:35:36,741 WARN [main] h.j.p.m.Main [Main.java:226] All available items have been added. Possibly returning empty array.
+2023-11-03 22:35:36,747 INFO [main] h.j.p.m.Main [Main.java:101] Aplikacija završila.
+2023-11-03 22:41:20,674 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:41:20,696 WARN [main] h.j.p.m.Main [Main.java:125] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:41:20,715 ERROR [main] h.j.p.m.Main [Main.java:290] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:41:20,717 WARN [main] h.j.p.m.Main [Main.java:244] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:41:20,719 WARN [main] h.j.p.m.Main [Main.java:231] All available items have been added. Possibly returning empty array.
+2023-11-03 22:41:20,735 INFO [main] h.j.p.m.Main [Main.java:106] Aplikacija završila.
+2023-11-03 22:43:42,794 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:43:42,817 WARN [main] h.j.p.m.Main [Main.java:126] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:43:42,839 ERROR [main] h.j.p.m.Main [Main.java:291] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:43:42,841 WARN [main] h.j.p.m.Main [Main.java:245] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:43:42,844 WARN [main] h.j.p.m.Main [Main.java:232] All available items have been added. Possibly returning empty array.
+2023-11-03 22:43:42,852 INFO [main] h.j.p.m.Main [Main.java:107] Aplikacija završila.
+2023-11-03 22:44:03,841 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:44:03,862 WARN [main] h.j.p.m.Main [Main.java:126] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:44:03,882 ERROR [main] h.j.p.m.Main [Main.java:291] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:44:03,884 WARN [main] h.j.p.m.Main [Main.java:245] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:44:03,886 WARN [main] h.j.p.m.Main [Main.java:232] All available items have been added. Possibly returning empty array.
+2023-11-03 22:44:03,893 INFO [main] h.j.p.m.Main [Main.java:107] Aplikacija završila.
+2023-11-03 22:44:18,217 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:44:18,237 WARN [main] h.j.p.m.Main [Main.java:126] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:44:18,262 ERROR [main] h.j.p.m.Main [Main.java:291] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:44:18,264 WARN [main] h.j.p.m.Main [Main.java:245] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:44:18,266 WARN [main] h.j.p.m.Main [Main.java:232] All available items have been added. Possibly returning empty array.
+2023-11-03 22:44:18,274 INFO [main] h.j.p.m.Main [Main.java:107] Aplikacija završila.
+2023-11-03 22:44:26,364 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:44:26,386 WARN [main] h.j.p.m.Main [Main.java:126] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:44:26,405 ERROR [main] h.j.p.m.Main [Main.java:291] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:44:26,407 WARN [main] h.j.p.m.Main [Main.java:245] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:44:26,409 WARN [main] h.j.p.m.Main [Main.java:232] All available items have been added. Possibly returning empty array.
+2023-11-03 22:44:26,416 INFO [main] h.j.p.m.Main [Main.java:107] Aplikacija završila.
+2023-11-03 22:48:20,294 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:48:20,317 WARN [main] h.j.p.m.Main [Main.java:128] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:48:20,339 ERROR [main] h.j.p.m.Main [Main.java:293] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:48:20,341 WARN [main] h.j.p.m.Main [Main.java:247] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:48:20,343 WARN [main] h.j.p.m.Main [Main.java:234] All available items have been added. Possibly returning empty array.
+2023-11-03 22:48:20,353 INFO [main] h.j.p.m.Main [Main.java:109] Aplikacija završila.
+2023-11-03 22:48:32,590 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:48:32,614 WARN [main] h.j.p.m.Main [Main.java:128] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:48:32,635 ERROR [main] h.j.p.m.Main [Main.java:293] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:48:32,637 WARN [main] h.j.p.m.Main [Main.java:247] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:48:32,640 WARN [main] h.j.p.m.Main [Main.java:234] All available items have been added. Possibly returning empty array.
+2023-11-03 22:48:32,649 INFO [main] h.j.p.m.Main [Main.java:109] Aplikacija završila.
+2023-11-03 22:48:39,600 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:48:39,622 WARN [main] h.j.p.m.Main [Main.java:128] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:48:39,643 ERROR [main] h.j.p.m.Main [Main.java:293] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:48:39,646 WARN [main] h.j.p.m.Main [Main.java:247] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:48:39,648 WARN [main] h.j.p.m.Main [Main.java:234] All available items have been added. Possibly returning empty array.
+2023-11-03 22:48:39,656 INFO [main] h.j.p.m.Main [Main.java:109] Aplikacija završila.
+2023-11-03 22:57:22,974 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 22:57:22,994 WARN [main] h.j.p.m.Main [Main.java:132] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 22:57:23,014 ERROR [main] h.j.p.m.Main [Main.java:297] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 22:57:23,016 WARN [main] h.j.p.m.Main [Main.java:251] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 22:57:23,019 WARN [main] h.j.p.m.Main [Main.java:238] All available items have been added. Possibly returning empty array.
+2023-11-03 22:57:23,028 INFO [main] h.j.p.m.Main [Main.java:113] Aplikacija završila.
+2023-11-03 23:05:01,924 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 23:05:01,948 WARN [main] h.j.p.m.Main [Main.java:133] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 23:05:01,970 ERROR [main] h.j.p.m.Main [Main.java:298] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 23:05:01,973 WARN [main] h.j.p.m.Main [Main.java:252] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 23:05:01,975 WARN [main] h.j.p.m.Main [Main.java:239] All available items have been added. Possibly returning empty array.
+2023-11-03 23:05:01,985 INFO [main] h.j.p.m.Main [Main.java:114] Aplikacija završila.
+2023-11-03 23:05:43,497 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 23:05:43,516 WARN [main] h.j.p.m.Main [Main.java:133] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 23:05:43,534 ERROR [main] h.j.p.m.Main [Main.java:298] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 23:05:43,536 WARN [main] h.j.p.m.Main [Main.java:252] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 23:05:43,539 WARN [main] h.j.p.m.Main [Main.java:239] All available items have been added. Possibly returning empty array.
+2023-11-03 23:05:43,546 INFO [main] h.j.p.m.Main [Main.java:114] Aplikacija završila.
+2023-11-03 23:06:31,542 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-03 23:06:31,567 WARN [main] h.j.p.m.Main [Main.java:133] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-03 23:06:31,591 ERROR [main] h.j.p.m.Main [Main.java:298] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-03 23:06:31,593 WARN [main] h.j.p.m.Main [Main.java:252] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-03 23:06:31,595 WARN [main] h.j.p.m.Main [Main.java:239] All available items have been added. Possibly returning empty array.
+2023-11-03 23:06:31,603 INFO [main] h.j.p.m.Main [Main.java:114] Aplikacija završila.

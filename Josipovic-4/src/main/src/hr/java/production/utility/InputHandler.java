@@ -58,7 +58,7 @@ public class InputHandler {
      * @param maxValue      The maximum acceptable value for the entered number (including).
      * @throws InvalidRangeException If the entered number is not within the specified range.
      */
-    public static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException {
+    private static void isNumInRangeEx(int enteredNumber, int minValue, int maxValue) throws InvalidRangeException {
         if (enteredNumber < minValue || enteredNumber > maxValue) {
             throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
         }
@@ -113,7 +113,7 @@ public class InputHandler {
      * @param maxValue      The maximum acceptable value for the entered number (including).
      * @throws InvalidRangeException If the entered number is not within the specified range.
      */
-    public static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException {
+    private static void isNumInRangeEx(BigDecimal enteredNumber, BigDecimal minValue, BigDecimal maxValue) throws InvalidRangeException {
         if (enteredNumber.compareTo(minValue) < 0 || enteredNumber.compareTo(maxValue) > 0) {
             throw new InvalidRangeException("Entered a number outside of specified range [" + minValue + "," + maxValue + "]." + " Input: " + enteredNumber);
         }

@@ -1,5 +1,7 @@
 package hr.java.production.model;
 
+import hr.java.production.enumeration.Cities;
+
 import java.util.Objects;
 
 /**
@@ -7,7 +9,8 @@ import java.util.Objects;
  * This class uses the Builder pattern to create instances.
  */
 public class Address {
-    private String street, houseNumber, city, postalCode;
+    private String street, houseNumber;
+    private Cities city;
 
     /**
      * Private constructor used by the Builder class to create instances.
@@ -19,7 +22,8 @@ public class Address {
      * Builder class for Address. Allows for the creation of Address instances using method chaining.
      */
     public static class Builder {
-        private String street, houseNumber, city, postalCode;
+        private String street, houseNumber;
+        private Cities city;
 
         /**
          * Sets the street of the Address being built.
@@ -43,25 +47,8 @@ public class Address {
             return this;
         }
 
-        /**
-         * Sets the city of the Address being built.
-         *
-         * @param city The city name.
-         * @return The current Builder instance.
-         */
-        public Builder atCity(String city) {
+        public Builder atCity(Cities city){
             this.city = city;
-            return this;
-        }
-
-        /**
-         * Sets the postal code of the Address being built.
-         *
-         * @param postalCode The postal code.
-         * @return The current Builder instance.
-         */
-        public Builder atPostalCode(String postalCode) {
-            this.postalCode = postalCode;
             return this;
         }
 
@@ -75,7 +62,6 @@ public class Address {
             address.street = this.street;
             address.houseNumber = this.houseNumber;
             address.city = this.city;
-            address.postalCode = this.postalCode;
             return address;
         }
     }
@@ -96,20 +82,19 @@ public class Address {
         this.houseNumber = houseNumber;
     }
 
-    public String getCity() {
+    public Cities getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(Cities city) {
         this.city = city;
     }
 
-    public String getPostalCode() {
-        return postalCode;
+    public String getCityName(){
+        return city.getName();
     }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public String getCityPostalCode(){
+        return city.getPostalCode();
     }
 
     @Override
@@ -117,12 +102,12 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && Objects.equals(getCity(), address.getCity()) && Objects.equals(getPostalCode(), address.getPostalCode());
+        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && getCity() == address.getCity();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStreet(), getHouseNumber(), getCity(), getPostalCode());
+        return Objects.hash(getStreet(), getHouseNumber(), getCity());
     }
 
     @Override
@@ -130,8 +115,7 @@ public class Address {
         return "Address{" +
                 "street='" + street + '\'' +
                 ", houseNumber='" + houseNumber + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
+                ", city=" + city +
                 '}';
     }
 }

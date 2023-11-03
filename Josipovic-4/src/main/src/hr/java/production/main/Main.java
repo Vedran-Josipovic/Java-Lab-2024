@@ -1,5 +1,7 @@
 package hr.java.production.main;
 
+import hr.java.production.enumeration.Cities;
+import hr.java.production.exception.CityNotSupportedException;
 import hr.java.production.exception.IdenticalCategoryInputException;
 import hr.java.production.exception.IdenticalItemChoiceException;
 import hr.java.production.model.*;
@@ -43,6 +45,7 @@ public class Main {
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
+        Map<Category, Item> itemsPerCategoryMap = new HashMap<>();
 
         List<Category> categories = inputCategories(scanner);
         List<Item> items = inputItems(scanner, categories);
@@ -68,6 +71,9 @@ public class Main {
         Item shortestWarrantyLaptop = findLaptopWithShortestWarranty(items);
         if (shortestWarrantyLaptop instanceof Technical t)
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
+
+
+        factories.stream().map(f->f.getAddress().getCity()).forEach(System.out::println);
 
         logger.info("Aplikacija završila.");
     }
@@ -247,13 +253,34 @@ public class Main {
         System.out.print("Enter the house number: ");
         String houseNumber = scanner.nextLine();
 
-        System.out.print("Enter the city: ");
-        String city = scanner.nextLine();
+        Cities city;
+        while (true){
+            try {
+                city = inputCity(scanner);
+                break;
+            } catch (CityNotSupportedException e) {
+                logger.error(e.getMessage());
+                System.out.println("Entered city is not in our database. Please enter a valid city.");
+            }
+        }
 
-        System.out.print("Enter the postal code: ");
-        String postalCode = scanner.nextLine();
+        return new Address.Builder().atStreet(street).atHouseNumber(houseNumber).atCity(city).build();
+    }
 
-        return new Address.Builder().atStreet(street).atHouseNumber(houseNumber).atCity(city).atPostalCode(postalCode).build();
+    private static Cities inputCity(Scanner scanner) throws CityNotSupportedException {
+        System.out.print("Enter the city name: ");
+        String name = scanner.nextLine();
+
+        return switch (name){
+            case "Zagreb" -> Cities.ZAGREB;
+            case "Split" -> Cities.SPLIT;
+            case "Rijeka" -> Cities.RIJEKA;
+            case "Osijek" -> Cities.OSIJEK;
+            case "Zadar" -> Cities.ZADAR;
+            case "Slavonski Brod" -> Cities.SLAVONSKI_BROD;
+            case "Velika Gorica" -> Cities.VELIKA_GORICA;
+            default -> throw new CityNotSupportedException("City not in the database: [" + name + "]. Cities in enums: [" + Arrays.stream(Cities.values()).map(Cities::getName).collect(Collectors.joining(", ")) + "]");
+        };
     }
 
 }

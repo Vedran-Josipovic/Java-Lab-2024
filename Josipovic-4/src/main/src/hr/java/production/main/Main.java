@@ -46,12 +46,10 @@ public class Main {
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
-
         List<Category> categories = inputCategories(scanner);
         List<Item> items = inputItems(scanner, categories);
         List<Factory> factories = inputFactories(scanner, items);
         List<Store> stores = inputStores(scanner, items);
-
 
         System.out.println();
         Factory bestFactory = findFactoryWithLargestVolumeOfAnItem(factories);
@@ -73,51 +71,11 @@ public class Main {
             System.out.println("The laptop with the shortest warranty is " + shortestWarrantyLaptop.getName() + " [" + t.getRemainingWarrantyInMonths() + "]");
 
 
-        //Zadatak 8
-        factories.stream().map(f -> f.getAddress().getCity()).forEach(System.out::println);
-
         Map<Category, List<Item>> itemsPerCategoryMap = new HashMap<>();
-
-        /*
-        for (var i : items) {
-            var key = i.getCategory();
-            if(itemsPerCategoryMap.containsKey(key) == false) itemsPerCategoryMap.put(key, new ArrayList<>());
-            itemsPerCategoryMap.get(key).add(i); //Dohvaćam ključ i u vrijednost tog ključa dodajem u listu item.
-            //Ovo je duža verzija linije koda ispod
-        }*/
         for (var i : items) itemsPerCategoryMap.computeIfAbsent(i.getCategory(), k -> new ArrayList<>()).add(i);
-
-        //Add this to a function that prints keys and list of values
-        itemsPerCategoryMap.forEach((key, value) -> {
-            String listNames = value.stream().map(NamedEntity::getName).collect(Collectors.joining(", "));
-            System.out.println("Key = [" + key.getName() + "]: Values = [" + listNames + "]");
-        });
-
-        System.out.println("ASCENDING");
-        items.stream().sorted(new ProductionSorter()).map(f -> "Name [" + f.getName() + "], Price [" + f.getDiscountedSellingPrice() + "]").forEach(System.out::println);
-        System.out.println("DESCENDING");
-        items.stream().sorted(new ProductionSorter().reversed()).map(f -> "Name [" + f.getName() + "], Price [" + f.getDiscountedSellingPrice() + "]").forEach(System.out::println);
-
-        System.out.println("//////////////");
-
-        /*
-        for (var i : itemsPerCategoryMap.entrySet()) {
-            List<Item> categoryItems = i.getValue();
-            categoryItems.sort(new ProductionSorter());
-            Item mostExpensive = categoryItems.getLast(), leastExpensive = categoryItems.getFirst();
-
-            String mostExpensiveString = mostExpensive.getName() + " [" + mostExpensive.getDiscountedSellingPrice() + "]";
-            String leastExpensiveString = leastExpensive.getName() + " [" + leastExpensive.getDiscountedSellingPrice() + "]";
-
-            System.out.println("Category: " + i.getKey().getName() + " -> Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString);
-            //I made a method that makes this redundant
-        }*/
         printCheapestAndPriciestItemsByKey(itemsPerCategoryMap);
-        //Zadatak 8
 
 
-        System.out.println("////////////////");
-        //Zadatak 9
         Map<String, List<Item>> itemsPerInterfaceMap = new HashMap<>();
         for (Item i : items) {
             String key;
@@ -127,16 +85,22 @@ public class Main {
             itemsPerInterfaceMap.computeIfAbsent(key, k -> new ArrayList<>()).add(i);
         }
         printCheapestAndPriciestItemsByKey(itemsPerInterfaceMap);
-        //Zadatak 9
 
         logger.info("Aplikacija završila.");
     }
 
     /**
-     * IThis sorts the lists so it changes the map.
+     * IThis sorts the lists so it changes the map. Maybe pull sorting out of method and require a sorted set.
+     *
      * @param itemsPerKeyMap
      */
-    private static void printCheapestAndPriciestItemsByKey(Map<?, List<Item>> itemsPerKeyMap){
+    private static void printCheapestAndPriciestItemsByKey(Map<?, List<Item>> itemsPerKeyMap) {
+        System.out.println();
+        itemsPerKeyMap.forEach((key, value) -> {
+            String listNames = value.stream().map(NamedEntity::getName).collect(Collectors.joining(", "));
+            logger.debug("Key = [" + key.toString() + "]: Values = [" + listNames + "]");
+        });
+
         for (var i : itemsPerKeyMap.entrySet()) {
             List<Item> categoryItems = i.getValue();
             categoryItems.sort(new ProductionSorter());
@@ -146,16 +110,13 @@ public class Main {
             String leastExpensiveString = leastExpensive.getName() + " [" + leastExpensive.getDiscountedSellingPrice() + "]";
 
             String keyName;
-            if (i.getKey() instanceof Category category) {
-                keyName = category.getName();
-            } else {
-                keyName = i.getKey().toString();
-            }
+            if (i.getKey() instanceof Category category) keyName = category.getName();
+            else keyName = i.getKey().toString();
 
-            System.out.println("Category: " + keyName + " -> Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString);
+            String msg = "Key: " + keyName + " -> Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString;
+            System.out.println(msg); logger.debug(msg);
         }
     }
-
 
 
     private static List<Category> inputCategories(Scanner scanner) {

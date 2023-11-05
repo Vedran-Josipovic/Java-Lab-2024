@@ -20,7 +20,9 @@ import static hr.java.production.utility.InputHandler.numInputHandler;
 import static hr.java.production.utility.ObjectFinder.*;
 
 /**
+ * Initializes and manages the production of different items in various factories and stores.
  * Contains the logic for the main method as well as all other methods used in it. Also contains constants used throughout the entire class.
+ * A Logger instance is used for logging application events.
  */
 public class Main {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
@@ -28,16 +30,19 @@ public class Main {
     private static final Integer FOOD = 1, LAPTOP = 2;
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-
     /**
-     * The main method of the application.
+     * Starts the application and manages the production process.
      * <p>
-     * Starts the application, reads input data from a file, and performs several operations. It creates categories, items, factories, and stores based on the input data.
-     * It then finds and prints information about the factory that produces the item with the largest volume, the store that sells the cheapest item, the most caloric food item,
-     * the highest priced food item, and the laptop with the shortest warranty.
+     * Performs the following steps:
+     * - Logs the start of the application. <p>
+     * - Reads input data from a file. <p>
+     * - Initializes categories, items, factories, and stores based on the input data. <p>
+     * - Finds and prints information about the factory that produces the item with the greatest volume, the store that sells the cheapest item, the most caloric food, the highest priced food, and the laptop with the shortest warranty. <p>
+     * - Groups items by category and by interface (Edible or Technical), and prints the cheapest and priciest items for each group. <p>
+     * - Logs the end of the application. <p>
      *
-     * @param args Command line arguments. Not used in this application.
-     * @throws FileNotFoundException If the input file cannot be found.
+     * @param args Command-line arguments. Not used in this application.
+     * @throws FileNotFoundException If the input file is not found.
      */
     public static void main(String[] args) throws FileNotFoundException {
         logger.info("Aplikacija započela s radom.");
@@ -51,7 +56,6 @@ public class Main {
         List<Factory> factories = inputFactories(scanner, items);
         List<Store> stores = inputStores(scanner, items);
 
-        System.out.println();
         Factory bestFactory = findFactoryWithLargestVolumeOfAnItem(factories);
         System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");
 
@@ -90,35 +94,43 @@ public class Main {
     }
 
     /**
-     * IThis sorts the lists so it changes the map. Maybe pull sorting out of method and require a sorted set.
+     * Sorts and displays the most and least expensive items for each key in the provided map.
+     * The items are sorted using the {@code ProductionSorter} comparator.
+     * Logs the names of all items associated with each key and prints the most and least expensive items for each key.
      *
-     * @param itemsPerKeyMap
+     * @param itemsPerKeyMap A map where each key is associated with a list of {@code Item} objects.
      */
     private static void printCheapestAndPriciestItemsByKey(Map<?, List<Item>> itemsPerKeyMap) {
         System.out.println();
-        itemsPerKeyMap.forEach((key, value) -> {
-            String listNames = value.stream().map(NamedEntity::getName).collect(Collectors.joining(", "));
-            logger.debug("Key = [" + key.toString() + "]: Values = [" + listNames + "]");
-        });
-
-        for (var i : itemsPerKeyMap.entrySet()) {
-            List<Item> categoryItems = i.getValue();
-            categoryItems.sort(new ProductionSorter());
-            Item mostExpensive = categoryItems.getLast(), leastExpensive = categoryItems.getFirst();
+        itemsPerKeyMap.forEach((key, valueItems) -> {
+            valueItems.sort(new ProductionSorter());
+            Item mostExpensive = valueItems.getLast(), leastExpensive = valueItems.getFirst();
 
             String mostExpensiveString = mostExpensive.getName() + " [" + mostExpensive.getDiscountedSellingPrice() + "]";
             String leastExpensiveString = leastExpensive.getName() + " [" + leastExpensive.getDiscountedSellingPrice() + "]";
 
             String keyName;
-            if (i.getKey() instanceof Category category) keyName = category.getName();
-            else keyName = i.getKey().toString();
+            if (key instanceof Category category) keyName = category.getName();
+            else keyName = key.toString();
 
-            String msg = "Key: " + keyName + " -> Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString;
-            System.out.println(msg); logger.debug(msg);
-        }
+            String listNames = valueItems.stream().map(NamedEntity::getName).collect(Collectors.joining(", "));
+            logger.debug("Key = [" + keyName + "]: Values = [" + listNames + "]");
+            String msg = "Key = [" + keyName + "]: Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString;
+            System.out.println(msg);
+            logger.debug(msg);
+        });
     }
 
-
+    /**
+     * Collects user input to create a list of categories.
+     * <p>
+     * Prompts the user to enter the name and description for each category.
+     * It ensures that no two categories have the same name and description.
+     * If a category already exists, the user is asked to enter a different category.
+     *
+     * @param scanner A Scanner object for reading user input.
+     * @return A list of categories created based on user input.
+     */
     private static List<Category> inputCategories(Scanner scanner) {
         ArrayList<Category> categories = new ArrayList<>();
         for (int i = 0; i < NUM_CATEGORIES; i++) {
@@ -145,6 +157,16 @@ public class Main {
         return categories;
     }
 
+    /**
+     * Checks if a category already exists in a list of categories.
+     * <p>
+     * Compares the input category with each category in the list.
+     * If a category with the same name and description is found, an {@code IdenticalCategoryInputException} is thrown.
+     *
+     * @param categoryInput The category to check.
+     * @param categories    The list of categories to check against.
+     * @throws IdenticalCategoryInputException If the input category already exists in the list.
+     */
     private static void checkForIdenticalCategories(Category categoryInput, List<Category> categories) throws IdenticalCategoryInputException {
         for (Category c : categories) {
             if (c.equals(categoryInput))
@@ -152,6 +174,19 @@ public class Main {
         }
     }
 
+    /**
+     * Collects user input to create a list of items. <p>
+     * <p>
+     * Prompts the user to enter the details for each item, including its name, category, dimensions, production cost, selling price, and discount.
+     * If the item is food, the user can specify whether it's pizza or chicken nuggets and input its weight.
+     * If the item is a laptop, the user can input its warranty duration.
+     * After each item is created, if it's edible, it prints out its kilocalories and price with discount.
+     * The created items are added to a list which is returned at the end.
+     *
+     * @param scanner    A Scanner object for reading user input.
+     * @param categories The list of categories to choose from when creating an item.
+     * @return A list of items created based on user input.
+     */
     private static List<Item> inputItems(Scanner scanner, List<Category> categories) {
         List<Item> items = new ArrayList<>();
         for (int i = 0; i < NUM_ITEMS; i++) {
@@ -199,7 +234,15 @@ public class Main {
         return items;
     }
 
-
+    /**
+     * Prompts the user to input information for a specified number of factories.
+     * The user can choose the name, address, and items produced by each factory.
+     * Ensures that no two factories produce the same item.
+     *
+     * @param scanner A {@code Scanner} object for user input.
+     * @param items   The list of items to choose from when creating a factory.
+     * @return A list of factories created based on user input.
+     */
     private static List<Factory> inputFactories(Scanner scanner, List<Item> items) {
         List<Factory> factories = new ArrayList<>();
         List<Item> addedItems = new ArrayList<>();
@@ -217,6 +260,15 @@ public class Main {
         return factories;
     }
 
+    /**
+     * Prompts the user to input information for a specified number of stores.
+     * User can choose the name, web address, and items sold by each store.
+     * Ensures that no two stores sell the same item.
+     *
+     * @param scanner A {@code Scanner} object for user input.
+     * @param items   The list of items to choose from when creating a store.
+     * @return A list of stores created based on user input.
+     */
     private static List<Store> inputStores(Scanner scanner, List<Item> items) {
         List<Store> stores = new ArrayList<>();
         List<Item> addedItems = new ArrayList<>();
@@ -235,8 +287,19 @@ public class Main {
         return stores;
     }
 
+    /**
+     * Allows the user to select items from a given list, ensuring that no item is selected more than once.
+     * <p>
+     * Prompts the user to choose items until they have either chosen all available items or decided to stop choosing.
+     * It ensures that no item is chosen more than once by checking each chosen item against a list of already chosen items.
+     *
+     * @param scanner    A Scanner object for reading user input.
+     * @param items      The list of items to choose from.
+     * @param addedItems The list of items that have already been chosen.
+     * @return A set of items chosen by the user.
+     */
     private static Set<Item> chooseItems(Scanner scanner, List<Item> items, List<Item> addedItems) {
-        Set<Item> addedItemSet = new HashSet<>();
+        Set<Item> chosenItemSet = new HashSet<>();
         boolean finishedChoosing = false, isFirstRun = true;
         while (!finishedChoosing) {
             if (items.size() == addedItems.size()) {
@@ -257,19 +320,25 @@ public class Main {
                     System.out.println("This item [" + items.get(itemChoice - 1).getName() + "] has already been added. Please choose an item that isn't in this list: " + addedItems.stream().map(Item::getName).collect(Collectors.joining(", ")));
                     continue;
                 }
-                addedItemSet.add(items.get(itemChoice - 1));
+                chosenItemSet.add(items.get(itemChoice - 1));
                 //addedItems mijenja se i van metode
                 addedItems.add(items.get(itemChoice - 1));
             } else finishedChoosing = true;
             isFirstRun = false;
         }
-        return addedItemSet;
+        return chosenItemSet;
     }
 
+    /**
+     * Displays a list of items for the user to choose from.
+     * If this is not the first run, it also prints an option for the user to finish choosing.
+     *
+     * @param items      The list of items to choose from.
+     * @param isFirstRun A boolean indicating whether this is the first run of the method.
+     */
     private static void printAvailableItems(List<Item> items, boolean isFirstRun) {
         System.out.println("Choose an item:");
-        for (int i = 0; i < items.size(); i++)
-            System.out.println((i + 1) + ". " + items.get(i).getName());
+        for (int i = 0; i < items.size(); i++) System.out.println((i + 1) + ". " + items.get(i).getName());
         if (!isFirstRun) System.out.println(items.size() + 1 + ". " + "Finished choosing.");
     }
 
@@ -286,6 +355,15 @@ public class Main {
             throw new IdenticalItemChoiceException("Chosen item [" + itemChoice.getName() + "] has already been added. Added Items: " + addedItems.stream().map(Item::getName).collect(Collectors.joining(", ")));
     }
 
+    /**
+     * Collects user input to create an {@code Address} object.
+     * <p>
+     * Prompts the user to enter the street name, house number, and city.
+     * It ensures that the entered city is valid. If the city is not valid, the user is asked to enter a different city.
+     *
+     * @param scanner A Scanner object for reading user input.
+     * @return An {@code Address} object created based on user input.
+     */
     private static Address inputAddress(Scanner scanner) {
         System.out.print("Enter the street name: ");
         String street = scanner.nextLine();
@@ -307,6 +385,16 @@ public class Main {
         return new Address.Builder().atStreet(street).atHouseNumber(houseNumber).atCity(city).build();
     }
 
+    /**
+     * Collects user input to determine the city.
+     * <p>
+     * Prompts the user to enter the name of a city. It checks if the entered city is in the list of supported cities.
+     * If the city is not supported, a {@code CityNotSupportedException} is thrown.
+     *
+     * @param scanner A Scanner object for reading user input.
+     * @return A {@code Cities} enum value representing the entered city.
+     * @throws CityNotSupportedException If the entered city is not supported.
+     */
     private static Cities inputCity(Scanner scanner) throws CityNotSupportedException {
         System.out.print("Enter the city name: ");
         String name = scanner.nextLine();

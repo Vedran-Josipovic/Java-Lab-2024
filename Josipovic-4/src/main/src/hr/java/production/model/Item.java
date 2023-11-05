@@ -16,14 +16,14 @@ public class Item extends NamedEntity {
     /**
      * Constructs a new Item with the specified name, category, dimensions, cost, selling price, and discount percentage.
      *
-     * @param name The name of the item.
-     * @param category The category of the item.
-     * @param width The width of the item.
-     * @param height The height of the item.
-     * @param length The length of the item.
+     * @param name           The name of the item.
+     * @param category       The category of the item.
+     * @param width          The width of the item.
+     * @param height         The height of the item.
+     * @param length         The length of the item.
      * @param productionCost The cost to produce the item.
-     * @param sellingPrice The price at which the item is sold.
-     * @param discount The discount percentage on the item.
+     * @param sellingPrice   The price at which the item is sold.
+     * @param discount       The discount percentage on the item.
      */
     public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount) {
         super(name);
@@ -127,15 +127,6 @@ public class Item extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", discount=" + discount +
-                ", name='" + name + '\'' +
-                '}';
+        return "Item{" + "category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + ", name='" + name + '\'' + '}';
     }
 }

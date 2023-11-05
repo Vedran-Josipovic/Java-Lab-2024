@@ -62,16 +62,6 @@ public final class Laptop extends Item implements Technical {
 
     @Override
     public String toString() {
-        return "Laptop{" +
-                "warrantyYears=" + warrantyYears +
-                ", category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", discount=" + discount +
-                ", name='" + name + '\'' +
-                '}';
+        return "Laptop{" + "warrantyYears=" + warrantyYears + ", category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + ", name='" + name + '\'' + '}';
     }
 }

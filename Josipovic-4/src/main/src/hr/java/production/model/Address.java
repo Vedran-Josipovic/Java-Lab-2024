@@ -18,6 +18,56 @@ public class Address {
     private Address() {
     }
 
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
+    public Cities getCity() {
+        return city;
+    }
+
+    public void setCity(Cities city) {
+        this.city = city;
+    }
+
+    public String getCityName() {
+        return city.getName();
+    }
+
+    public String getCityPostalCode() {
+        return city.getPostalCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && getCity() == address.getCity();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStreet(), getHouseNumber(), getCity());
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" + "street='" + street + '\'' + ", houseNumber='" + houseNumber + '\'' + ", city=" + city + '}';
+    }
+
     /**
      * Builder class for Address. Allows for the creation of Address instances using method chaining.
      */
@@ -47,7 +97,13 @@ public class Address {
             return this;
         }
 
-        public Builder atCity(Cities city){
+        /**
+         * Sets the city of the Address being built.
+         *
+         * @param city The city.
+         * @return The current Builder instance.
+         */
+        public Builder atCity(Cities city) {
             this.city = city;
             return this;
         }
@@ -66,56 +122,4 @@ public class Address {
         }
     }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-
-    public Cities getCity() {
-        return city;
-    }
-
-    public void setCity(Cities city) {
-        this.city = city;
-    }
-
-    public String getCityName(){
-        return city.getName();
-    }
-    public String getCityPostalCode(){
-        return city.getPostalCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNumber(), address.getHouseNumber()) && getCity() == address.getCity();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getStreet(), getHouseNumber(), getCity());
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "street='" + street + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                ", city=" + city +
-                '}';
-    }
 }

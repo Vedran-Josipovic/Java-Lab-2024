@@ -8,6 +8,15 @@ import java.math.BigDecimal;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Utility class for handling user input.
+ * <p>
+ * This class provides methods for reading and validating user input of different types.
+ * It uses a {@code Scanner} object to read the input and throws exceptions if the input is not valid.
+ * All methods in this class are static and belong to the class itself.
+ *
+ * @implNote Change to an interface instead of a class if necessary.
+ */
 public class InputHandler {
     private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 

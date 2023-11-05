@@ -3,11 +3,21 @@ package hr.java.production.model;
 import java.util.Objects;
 import java.util.Set;
 
-
+/**
+ * Represents a store in the production model.
+ * Extends the NamedEntity class.
+ */
 public class Store extends NamedEntity {
     private String webAddress;
     private Set<Item> items;
 
+    /**
+     * Constructs a new Store with the specified name, web address, and items.
+     *
+     * @param name       The name of the store.
+     * @param webAddress The web address of the store.
+     * @param items      The items sold by the store.
+     */
     public Store(String name, String webAddress, Set<Item> items) {
         super(name);
         this.webAddress = webAddress;
@@ -46,10 +56,6 @@ public class Store extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Store{" +
-                "webAddress='" + webAddress + '\'' +
-                ", items=" + items +
-                ", name='" + name + '\'' +
-                '}';
+        return "Store{" + "webAddress='" + webAddress + '\'' + ", items=" + items + ", name='" + name + '\'' + '}';
     }
 }

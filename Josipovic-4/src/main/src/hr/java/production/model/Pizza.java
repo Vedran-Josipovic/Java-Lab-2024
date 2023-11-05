@@ -15,15 +15,15 @@ public class Pizza extends Item implements Edible {
     /**
      * Constructs a new Pizza with the specified name, category, dimensions, cost, selling price, discount, and weight.
      *
-     * @param name The name of the pizza.
-     * @param category The category of the pizza.
-     * @param width The width of the pizza.
-     * @param height The height of the pizza.
-     * @param length The length of the pizza.
+     * @param name           The name of the pizza.
+     * @param category       The category of the pizza.
+     * @param width          The width of the pizza.
+     * @param height         The height of the pizza.
+     * @param length         The length of the pizza.
      * @param productionCost The cost to produce the pizza.
-     * @param sellingPrice The price at which the pizza is sold.
-     * @param discount The discount on the pizza.
-     * @param weightInKG The weight of the pizza in kilograms.
+     * @param sellingPrice   The price at which the pizza is sold.
+     * @param discount       The discount on the pizza.
+     * @param weightInKG     The weight of the pizza in kilograms.
      */
     public Pizza(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, BigDecimal weightInKG) {
         super(name, category, width, height, length, productionCost, sellingPrice, discount);
@@ -78,16 +78,6 @@ public class Pizza extends Item implements Edible {
 
     @Override
     public String toString() {
-        return "Pizza{" +
-                "weightInKG=" + weightInKG +
-                ", category=" + category +
-                ", width=" + width +
-                ", height=" + height +
-                ", length=" + length +
-                ", productionCost=" + productionCost +
-                ", sellingPrice=" + sellingPrice +
-                ", discount=" + discount +
-                ", name='" + name + '\'' +
-                '}';
+        return "Pizza{" + "weightInKG=" + weightInKG + ", category=" + category + ", width=" + width + ", height=" + height + ", length=" + length + ", productionCost=" + productionCost + ", sellingPrice=" + sellingPrice + ", discount=" + discount + ", name='" + name + '\'' + '}';
     }
 }

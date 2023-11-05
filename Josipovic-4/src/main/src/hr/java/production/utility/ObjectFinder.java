@@ -7,9 +7,23 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Utility class for finding objects with specific properties.
+ * <p>
+ * This class provides static methods for finding objects such as factories, stores, and items with specific properties.
+ * It uses a {@code Logger} object to log errors and information.
+ */
 public class ObjectFinder {
     private static final Logger logger = LoggerFactory.getLogger(ObjectFinder.class);
 
+    /**
+     * Finds the factory with the largest volume of an item.
+     * <p>
+     * Iterates over a list of factories and finds the one with the largest volume of an item.
+     *
+     * @param factories A list of factories to search.
+     * @return The factory with the largest volume of an item.
+     */
     public static Factory findFactoryWithLargestVolumeOfAnItem(List<Factory> factories) {
         Factory bestFactory = factories.getFirst();
         BigDecimal largestVolume = BigDecimal.valueOf(0);
@@ -24,21 +38,41 @@ public class ObjectFinder {
         return bestFactory;
     }
 
+    /**
+     * Finds the store with the cheapest item.
+     * <p>
+     * Iterates over a list of stores and finds the one with the cheapest item with discount applied.
+     *
+     * @param stores A list of stores to search.
+     * @return The store with the cheapest item.
+     * @implNote For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
+     * and not by taking into account the weight like the {@code calculatePrice} method
+     * defined in the {@code Edible} interface does. Might want to change that in the future.
+     */
     public static Store findStoreWithCheapestItem(List<Store> stores) {
         Store bestStore = stores.getFirst();
         BigDecimal cheapestSellingPrice = BigDecimal.valueOf(Double.MAX_VALUE);
 
         for (Store s : stores) {
             for (Item i : s.getItems()) {
-                if (i.getSellingPrice().compareTo(cheapestSellingPrice) < 0) {
+                if (i.getDiscountedSellingPrice().compareTo(cheapestSellingPrice) < 0) {
                     bestStore = s;
-                    cheapestSellingPrice = i.getSellingPrice();
+                    cheapestSellingPrice = i.getDiscountedSellingPrice();
                 }
             }
         }
         return bestStore;
     }
 
+    /**
+     * Finds the most caloric food item.
+     * <p>
+     * Iterates over a list of items and finds the one with the most calories.
+     * If there are no food products among the items, it returns the first item in the list and logs an error.
+     *
+     * @param items A list of items to search.
+     * @return The most caloric food item.
+     */
     public static Item findMostCaloricFood(List<Item> items) {
         Item mostCaloric = items.getFirst();
         int maxCalories = -1;
@@ -58,6 +92,15 @@ public class ObjectFinder {
         return mostCaloric;
     }
 
+    /**
+     * Finds the highest priced food item.
+     * <p>
+     * Iterates over a list of items and finds the one with the highest price.
+     * If there are no food products among the items, it returns the first item in the list and logs an error.
+     *
+     * @param items A list of items to search.
+     * @return The highest priced food item.
+     */
     public static Item findHighestPricedFood(List<Item> items) {
         Item mostExpensive = items.getFirst();
         BigDecimal highestPrice = BigDecimal.valueOf(-1);
@@ -77,6 +120,15 @@ public class ObjectFinder {
         return mostExpensive;
     }
 
+    /**
+     * Finds the laptop with the shortest warranty.
+     * <p>
+     * Iterates over a list of items and finds the laptop with the shortest warranty.
+     * If there are no laptops among the items, it returns the first item in the list and logs an error.
+     *
+     * @param items A list of items to search.
+     * @return The laptop with the shortest warranty.
+     */
     public static Item findLaptopWithShortestWarranty(List<Item> items) {
         Item shortestWarrantyLaptop = items.getFirst();
         Integer minWarranty = Integer.MAX_VALUE;
@@ -96,4 +148,5 @@ public class ObjectFinder {
         }
         return shortestWarrantyLaptop;
     }
+
 }

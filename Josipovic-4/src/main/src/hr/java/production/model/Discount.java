@@ -22,8 +22,6 @@ public record Discount(BigDecimal discountAmount) {
 
     @Override
     public String toString() {
-        return "Discount{" +
-                "discountAmount=" + discountAmount +
-                '}';
+        return "Discount{" + "discountAmount=" + discountAmount + '}';
     }
 }

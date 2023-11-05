@@ -12,7 +12,7 @@ public class Category extends NamedEntity {
     /**
      * Constructs a new Category with the specified name and description.
      *
-     * @param name The name of the category.
+     * @param name        The name of the category.
      * @param description The description of the category.
      */
     public Category(String name, String description) {
@@ -44,9 +44,6 @@ public class Category extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Category{" +
-                "description='" + description + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+        return "Category{" + "description='" + description + '\'' + ", name='" + name + '\'' + '}';
     }
 }

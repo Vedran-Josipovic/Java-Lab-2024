@@ -3,11 +3,21 @@ package hr.java.production.model;
 import java.util.Objects;
 import java.util.Set;
 
-
+/**
+ * Represents a factory in the production model.
+ * Extends the NamedEntity class.
+ */
 public class Factory extends NamedEntity {
     private Address address;
     private Set<Item> items;
 
+    /**
+     * Constructs a new Factory with the specified name, address, and items.
+     *
+     * @param name    The name of the factory.
+     * @param address The address of the factory.
+     * @param items   The items produced by the factory.
+     */
     public Factory(String name, Address address, Set<Item> items) {
         super(name);
         this.address = address;
@@ -47,10 +57,6 @@ public class Factory extends NamedEntity {
 
     @Override
     public String toString() {
-        return "Factory{" +
-                "address=" + address +
-                ", items=" + items +
-                ", name='" + name + '\'' +
-                '}';
+        return "Factory{" + "address=" + address + ", items=" + items + ", name='" + name + '\'' + '}';
     }
 }

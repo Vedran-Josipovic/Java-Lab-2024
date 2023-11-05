@@ -17,7 +17,7 @@ public class ProductionSorter implements Comparator<Item> {
      * @param i1 The first item to be compared.
      * @param i2 The second item to be compared.
      * @return A negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
-     * @implNote For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
+     * @Author For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
      * and not by taking into account the weight like the {@code calculatePrice} method
      * defined in the {@code Edible} interface does. Might want to change that in the future.
      */

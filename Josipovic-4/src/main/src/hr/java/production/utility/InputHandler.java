@@ -15,7 +15,7 @@ import java.util.Scanner;
  * It uses a {@code Scanner} object to read the input and throws exceptions if the input is not valid.
  * All methods in this class are static and belong to the class itself.
  *
- * @implNote Change to an interface instead of a class if necessary.
+ * @Author Change to an interface instead of a class if necessary.
  */
 public class InputHandler {
     private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);

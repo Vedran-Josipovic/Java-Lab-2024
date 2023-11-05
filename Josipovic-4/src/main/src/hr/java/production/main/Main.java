@@ -34,7 +34,7 @@ public class Main {
      * - Logs the end of the application. <p>
      *
      * @param args Command-line arguments. Not used in this application.
-     * @Author All prices shown have discount applied.
+     * @deprecated All prices shown have discount applied.
      */
     public static void main(String[] args) {
         logger.info("Aplikacija započela s radom.");
@@ -98,7 +98,7 @@ public class Main {
      * Logs the names of all items associated with each key and prints the most and least expensive items for each key.
      *
      * @param itemsPerKeyMap A map where each key is associated with a list of {@code Item} objects.
-     * @Author For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
+     * @deprecated For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
      * and not by taking into account the weight like the {@code calculatePrice} method
      * defined in the {@code Edible} interface does. Might want to change that in the future.
      */

@@ -45,7 +45,7 @@ public class ObjectFinder {
      *
      * @param stores A list of stores to search.
      * @return The store with the cheapest item.
-     * @Author For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
+     * @deprecated For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
      * and not by taking into account the weight like the {@code calculatePrice} method
      * defined in the {@code Edible} interface does. Might want to change that in the future.
      */

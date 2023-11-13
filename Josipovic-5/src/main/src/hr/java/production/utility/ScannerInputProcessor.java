@@ -4,6 +4,8 @@ import hr.java.production.enumeration.Cities;
 import hr.java.production.exception.CityNotSupportedException;
 import hr.java.production.exception.IdenticalCategoryInputException;
 import hr.java.production.exception.IdenticalItemChoiceException;
+import hr.java.production.genericsi.FoodStore;
+import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,6 +156,8 @@ public class ScannerInputProcessor implements InputProcessor {
      * Prompts the user to input information for a specified number of stores.
      * User can choose the name, web address, and items sold by each store.
      * Ensures that no two stores sell the same item.
+     * Creates a {@code TechnicalStore} if all items are technical, a {@code FoodStore} if all items are edible,
+     * and a general Store otherwise.
      *
      * @param scanner A {@code Scanner} object for user input.
      * @param items   The list of items to choose from when creating a store.
@@ -173,7 +177,22 @@ public class ScannerInputProcessor implements InputProcessor {
             System.out.println("Pick which items the store sells: ");
 
             Set<Item> storeItems = chooseItems(scanner, items, addedItems);
-            stores.add(new Store(name, webAddress, storeItems));
+
+            //Ako su sve u storeu technical, stvaramo tehnical store
+            if(storeItems.stream().allMatch(item -> item instanceof Technical)){
+                TechnicalStore<Technical> techStore = new TechnicalStore<>(name, webAddress, storeItems, new ArrayList<>());
+                // Add each Technical item to techStore
+                storeItems.forEach(item -> techStore.addTechnicalStoreItem((Technical) item));
+                stores.add(techStore);
+            }
+            else if(storeItems.stream().allMatch(item -> item instanceof Edible)){
+                FoodStore<Edible> foodStore = new FoodStore<>(name, webAddress, storeItems, new ArrayList<>());
+                storeItems.forEach(item -> foodStore.addFoodStoreItem((Edible) item));
+                stores.add(foodStore);
+            }
+            else {
+                stores.add(new Store(name, webAddress, storeItems));
+            }
         }
         return stores;
     }

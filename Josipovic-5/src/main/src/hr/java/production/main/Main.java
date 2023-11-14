@@ -53,7 +53,7 @@ public class Main {
         List<Category> categories = inputProcessor.inputCategories(scanner);
         List<Item> items = inputProcessor.inputItems(scanner, categories);
         List<Factory> factories = inputProcessor.inputFactories(scanner, items);
-        List<Store> stores = inputProcessor.inputStores(scanner, items);
+        List<Store> stores = inputProcessor.inputStores(scanner1, items);
 
         Factory bestFactory = ObjectFinder.findFactoryWithLargestVolumeOfAnItem(factories);
         System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");
@@ -89,6 +89,21 @@ public class Main {
         }
         printCheapestAndPriciestItemsByKey(itemsPerInterfaceMap);
 
+        //Sortiranje store artikala ScannerInputProcessor.chooseItems
+        System.out.println("\n\nStore item volumes [Sorted with TreeSet - Descending]:");
+        stores.forEach(store -> {
+            System.out.println(store.getName() + ": ");
+            store.getItems().forEach(item -> System.out.println(" - " + item.getName() + " [Volume: [" + item.calculateVolume() + "]]"));
+        });
+
+        System.out.println("\n\nFactory item volumes [Not sorted]:");
+        factories.forEach(factory -> {
+            System.out.println(factory.getName() + ": ");
+            factory.getItems().forEach(item -> System.out.println(" - " + item.getName() + " [Volume: [" + item.calculateVolume() + "]]"));
+        });
+        //Sortiranje store artikala ScannerInputProcessor.chooseItems
+
+        
 
         logger.info("Aplikacija završila.");
     }

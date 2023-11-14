@@ -108,7 +108,8 @@ public class Item extends NamedEntity {
      * @return The volume of the item.
      */
     public BigDecimal calculateVolume() {
-        return width.multiply(height).multiply(length);
+        BigDecimal volume = width.multiply(height).multiply(length);
+        return volume.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override

@@ -4,6 +4,7 @@ import hr.java.production.enumeration.Cities;
 import hr.java.production.exception.CityNotSupportedException;
 import hr.java.production.exception.IdenticalCategoryInputException;
 import hr.java.production.exception.IdenticalItemChoiceException;
+import hr.java.production.exception.InvalidStoreTypeException;
 import hr.java.production.genericsi.FoodStore;
 import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
@@ -21,6 +22,7 @@ public class ScannerInputProcessor implements InputProcessor {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
     private static final Integer FOOD = 1, LAPTOP = 2;
+    private static final int TECHNICAL_STORE = 1, FOOD_STORE = 2;
     private static final Logger logger = LoggerFactory.getLogger(ScannerInputProcessor.class);
 
 
@@ -127,11 +129,11 @@ public class ScannerInputProcessor implements InputProcessor {
     /**
      * Prompts the user to input information for a specified number of factories.
      * The user can choose the name, address, and items produced by each factory.
-     * Ensures that no two factories produce the same item.
+     * Ensures that each factory's item list is unique and not shared with other factories.
      *
-     * @param scanner A {@code Scanner} object for user input.
+     * @param scanner A Scanner object for user input.
      * @param items   The list of items to choose from when creating a factory.
-     * @return A list of factories created based on user input.
+     * @return A list of Factory objects created based on user input.
      */
     @Override
     public List<Factory> inputFactories(Scanner scanner, List<Item> items) {
@@ -145,7 +147,7 @@ public class ScannerInputProcessor implements InputProcessor {
             Address address = inputAddress(scanner);
             System.out.println("Pick which items the factory produces: ");
 
-            Set<Item> factoryItems = chooseItems(scanner, items, addedItems);
+            Set<Item> factoryItems = chooseItems(scanner, items, addedItems, Factory.class);
             factories.add(new Factory(name, address, factoryItems));
         }
         return factories;
@@ -153,48 +155,79 @@ public class ScannerInputProcessor implements InputProcessor {
 
 
     /**
-     * Prompts the user to input information for a specified number of stores.
-     * User can choose the name, web address, and items sold by each store.
-     * Ensures that no two stores sell the same item.
-     * Creates a {@code TechnicalStore} if all items are technical, a {@code FoodStore} if all items are edible,
-     * and a general Store otherwise.
+     * Prompts the user to input information for a specified number of stores and select items that each store will sell.
+     * The user chooses the name, web address, and the items to be sold by each store.
+     * After selecting items, the user is prompted to choose the type of store: Technical, Food, or General.
+     * If a Technical or Food store is selected, only the relevant items (Technical or Edible) are added to the store.
+     * The method offers a retry mechanism if the user selects a store type that doesn't match the chosen items.
      *
      * @param scanner A {@code Scanner} object for user input.
      * @param items   The list of items to choose from when creating a store.
-     * @return A list of stores created based on user input.
+     * @return A list of stores created based on user input. Each store is populated with the appropriate items based on its type.
      */
     @Override
     public List<Store> inputStores(Scanner scanner, List<Item> items) {
         List<Store> stores = new ArrayList<>();
         List<Item> addedItems = new ArrayList<>();
+
         for (int i = 0; i < NUM_STORES; i++) {
-            System.out.println("Enter the information about the " + (i + 1) + ". store: ");
+            System.out.println("Enter the information for store " + (i + 1) + ":");
             System.out.print("Enter the store name: ");
             String name = scanner.nextLine();
             System.out.print("Enter the store web address: ");
             String webAddress = scanner.nextLine();
 
             System.out.println("Pick which items the store sells: ");
+            Set<Item> storeItems = chooseItems(scanner, items, addedItems, Store.class);
 
-            Set<Item> storeItems = chooseItems(scanner, items, addedItems);
+            boolean validStoreType = false;
+            while (!validStoreType) {
+                try {
+                    System.out.println("Choose the type of store: \n1. Technical Store \n2. Food Store \n3. General Store");
+                    int storeType = InputHandler.numInputHandler(scanner, "Enter your choice (1-3): ", 1, 3);
 
-            //Ako su sve u storeu technical, stvaramo tehnical store
-            if(storeItems.stream().allMatch(item -> item instanceof Technical)){
-                TechnicalStore<Technical> techStore = new TechnicalStore<>(name, webAddress, storeItems, new ArrayList<>());
-                // Add each Technical item to techStore
-                storeItems.forEach(item -> techStore.addTechnicalStoreItem((Technical) item));
-                stores.add(techStore);
-            }
-            else if(storeItems.stream().allMatch(item -> item instanceof Edible)){
-                FoodStore<Edible> foodStore = new FoodStore<>(name, webAddress, storeItems, new ArrayList<>());
-                storeItems.forEach(item -> foodStore.addFoodStoreItem((Edible) item));
-                stores.add(foodStore);
-            }
-            else {
-                stores.add(new Store(name, webAddress, storeItems));
+                    Store store = createStoreBasedOnType(storeType, name, webAddress, storeItems);
+                    if (store instanceof TechnicalStore) {
+                        storeItems.stream().filter(item -> item instanceof Technical).forEach(item -> ((TechnicalStore<Technical>) store).addTechnicalStoreItem((Technical) item));
+                    } else if (store instanceof FoodStore) {
+                        storeItems.stream().filter(item -> item instanceof Edible).forEach(item -> ((FoodStore<Edible>) store).addFoodStoreItem((Edible) item));
+                    }
+                    stores.add(store);
+                    validStoreType = true;
+                } catch (InvalidStoreTypeException e) {
+                    logger.error(e.getMessage());
+                    System.out.println(e.getMessage() + " Please try again.");
+                }
             }
         }
         return stores;
+    }
+
+    /**
+     * Creates a store based on the specified type.
+     * This method validates whether the chosen items match the store type.
+     * If the items don't match the store type, it throws an InvalidStoreTypeException.
+     *
+     * @param storeType  The type of the store to create (1 for Technical, 2 for Food, others for General).
+     * @param name       The name of the store.
+     * @param webAddress The web address of the store.
+     * @param storeItems The set of items to be added to the store.
+     * @return A new store instance of the specified type with the given items.
+     * @throws InvalidStoreTypeException If the chosen items don't match the specified store type.
+     */
+    private Store createStoreBasedOnType(int storeType, String name, String webAddress, Set<Item> storeItems) throws InvalidStoreTypeException {
+        switch (storeType) {
+            case TECHNICAL_STORE:
+                if (storeItems.stream().noneMatch(item -> item instanceof Technical))
+                    throw new InvalidStoreTypeException("Cannot choose Technical Store if there are no Technical items.");
+                return new TechnicalStore<>(name, webAddress, storeItems, new ArrayList<>());
+            case FOOD_STORE:
+                if (storeItems.stream().noneMatch(item -> item instanceof Edible))
+                    throw new InvalidStoreTypeException("Cannot choose Food Store if there are no Edible items.");
+                return new FoodStore<>(name, webAddress, storeItems, new ArrayList<>());
+            default:
+                return new Store(name, webAddress, storeItems);
+        }
     }
 
 
@@ -277,17 +310,29 @@ public class ScannerInputProcessor implements InputProcessor {
 
     /**
      * Allows the user to select items from a given list, ensuring that no item is selected more than once.
-     * <p>
-     * Prompts the user to choose items until they have either chosen all available items or decided to stop choosing.
-     * It ensures that no item is chosen more than once by checking each chosen item against a list of already chosen items.
+     * The method behavior changes based on the class type passed to it. For Store classes, it uses a TreeSet
+     * sorted by item volume. For other classes, it uses a HashSet.
      *
-     * @param scanner    A Scanner object for reading user input.
-     * @param items      The list of items to choose from.
-     * @param addedItems The list of items that have already been chosen.
-     * @return A set of items chosen by the user.
+     * @param scanner      A Scanner object for reading user input.
+     * @param items        The list of items to choose from.
+     * @param addedItems   The list of items that have already been chosen.
+     * @param callingClass The class of the caller, which determines the type of Set used for chosen items.
+     * @return A set of items chosen by the user, either sorted by volume or unordered.
      */
-    private Set<Item> chooseItems(Scanner scanner, List<Item> items, List<Item> addedItems) {
-        Set<Item> chosenItemSet = new HashSet<>();
+    private Set<Item> chooseItems(Scanner scanner, List<Item> items, List<Item> addedItems, Class<?> callingClass) {
+        Set<Item> chosenItemSet;
+        if (callingClass.equals(Store.class)) {
+            chosenItemSet = new TreeSet<>((i2, i1) -> {
+                int volumeComparison = i1.calculateVolume().compareTo(i2.calculateVolume());
+                if (volumeComparison != 0) {
+                    return volumeComparison;
+                }
+                return i1.getName().compareTo(i2.getName());
+            });
+        } else {
+            chosenItemSet = new HashSet<>();
+        }
+
         boolean finishedChoosing = false, isFirstRun = true;
         while (!finishedChoosing) {
             if (items.size() == addedItems.size()) {

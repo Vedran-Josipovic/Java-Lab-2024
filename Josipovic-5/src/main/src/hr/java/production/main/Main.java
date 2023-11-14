@@ -143,7 +143,6 @@ public class Main {
         //Trgovine s natprosječnim brojem artikala
 
 
-
         //Mjerenje koliko treba da se sortiraju dućani bez lambdi
         Instant startWithoutLambda = Instant.now();
         TreeSet<Item> sortedWithoutLambda = new TreeSet<>(new Comparator<Item>() {
@@ -163,7 +162,23 @@ public class Main {
         //Mjerenje koliko treba da se sortiraju dućani bez lambdi
 
 
-        //Filtriranje itemova po tome koji ima popust veći od jedan
+        //Filtriranje itemova po tome koji ima popust veći od nula
+        System.out.print("\nDiscounted items: ");
+        Optional<List<Item>> discountedItemsOptional = Optional.of(
+                        items.stream()
+                                .filter(i -> i.getDiscount().discountAmount().compareTo(BigDecimal.ZERO) > 0)
+                                .collect(Collectors.toList()))
+                .filter(list -> !list.isEmpty());
+        if (discountedItemsOptional.isPresent()) {
+            String itemNames = discountedItemsOptional.get().stream()
+                    .map(Item::getName)
+                    .collect(Collectors.joining(", "));
+            System.out.println(itemNames);
+        } else {
+            System.out.println("No discounted items found");
+        }
+        //Filtriranje itemova po tome koji ima popust veći od nula
+
 
         logger.info("Aplikacija završila.");
     }
@@ -182,8 +197,14 @@ public class Main {
                 .collect(Collectors.toList());
 
         System.out.println("Stores with above-average number of items:");
-        storesWithAboveAverageItems.forEach(store ->
-                System.out.println(store.getName() + " - Number of Items: " + store.getItems().size()));
+        if (storesWithAboveAverageItems.isEmpty()) {
+            System.out.println("There are no stores with an above-average number of items.");
+            logger.info("There are no stores with an above-average number of items.");
+        } else {
+            storesWithAboveAverageItems.forEach(store ->
+                    System.out.println(store.getName() + " - Number of Items: " + store.getItems().size()));
+        }
+
     }
 
 

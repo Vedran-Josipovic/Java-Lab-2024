@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -142,7 +144,26 @@ public class Main {
 
 
 
+        //Mjerenje koliko treba da se sortiraju dućani bez lambdi
+        Instant startWithoutLambda = Instant.now();
+        TreeSet<Item> sortedWithoutLambda = new TreeSet<>(new Comparator<Item>() {
+            @Override
+            public int compare(Item i1, Item i2) {
+                int volumeComparison = i1.calculateVolume().compareTo(i2.calculateVolume());
+                if (volumeComparison != 0) {
+                    return volumeComparison;
+                }
+                return i1.getName().compareTo(i2.getName());
+            }
+        });
+        sortedWithoutLambda.addAll(items);
+        Instant endWithoutLambda = Instant.now();
+        Duration durationWithoutLambda = Duration.between(startWithoutLambda, endWithoutLambda);
+        logger.info("Sorting without lambdas: " + durationWithoutLambda.toNanos());
+        //Mjerenje koliko treba da se sortiraju dućani bez lambdi
 
+
+        //Filtriranje itemova po tome koji ima popust veći od jedan
 
         logger.info("Aplikacija završila.");
     }
@@ -164,8 +185,6 @@ public class Main {
         storesWithAboveAverageItems.forEach(store ->
                 System.out.println(store.getName() + " - Number of Items: " + store.getItems().size()));
     }
-
-
 
 
     /**

@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -322,6 +324,8 @@ public class ScannerInputProcessor implements InputProcessor {
     private Set<Item> chooseItems(Scanner scanner, List<Item> items, List<Item> addedItems, Class<?> callingClass) {
         Set<Item> chosenItemSet;
         if (callingClass.equals(Store.class)) {
+            //Mjerenje koliko treba da se sortira jedan dućan
+            Instant startWithLambda = Instant.now();
             chosenItemSet = new TreeSet<>((i2, i1) -> {
                 int volumeComparison = i1.calculateVolume().compareTo(i2.calculateVolume());
                 if (volumeComparison != 0) {
@@ -329,6 +333,9 @@ public class ScannerInputProcessor implements InputProcessor {
                 }
                 return i1.getName().compareTo(i2.getName());
             });
+            Instant endWithLambda = Instant.now();
+            Duration durationWithLambda = Duration.between(startWithLambda, endWithLambda);
+            logger.info("Sorting with lambdas: " + durationWithLambda.toNanos());
         } else {
             chosenItemSet = new HashSet<>();
         }

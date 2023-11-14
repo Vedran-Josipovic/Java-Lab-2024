@@ -39,18 +39,11 @@ public class Main {
      * @param args Command-line arguments. Not used in this application.
      * @deprecated All prices shown have discount applied.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         logger.info("Aplikacija započela s radom.");
 
         File file = new File("Josipovic-5/src/main/files/lab-5-input");
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException ex) {
-            logger.error("File not found. Exiting program. Entered file location: [" + file.getAbsolutePath() + "] Message: " + ex.getMessage());
-            System.out.println("File not found. Exiting program.");
-            System.exit(-1);
-        }
+        Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
         List<Category> categories = inputProcessor.inputCategories(scanner);
@@ -178,6 +171,13 @@ public class Main {
             System.out.println("No discounted items found");
         }
         //Filtriranje itemova po tome koji ima popust veći od nula
+
+        //Korištenjem .map ispisati broj artikala u svakoj od trgovina i ispisati itemove sa tostringom
+        System.out.println();
+        stores.stream()
+                .map(store -> store.getName() + " has " + store.getItems().size() + " items: " + store.getItems())
+                .forEach(System.out::println);
+        //Korištenjem .map ispisati broj artikala u svakoj od trgovina i ispisati itemove sa tostringom
 
 
         logger.info("Aplikacija završila.");

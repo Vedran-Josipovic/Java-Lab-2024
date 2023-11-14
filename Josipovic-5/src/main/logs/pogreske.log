@@ -183,3 +183,87 @@ hr.java.production.exception.InvalidStoreTypeException: Cannot choose Food Store
 2023-11-14 12:37:00,904 DEBUG [main] h.j.p.m.Main [Main.java:132] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
 2023-11-14 12:37:00,905 DEBUG [main] h.j.p.m.Main [Main.java:135] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
 2023-11-14 12:37:00,906 INFO [main] h.j.p.m.Main [Main.java:105] Aplikacija završila.
+2023-11-14 12:52:47,317 INFO [main] h.j.p.m.Main [Main.java:41] Aplikacija započela s radom.
+2023-11-14 12:52:47,339 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:55] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-14 12:52:47,360 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:274] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-14 12:52:47,362 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:352] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-14 12:52:47,365 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:339] All available items have been added. Possibly returning empty array.
+2023-11-14 12:52:53,297 ERROR [main] h.j.p.u.InputHandler [InputHandler.java:46] Entered a string instead of a number java.util.InputMismatchException
+2023-11-14 12:52:55,947 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:198] Cannot choose Technical Store if there are no Technical items.
+2023-11-14 12:53:05,565 DEBUG [main] h.j.p.m.Main [Main.java:148] Key = [Laptops]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 12:53:05,565 DEBUG [main] h.j.p.m.Main [Main.java:151] Key = [Laptops]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 12:53:05,565 DEBUG [main] h.j.p.m.Main [Main.java:148] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-14 12:53:05,565 DEBUG [main] h.j.p.m.Main [Main.java:151] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 12:53:05,566 DEBUG [main] h.j.p.m.Main [Main.java:148] Key = [Game Consoles]: Values = [Nintendo Switch]
+2023-11-14 12:53:05,566 DEBUG [main] h.j.p.m.Main [Main.java:151] Key = [Game Consoles]: Most expensive: Nintendo Switch [297.49], Least expensive: Nintendo Switch [297.49]
+2023-11-14 12:53:05,566 DEBUG [main] h.j.p.m.Main [Main.java:148] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-14 12:53:05,566 DEBUG [main] h.j.p.m.Main [Main.java:151] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 12:53:05,566 DEBUG [main] h.j.p.m.Main [Main.java:148] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 12:53:05,566 DEBUG [main] h.j.p.m.Main [Main.java:151] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 12:53:05,569 INFO [main] h.j.p.m.Main [Main.java:121] Aplikacija završila.
+2023-11-14 12:54:11,612 INFO [main] h.j.p.m.Main [Main.java:41] Aplikacija započela s radom.
+2023-11-14 12:54:11,633 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:55] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-14 12:54:11,656 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:274] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-14 12:54:11,658 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:352] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-14 12:54:11,659 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:339] All available items have been added. Possibly returning empty array.
+2023-11-14 12:54:24,982 DEBUG [main] h.j.p.m.Main [Main.java:150] Key = [Laptops]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 12:54:24,983 DEBUG [main] h.j.p.m.Main [Main.java:153] Key = [Laptops]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 12:54:24,983 DEBUG [main] h.j.p.m.Main [Main.java:150] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-14 12:54:24,983 DEBUG [main] h.j.p.m.Main [Main.java:153] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 12:54:24,983 DEBUG [main] h.j.p.m.Main [Main.java:150] Key = [Game Consoles]: Values = [Nintendo Switch]
+2023-11-14 12:54:24,983 DEBUG [main] h.j.p.m.Main [Main.java:153] Key = [Game Consoles]: Most expensive: Nintendo Switch [297.49], Least expensive: Nintendo Switch [297.49]
+2023-11-14 12:54:24,983 DEBUG [main] h.j.p.m.Main [Main.java:150] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-14 12:54:24,984 DEBUG [main] h.j.p.m.Main [Main.java:153] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 12:54:24,984 DEBUG [main] h.j.p.m.Main [Main.java:150] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 12:54:24,984 DEBUG [main] h.j.p.m.Main [Main.java:153] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 12:54:24,987 INFO [main] h.j.p.m.Main [Main.java:123] Aplikacija završila.
+2023-11-14 12:57:29,913 INFO [main] h.j.p.m.Main [Main.java:41] Aplikacija započela s radom.
+2023-11-14 12:57:29,942 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:55] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-14 12:57:29,967 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:274] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-14 12:57:29,972 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:352] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-14 12:57:29,973 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:339] All available items have been added. Possibly returning empty array.
+2023-11-14 12:57:35,101 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:198] Cannot choose Technical Store if there are no Technical items.
+2023-11-14 12:57:41,143 DEBUG [main] h.j.p.m.Main [Main.java:154] Key = [Laptops]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 12:57:41,144 DEBUG [main] h.j.p.m.Main [Main.java:157] Key = [Laptops]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 12:57:41,145 DEBUG [main] h.j.p.m.Main [Main.java:154] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-14 12:57:41,145 DEBUG [main] h.j.p.m.Main [Main.java:157] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 12:57:41,145 DEBUG [main] h.j.p.m.Main [Main.java:154] Key = [Game Consoles]: Values = [Nintendo Switch]
+2023-11-14 12:57:41,145 DEBUG [main] h.j.p.m.Main [Main.java:157] Key = [Game Consoles]: Most expensive: Nintendo Switch [297.49], Least expensive: Nintendo Switch [297.49]
+2023-11-14 12:57:41,146 DEBUG [main] h.j.p.m.Main [Main.java:154] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-14 12:57:41,146 DEBUG [main] h.j.p.m.Main [Main.java:157] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 12:57:41,146 DEBUG [main] h.j.p.m.Main [Main.java:154] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 12:57:41,146 DEBUG [main] h.j.p.m.Main [Main.java:157] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 12:57:41,150 INFO [main] h.j.p.m.Main [Main.java:127] Aplikacija završila.
+2023-11-14 13:05:29,677 INFO [main] h.j.p.m.Main [Main.java:41] Aplikacija započela s radom.
+2023-11-14 13:05:29,704 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:55] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-14 13:05:29,729 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:274] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-14 13:05:29,733 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:352] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-14 13:05:29,735 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:339] All available items have been added. Possibly returning empty array.
+2023-11-14 13:05:41,567 DEBUG [main] h.j.p.m.Main [Main.java:166] Key = [Laptops]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 13:05:41,568 DEBUG [main] h.j.p.m.Main [Main.java:169] Key = [Laptops]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 13:05:41,568 DEBUG [main] h.j.p.m.Main [Main.java:166] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-14 13:05:41,568 DEBUG [main] h.j.p.m.Main [Main.java:169] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 13:05:41,568 DEBUG [main] h.j.p.m.Main [Main.java:166] Key = [Game Consoles]: Values = [Nintendo Switch]
+2023-11-14 13:05:41,568 DEBUG [main] h.j.p.m.Main [Main.java:169] Key = [Game Consoles]: Most expensive: Nintendo Switch [297.49], Least expensive: Nintendo Switch [297.49]
+2023-11-14 13:05:41,569 DEBUG [main] h.j.p.m.Main [Main.java:166] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-14 13:05:41,570 DEBUG [main] h.j.p.m.Main [Main.java:169] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 13:05:41,570 DEBUG [main] h.j.p.m.Main [Main.java:166] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 13:05:41,570 DEBUG [main] h.j.p.m.Main [Main.java:169] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 13:05:41,574 INFO [main] h.j.p.m.Main [Main.java:139] Aplikacija završila.
+2023-11-14 13:14:22,078 INFO [main] h.j.p.m.Main [Main.java:41] Aplikacija započela s radom.
+2023-11-14 13:14:22,097 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:55] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-14 13:14:22,116 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:274] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-14 13:14:22,119 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:352] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-14 13:14:22,120 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:339] All available items have been added. Possibly returning empty array.
+2023-11-14 13:14:47,664 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:339] All available items have been added. Possibly returning empty array.
+2023-11-14 13:14:51,652 DEBUG [main] h.j.p.m.Main [Main.java:190] Key = [Laptops]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 13:14:51,653 DEBUG [main] h.j.p.m.Main [Main.java:193] Key = [Laptops]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 13:14:51,653 DEBUG [main] h.j.p.m.Main [Main.java:190] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-14 13:14:51,653 DEBUG [main] h.j.p.m.Main [Main.java:193] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 13:14:51,653 DEBUG [main] h.j.p.m.Main [Main.java:190] Key = [Game Consoles]: Values = [Nintendo Switch]
+2023-11-14 13:14:51,653 DEBUG [main] h.j.p.m.Main [Main.java:193] Key = [Game Consoles]: Most expensive: Nintendo Switch [297.49], Least expensive: Nintendo Switch [297.49]
+2023-11-14 13:14:51,654 DEBUG [main] h.j.p.m.Main [Main.java:190] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-14 13:14:51,654 DEBUG [main] h.j.p.m.Main [Main.java:193] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-14 13:14:51,654 DEBUG [main] h.j.p.m.Main [Main.java:190] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-14 13:14:51,654 DEBUG [main] h.j.p.m.Main [Main.java:193] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-14 13:14:51,663 INFO [main] h.j.p.m.Main [Main.java:142] Aplikacija završila.

@@ -1,0 +1,20 @@
+2023-11-17 08:40:15,921 INFO [main] h.j.p.m.Main [Main.java:43] Aplikacija započela s radom.
+2023-11-17 08:40:15,939 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:57] Entered category [Laptops] has already been added. Added Categories: Food, Laptops
+2023-11-17 08:40:15,958 ERROR [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:276] City not in the database: [Shenzhen]. Cities in enums: [Zagreb, Split, Rijeka, Osijek, Zadar, Slavonski Brod, Velika Gorica]
+2023-11-17 08:40:15,960 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:359] Chosen item [Razer Blade 14] has already been added. Added Items: Razer Blade 14
+2023-11-17 08:40:15,961 WARN [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:346] All available items have been added. Possibly returning empty array.
+2023-11-17 08:40:19,966 INFO [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:338] Sorting with lambdas: 504400
+2023-11-17 08:40:23,895 INFO [main] h.j.p.u.ScannerInputProcessor [ScannerInputProcessor.java:338] Sorting with lambdas: 0
+2023-11-17 08:40:26,617 DEBUG [main] h.j.p.m.Main [Main.java:235] Key = [Laptops]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-17 08:40:26,618 DEBUG [main] h.j.p.m.Main [Main.java:238] Key = [Laptops]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-17 08:40:26,618 DEBUG [main] h.j.p.m.Main [Main.java:235] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-17 08:40:26,618 DEBUG [main] h.j.p.m.Main [Main.java:238] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-17 08:40:26,618 DEBUG [main] h.j.p.m.Main [Main.java:235] Key = [Game Consoles]: Values = [Nintendo Switch]
+2023-11-17 08:40:26,618 DEBUG [main] h.j.p.m.Main [Main.java:238] Key = [Game Consoles]: Most expensive: Nintendo Switch [297.49], Least expensive: Nintendo Switch [297.49]
+2023-11-17 08:40:26,619 DEBUG [main] h.j.p.m.Main [Main.java:235] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-17 08:40:26,619 DEBUG [main] h.j.p.m.Main [Main.java:238] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-17 08:40:26,619 DEBUG [main] h.j.p.m.Main [Main.java:235] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-17 08:40:26,619 DEBUG [main] h.j.p.m.Main [Main.java:238] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-17 08:40:26,626 INFO [main] h.j.p.m.Main [Main.java:202] There are no stores with an above-average number of items.
+2023-11-17 08:40:26,627 INFO [main] h.j.p.m.Main [Main.java:154] Sorting without lambdas: 1501600
+2023-11-17 08:40:26,635 INFO [main] h.j.p.m.Main [Main.java:183] Aplikacija završila.

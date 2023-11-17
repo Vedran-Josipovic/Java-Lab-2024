@@ -11,6 +11,7 @@
         <module name="Josipovic-3" />
         <module name="Josipovic-4" />
         <module name="Josipovic-5" />
+        <module name="Josipovic-6" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

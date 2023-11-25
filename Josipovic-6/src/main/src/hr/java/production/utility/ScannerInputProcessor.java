@@ -24,7 +24,7 @@ public class ScannerInputProcessor implements InputProcessor {
     private static final Integer NUM_CATEGORIES = 3, NUM_ITEMS = 5, NUM_FACTORIES = 2, NUM_STORES = 2;
     private static final Integer PIZZA = 1, CHICKEN_NUGGETS = 2;
     private static final Integer FOOD = 1, LAPTOP = 2;
-    private static final int TECHNICAL_STORE = 1, FOOD_STORE = 2;
+    private static final Integer TECHNICAL_STORE = 1, FOOD_STORE = 2;
     private static final Logger logger = LoggerFactory.getLogger(ScannerInputProcessor.class);
 
 

@@ -25,8 +25,8 @@ public class Pizza extends Item implements Edible {
      * @param discount       The discount on the pizza.
      * @param weightInKG     The weight of the pizza in kilograms.
      */
-    public Pizza(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, BigDecimal weightInKG) {
-        super(name, category, width, height, length, productionCost, sellingPrice, discount);
+    public Pizza(Long id,String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, BigDecimal weightInKG) {
+        super(id,name, category, width, height, length, productionCost, sellingPrice, discount);
         this.weightInKG = weightInKG;
     }
 

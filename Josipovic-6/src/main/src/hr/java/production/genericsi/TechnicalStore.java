@@ -11,12 +11,12 @@ import java.util.Set;
 public class TechnicalStore<T extends Technical> extends Store {
     private List<T> technicalStoreItems;
 
-    public TechnicalStore(String name, String webAddress, Set<Item> items, List<T> technicalStores) {
-        super(name, webAddress, items);
+    public TechnicalStore(Long id, String name, String webAddress, Set<Item> items, List<T> technicalStores) {
+        super(id, name, webAddress, items);
         this.technicalStoreItems = technicalStores;
     }
 
-    public void addTechnicalStoreItem(T item){
+    public void addTechnicalStoreItem(T item) {
         technicalStoreItems.add(item);
     }
 

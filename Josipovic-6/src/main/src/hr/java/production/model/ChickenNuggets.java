@@ -25,8 +25,8 @@ public class ChickenNuggets extends Item implements Edible {
      * @param discount       The discount on the chicken nuggets.
      * @param weightInKG     The weight of the chicken nuggets in kilograms.
      */
-    public ChickenNuggets(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, BigDecimal weightInKG) {
-        super(name, category, width, height, length, productionCost, sellingPrice, discount);
+    public ChickenNuggets(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, BigDecimal weightInKG) {
+        super(id, name, category, width, height, length, productionCost, sellingPrice, discount);
         this.weightInKG = weightInKG;
     }
 

@@ -7,11 +7,21 @@ import java.util.Objects;
  * This class serves as a base for all entities that have a name.
  */
 public abstract class NamedEntity {
-    protected String name;
     protected Long id;
+    protected String name;
 
-    public NamedEntity(String name, Long id) {
+
+    public NamedEntity(Long id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -21,14 +31,6 @@ public abstract class NamedEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     @Override
@@ -46,9 +48,6 @@ public abstract class NamedEntity {
 
     @Override
     public String toString() {
-        return "NamedEntity{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                '}';
+        return "NamedEntity{" + "name='" + name + '\'' + ", id=" + id + '}';
     }
 }

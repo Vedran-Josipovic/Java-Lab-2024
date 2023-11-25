@@ -23,8 +23,8 @@ public final class Laptop extends Item implements Technical {
      * @param discount       The discount on the laptop.
      * @param warrantyYears  The warranty of the laptop in years.
      */
-    public Laptop(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, Integer warrantyYears) {
-        super(name, category, width, height, length, productionCost, sellingPrice, discount);
+    public Laptop(Long id, String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount, Integer warrantyYears) {
+        super(id, name, category, width, height, length, productionCost, sellingPrice, discount);
         this.warrantyYears = warrantyYears;
     }
 

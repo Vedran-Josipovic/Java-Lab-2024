@@ -3,7 +3,11 @@ package hr.java.production.utility;
 import hr.java.production.enumeration.CategoryTypeChoice;
 import hr.java.production.enumeration.Cities;
 import hr.java.production.enumeration.FoodType;
+import hr.java.production.enumeration.StoreType;
 import hr.java.production.exception.CityNotSupportedException;
+import hr.java.production.exception.InvalidStoreTypeException;
+import hr.java.production.genericsi.FoodStore;
+import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +24,13 @@ public class FileUtils {
     private static final String ITEMS_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/items.txt";
     private static final String ADDRESSES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/addresses.txt";
     private static final String FACTORIES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/factories.txt";
+    private static final String STORES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/stores.txt";
 
     /**
      * Za razliku od ScannerInputProcessor.inputCategories ne provjeravaju se duplikati.
      * Možda uvesti to po ID-u idk.
      */
-    public List<Category> inputCategories() {
+    public static List<Category> inputCategories() {
         List<Category> categories = new ArrayList<>();
         File file = new File(CATEGORIES_TEXT_FILE_NAME);
 
@@ -53,7 +58,7 @@ public class FileUtils {
     }
 
 
-    public List<Item> inputItems(List<Category> categories) {
+    public static List<Item> inputItems(List<Category> categories) {
         List<Item> items = new ArrayList<>();
         File file = new File(ITEMS_TEXT_FILE_NAME);
 
@@ -110,7 +115,7 @@ public class FileUtils {
     }
 
 
-    public List<Factory> inputFactories(List<Item> items) {
+    public static List<Factory> inputFactories(List<Item> items) {
         List<Factory> factories = new ArrayList<>();
         File file = new File(FACTORIES_TEXT_FILE_NAME);
 
@@ -119,30 +124,20 @@ public class FileUtils {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Optional<String> idOptional;
             while ((idOptional = Optional.ofNullable(reader.readLine())).isPresent()) {
-                Optional<Factory> newFactoryOptional = Optional.empty();
+                Optional<Factory> newFactoryOptional;
 
                 Long id = Long.parseLong(idOptional.get());
                 String name = reader.readLine();
 
-                Integer addressChoice = Integer.parseInt(reader.readLine());
+                int addressChoice = Integer.parseInt(reader.readLine());
                 Address address = addresses.get(addressChoice - 1);
 
 
                 Optional<String> itemChoicesOptional = Optional.ofNullable(reader.readLine());
-                Set<Item> factoryItems = new HashSet<>();
 
-                itemChoicesOptional.ifPresent(itemChoices -> {
-                    Arrays.stream(itemChoices.split(",")).map(String::trim).filter(str -> !str.isEmpty()).forEach(itemIdStr -> {
-                        try {
-                            Long itemId = Long.parseLong(itemIdStr);
-                            items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(factoryItems::add);
-                        } catch (NumberFormatException e) {
-                            logger.error("Invalid item ID format: {}", itemIdStr, e);
-                        }
-                    });
-                });
+                Set<Item> factoryItems = itemChoicesOptional.map(itemChoices -> processItemChoices(itemChoices, items)).orElse(new HashSet<>());
 
-                newFactoryOptional = Optional.of(new Factory(id, name,address,factoryItems));
+                newFactoryOptional = Optional.of(new Factory(id, name, address, factoryItems));
                 newFactoryOptional.ifPresent(factories::add);
             }
         } catch (FileNotFoundException e) {
@@ -156,8 +151,88 @@ public class FileUtils {
         return factories;
     }
 
+    private static Set<Item> processItemChoices(String itemChoices, List<Item> items) {
+        Set<Item> chosenItems = new HashSet<>();
 
-    private List<Address> inputAddresses() {
+        Arrays.stream(itemChoices.split(",")).map(String::trim).filter(str -> !str.isEmpty()).forEach(itemIdStr -> {
+            try {
+                Long itemId = Long.parseLong(itemIdStr);
+                items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(chosenItems::add);
+            } catch (NumberFormatException e) {
+                logger.error("Invalid item ID format: {}", itemIdStr, e);
+            }
+        });
+
+        return chosenItems;
+    }
+
+
+    public static List<Store> inputStores(List<Item> items) {
+        List<Store> stores = new ArrayList<>();
+        File file = new File(STORES_TEXT_FILE_NAME);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            Optional<String> idOptional;
+            while ((idOptional = Optional.ofNullable(reader.readLine())).isPresent()) {
+                Store newStore;
+
+                Long id = Long.parseLong(idOptional.get());
+                String name = reader.readLine();
+                String webAddress = reader.readLine();
+
+                Optional<String> itemChoicesOptional = Optional.ofNullable(reader.readLine());
+
+                Set<Item> storeItems = itemChoicesOptional.map(itemChoices -> processItemChoices(itemChoices, items)).orElse(new HashSet<>());
+
+                try{
+                    Integer storeType = Integer.parseInt(reader.readLine());
+                    newStore = createStoreBasedOnType(storeType,id, name, webAddress, storeItems);
+                    if (newStore instanceof TechnicalStore) {
+                        storeItems.stream().filter(item -> item instanceof Technical).forEach(item -> ((TechnicalStore<Technical>) newStore).addTechnicalStoreItem((Technical) item));
+                    } else if (newStore instanceof FoodStore) {
+                        storeItems.stream().filter(item -> item instanceof Edible).forEach(item -> ((FoodStore<Edible>) newStore).addFoodStoreItem((Edible) item));
+                    }
+                    stores.add(newStore);
+                } catch (InvalidStoreTypeException e) {
+                    logger.warn(e.getMessage());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            String msg = "File not found at the specified location: " + STORES_TEXT_FILE_NAME + ". Please check the file path and ensure the file exists.";
+            logger.error(msg, e);
+        } catch (IOException e) {
+            String msg = "An IO Exception occurred while reading the file: " + STORES_TEXT_FILE_NAME + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            logger.error(msg, e);
+        }
+
+        return stores;
+    }
+
+    private static Store createStoreBasedOnType(Integer storeType, Long id, String name, String webAddress, Set<Item> storeItems) throws InvalidStoreTypeException {
+        StoreType type = StoreType.values()[storeType - 1];
+
+        switch (type) {
+            case TECHNICAL_STORE:
+                if (storeItems.stream().noneMatch(item -> item instanceof Technical)) {
+                    throw new InvalidStoreTypeException("Cannot choose Technical Store if there are no Technical items.");
+                }
+                return (new TechnicalStore<>(id, name, webAddress, storeItems, new ArrayList<>()));
+
+            case FOOD_STORE:
+                if (storeItems.stream().noneMatch(item -> item instanceof Edible)) {
+                    throw new InvalidStoreTypeException("Cannot choose Food Store if there are no Edible items.");
+                }
+                return (new FoodStore<>(id, name, webAddress, storeItems, new ArrayList<>()));
+
+            default:
+                return (new Store(id, name, webAddress, storeItems));
+        }
+    }
+
+
+
+
+    private static List<Address> inputAddresses() {
         List<Address> addresses = new ArrayList<>();
         File file = new File(ADDRESSES_TEXT_FILE_NAME);
 
@@ -189,7 +264,7 @@ public class FileUtils {
         return addresses;
     }
 
-    private Cities convertStringToCity(String cityName) throws CityNotSupportedException {
+    private static Cities convertStringToCity(String cityName) throws CityNotSupportedException {
         return switch (cityName) {
             case "Zagreb" -> Cities.ZAGREB;
             case "Split" -> Cities.SPLIT;

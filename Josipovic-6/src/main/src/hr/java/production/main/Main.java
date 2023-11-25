@@ -2,9 +2,8 @@ package hr.java.production.main;
 
 import hr.java.production.model.*;
 import hr.java.production.sort.ProductionSorter;
-import hr.java.production.utility.InputProcessor;
+import hr.java.production.utility.FileUtils;
 import hr.java.production.utility.ObjectFinder;
-import hr.java.production.utility.ScannerInputProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
  * A Logger instance is used for logging application events.
  */
 public class Main {
-    private static final InputProcessor inputProcessor = new ScannerInputProcessor();
+    //private static final InputProcessor inputProcessor = new ScannerInputProcessor();
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     /**
@@ -46,10 +45,10 @@ public class Main {
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 
-        List<Category> categories = inputProcessor.inputCategories(scanner);
-        List<Item> items = inputProcessor.inputItems(scanner, categories);
-        List<Factory> factories = inputProcessor.inputFactories(scanner, items);
-        List<Store> stores = inputProcessor.inputStores(scanner1, items);
+        List<Category> categories = FileUtils.inputCategories();
+        List<Item> items = FileUtils.inputItems(categories);
+        List<Factory> factories = FileUtils.inputFactories(items);
+        List<Store> stores = FileUtils.inputStores(items);
 
         Factory bestFactory = ObjectFinder.findFactoryWithLargestVolumeOfAnItem(factories);
         System.out.println("The factory that produces an item with the greatest volume is: '" + bestFactory.getName() + "'.");

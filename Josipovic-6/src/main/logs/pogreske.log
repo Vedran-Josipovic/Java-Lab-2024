@@ -1,1 +1,16 @@
 2023-11-25 20:48:34,085 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-25 20:51:01,288 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-25 20:53:15,338 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-25 20:54:50,103 INFO [main] h.j.p.m.Main [Main.java:42] Aplikacija započela s radom.
+2023-11-25 20:54:50,143 DEBUG [main] h.j.p.m.Main [Main.java:233] Key = [Food]: Values = [Pileći medaljon, Pizza]
+2023-11-25 20:54:50,146 DEBUG [main] h.j.p.m.Main [Main.java:236] Key = [Food]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-25 20:54:50,146 DEBUG [main] h.j.p.m.Main [Main.java:233] Key = [Literature]: Values = [Čarobna Gora]
+2023-11-25 20:54:50,146 DEBUG [main] h.j.p.m.Main [Main.java:236] Key = [Literature]: Most expensive: Čarobna Gora [297.49], Least expensive: Čarobna Gora [297.49]
+2023-11-25 20:54:50,147 DEBUG [main] h.j.p.m.Main [Main.java:233] Key = [Technical equipment]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-25 20:54:50,147 DEBUG [main] h.j.p.m.Main [Main.java:236] Key = [Technical equipment]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-25 20:54:50,147 DEBUG [main] h.j.p.m.Main [Main.java:233] Key = [Edible]: Values = [Pileći medaljon, Pizza]
+2023-11-25 20:54:50,147 DEBUG [main] h.j.p.m.Main [Main.java:236] Key = [Edible]: Most expensive: Pizza [8.80], Least expensive: Pileći medaljon [4.50]
+2023-11-25 20:54:50,147 DEBUG [main] h.j.p.m.Main [Main.java:233] Key = [Technical]: Values = [Macbook Pro M2 13 inch, Razer Blade 14]
+2023-11-25 20:54:50,147 DEBUG [main] h.j.p.m.Main [Main.java:236] Key = [Technical]: Most expensive: Razer Blade 14 [1799.99], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-25 20:54:50,161 INFO [main] h.j.p.m.Main [Main.java:153] Sorting without lambdas: 500400
+2023-11-25 20:54:50,171 INFO [main] h.j.p.m.Main [Main.java:181] Aplikacija završila.

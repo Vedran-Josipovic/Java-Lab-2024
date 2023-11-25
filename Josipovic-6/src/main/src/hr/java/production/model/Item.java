@@ -1,5 +1,6 @@
 package hr.java.production.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.Objects;
  * Represents items in a production system by category, dimensions, cost, selling price, and discount.
  * Extends the {@code NamedEntity} class.
  */
-public class Item extends NamedEntity {
+public class Item extends NamedEntity implements Serializable {
     protected Category category;
     protected BigDecimal width, height, length, productionCost, sellingPrice;
     protected Discount discount;

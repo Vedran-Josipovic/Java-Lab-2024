@@ -1,5 +1,6 @@
 package hr.java.production.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
@@ -7,7 +8,7 @@ import java.util.Set;
  * Represents a store in the production model.
  * Extends the NamedEntity class.
  */
-public class Store extends NamedEntity {
+public class Store extends NamedEntity implements Serializable {
     private String webAddress;
     private Set<Item> items;
 

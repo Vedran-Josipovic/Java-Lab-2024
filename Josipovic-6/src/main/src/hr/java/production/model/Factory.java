@@ -1,5 +1,6 @@
 package hr.java.production.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
@@ -7,7 +8,7 @@ import java.util.Set;
  * Represents a factory in the production model.
  * Extends the NamedEntity class.
  */
-public class Factory extends NamedEntity {
+public class Factory extends NamedEntity implements Serializable {
     private Address address;
     private Set<Item> items;
 

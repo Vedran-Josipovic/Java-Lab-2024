@@ -1,12 +1,13 @@
 package hr.java.production.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Organizes items in a production system by category.
  * Extends the {@code NamedEntity} class and includes a description.
  */
-public class Category extends NamedEntity {
+public class Category extends NamedEntity implements Serializable {
     private String description;
 
     /**

@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -22,6 +19,7 @@ public class FileUtils {
     private static final String CATEGORIES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/categories.txt";
     private static final String ITEMS_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/items.txt";
     private static final String ADDRESSES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/addresses.txt";
+    private static final String FACTORIES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/factories.txt";
 
     /**
      * Za razliku od ScannerInputProcessor.inputCategories ne provjeravaju se duplikati.
@@ -112,9 +110,51 @@ public class FileUtils {
     }
 
 
+    public List<Factory> inputFactories(List<Item> items) {
+        List<Factory> factories = new ArrayList<>();
+        File file = new File(FACTORIES_TEXT_FILE_NAME);
+
+        List<Address> addresses = inputAddresses();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            Optional<String> idOptional;
+            while ((idOptional = Optional.ofNullable(reader.readLine())).isPresent()) {
+                Optional<Factory> newFactoryOptional = Optional.empty();
+
+                Long id = Long.parseLong(idOptional.get());
+                String name = reader.readLine();
+
+                Integer addressChoice = Integer.parseInt(reader.readLine());
+                Address address = addresses.get(addressChoice - 1);
 
 
+                Optional<String> itemChoicesOptional = Optional.ofNullable(reader.readLine());
+                Set<Item> factoryItems = new HashSet<>();
 
+                itemChoicesOptional.ifPresent(itemChoices -> {
+                    Arrays.stream(itemChoices.split(",")).map(String::trim).filter(str -> !str.isEmpty()).forEach(itemIdStr -> {
+                        try {
+                            Long itemId = Long.parseLong(itemIdStr);
+                            items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(factoryItems::add);
+                        } catch (NumberFormatException e) {
+                            logger.error("Invalid item ID format: {}", itemIdStr, e);
+                        }
+                    });
+                });
+
+                newFactoryOptional = Optional.of(new Factory(id, name,address,factoryItems));
+                newFactoryOptional.ifPresent(factories::add);
+            }
+        } catch (FileNotFoundException e) {
+            String msg = "File not found at the specified location: " + FACTORIES_TEXT_FILE_NAME + ". Please check the file path and ensure the file exists.";
+            logger.error(msg, e);
+        } catch (IOException e) {
+            String msg = "An IO Exception occurred while reading the file: " + FACTORIES_TEXT_FILE_NAME + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            logger.error(msg, e);
+        }
+
+        return factories;
+    }
 
 
     private List<Address> inputAddresses() {

@@ -25,8 +25,8 @@ public class Item extends NamedEntity {
      * @param sellingPrice   The price at which the item is sold.
      * @param discount       The discount percentage on the item.
      */
-    public Item(String name, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount) {
-        super(name);
+    public Item(String name, Long id, Category category, BigDecimal width, BigDecimal height, BigDecimal length, BigDecimal productionCost, BigDecimal sellingPrice, Discount discount) {
+        super(name, id);
         this.category = category;
         this.width = width;
         this.height = height;

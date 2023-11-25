@@ -8,14 +8,11 @@ import java.util.Objects;
  */
 public abstract class NamedEntity {
     protected String name;
+    protected Long id;
 
-    /**
-     * Constructs a new NamedEntity with the specified name.
-     *
-     * @param name The name of the entity.
-     */
-    public NamedEntity(String name) {
+    public NamedEntity(String name, Long id) {
         this.name = name;
+        this.id = id;
     }
 
     public String getName() {
@@ -26,21 +23,32 @@ public abstract class NamedEntity {
         this.name = name;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NamedEntity that = (NamedEntity) o;
-        return Objects.equals(getName(), that.getName());
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName());
+        return Objects.hash(getName(), getId());
     }
 
     @Override
     public String toString() {
-        return "NamedEntity{" + "name='" + name + '\'' + '}';
+        return "NamedEntity{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

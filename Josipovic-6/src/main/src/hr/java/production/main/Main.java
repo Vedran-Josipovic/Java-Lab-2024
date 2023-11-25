@@ -42,7 +42,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         logger.info("Aplikacija započela s radom.");
 
-        File file = new File("josipovic-6/src/main/files/lab-5-input");
+        File file = new File("josipovic-6/src/main/dat/lab-5-input");
         Scanner scanner = new Scanner(file);
         Scanner scanner1 = new Scanner(System.in);
 

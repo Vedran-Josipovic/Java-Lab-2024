@@ -8,7 +8,7 @@ import java.util.Set;
  * Represents a factory in the production model.
  * Extends the NamedEntity class.
  */
-public class Factory extends NamedEntity implements Serializable {
+public class Factory extends NamedEntity implements Serializable, ItemContainer {
     private Address address;
     private Set<Item> items;
 

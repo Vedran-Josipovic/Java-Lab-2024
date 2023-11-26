@@ -8,7 +8,7 @@ import java.util.Set;
  * Represents a store in the production model.
  * Extends the NamedEntity class.
  */
-public class Store extends NamedEntity implements Serializable {
+public class Store extends NamedEntity implements Serializable, ItemContainer {
     private String webAddress;
     private Set<Item> items;
 

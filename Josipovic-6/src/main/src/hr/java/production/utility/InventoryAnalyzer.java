@@ -5,7 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for finding objects with specific properties.
@@ -13,8 +18,60 @@ import java.util.List;
  * This class provides static methods for finding objects such as factories, stores, and items with specific properties.
  * It uses a {@code Logger} object to log errors and information.
  */
-public class ObjectFinder {
-    private static final Logger logger = LoggerFactory.getLogger(ObjectFinder.class);
+public class InventoryAnalyzer {
+    private static final Logger logger = LoggerFactory.getLogger(InventoryAnalyzer.class);
+
+
+
+
+
+    public static BigDecimal calculateAverageItemPrice(List<Item> items) {
+        return items.stream()
+                .map(Item::getSellingPrice)
+                .reduce(BigDecimal::add)
+                .map(total -> total.divide(BigDecimal.valueOf(items.size()), RoundingMode.CEILING))
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public static BigDecimal calculateAverageItemVolume(List<Item> items) {
+        return items.stream()
+                .map(Item::calculateVolume)
+                .reduce(BigDecimal::add)
+                .map(total -> total.divide(BigDecimal.valueOf(items.size()), RoundingMode.CEILING))
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public static BigDecimal calculateAveragePriceForAboveAverageVolumeItems(List<Item> items) {
+        BigDecimal averageVolume = calculateAverageItemVolume(items);
+
+        List<Item> aboveAverageVolumeItems = items.stream()
+                .filter(item -> item.calculateVolume().compareTo(averageVolume) > 0)
+                .collect(Collectors.toList());
+
+        return calculateAverageItemPrice(aboveAverageVolumeItems);
+    }
+
+
+    public static Map<Category, List<Item>> mapItemsByCategory(List<Item> items) {
+        Map<Category, List<Item>> itemsPerCategoryMap = new HashMap<>();
+        for (var i : items) {
+            itemsPerCategoryMap.computeIfAbsent(i.getCategory(), k -> new ArrayList<>()).add(i);
+        }
+        return itemsPerCategoryMap;
+    }
+
+    public static Map<String, List<Item>> mapItemsByInterfaceType(List<Item> items) {
+        Map<String, List<Item>> itemsPerInterfaceMap = new HashMap<>();
+        for (Item i : items) {
+            String key;
+            if (i instanceof Edible) key = "Edible";
+            else if (i instanceof Technical) key = "Technical";
+            else continue;
+            itemsPerInterfaceMap.computeIfAbsent(key, k -> new ArrayList<>()).add(i);
+        }
+        return itemsPerInterfaceMap;
+    }
+
 
     /**
      * Finds the factory with the largest volume of an item.
@@ -148,5 +205,7 @@ public class ObjectFinder {
         }
         return shortestWarrantyLaptop;
     }
+
+
 
 }

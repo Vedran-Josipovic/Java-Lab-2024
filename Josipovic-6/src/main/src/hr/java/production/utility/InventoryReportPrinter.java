@@ -9,12 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class InventoryReportPrinter {
     private static final Logger logger = LoggerFactory.getLogger(InventoryReportPrinter.class);
+
+    public static <T extends NamedEntity> void printNames(Collection<T> entityCollection){
+        System.out.println(entityCollection.stream().map(NamedEntity::getName).collect(Collectors.joining(", ")));
+    }
+
 
     public static void printDiscountedItems(List<Item> items) {
         System.out.print("Discounted items: ");
@@ -25,20 +31,19 @@ public class InventoryReportPrinter {
         if (discountedItems.isEmpty()) {
             System.out.println("No discounted items found");
         } else {
-            String itemNames = discountedItems.stream()
-                    .map(Item::getName)
-                    .collect(Collectors.joining(", "));
-            System.out.println(itemNames);
+            printNames(discountedItems);
         }
     }
 
 
+
     public static void printItemNamesInContainers(List<? extends ItemContainer> containers) {
-        containers.stream()
-                .map(container -> container.getName() + " has " + container.getItems().size() + " items: "
-                        + container.getItems().stream().map(Item::getName).collect(Collectors.joining(", ")))
-                .forEach(System.out::println);
+        containers.forEach(container -> {
+            System.out.print(container.getName() + " has " + container.getItems().size() + " items: ");
+            printNames(container.getItems());
+        });
     }
+
 
 
     public static <T extends ItemContainer> void printContainersWithAboveAverageItemCount(List<T> containers) {
@@ -51,9 +56,9 @@ public class InventoryReportPrinter {
 
         List<T> containersWithAboveAverageItems = containers.stream()
                 .filter(store -> store.getItems().size() > averageNumberOfItemsInContainers)
-                .collect(Collectors.toList());
+                .toList();
 
-        System.out.println("Entities in production chain with above-average number of items:");
+        System.out.print("Entities in production chain with above-average number of items: ");
         if (containersWithAboveAverageItems.isEmpty()) {
             System.out.println("There are no entities with an above-average number of items.");
             logger.info("There are no entities with an above-average number of items.");
@@ -72,18 +77,9 @@ public class InventoryReportPrinter {
         });
     }
 
-    /**
-     * Sorts and displays the most and least expensive items for each key in the provided map.
-     * The items are sorted using the {@code ProductionSorter} comparator.
-     * Logs the names of all items associated with each key and prints the most and least expensive items for each key.
-     *
-     * @param itemsPerKeyMap A map where each key is associated with a list of {@code Item} objects.
-     * @deprecated For edible items the price is calculated per kilo ({@code getDiscountedSellingPrice}),
-     * and not by taking into account the weight like the {@code calculatePrice} method
-     * defined in the {@code Edible} interface does. Might want to change that in the future.
-     */
+
+
     public static void printCheapestAndPriciestItemsByKey(Map<?, List<Item>> itemsPerKeyMap) {
-        System.out.println();
         itemsPerKeyMap.forEach((key, valueItems) -> {
             valueItems.sort(new ProductionSorter());
             Item mostExpensive = valueItems.getLast(), leastExpensive = valueItems.getFirst();
@@ -91,15 +87,15 @@ public class InventoryReportPrinter {
             String mostExpensiveString = mostExpensive.getName() + " [" + mostExpensive.getDiscountedSellingPrice() + "]";
             String leastExpensiveString = leastExpensive.getName() + " [" + leastExpensive.getDiscountedSellingPrice() + "]";
 
-            String keyName;
-            if (key instanceof Category category) keyName = category.getName();
-            else keyName = key.toString();
+            String keyName = key instanceof Category ? ((Category) key).getName() : key.toString();
 
-            String listNames = valueItems.stream().map(NamedEntity::getName).collect(Collectors.joining(", "));
-            logger.debug("Key = [" + keyName + "]: Values = [" + listNames + "]");
+            System.out.print("Key = [" + keyName + "]: Values = ");
+            printNames(valueItems);
+
             String msg = "Key = [" + keyName + "]: Most expensive: " + mostExpensiveString + ", Least expensive: " + leastExpensiveString;
             System.out.println(msg);
             logger.debug(msg);
         });
     }
+
 }

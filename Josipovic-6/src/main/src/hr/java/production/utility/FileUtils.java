@@ -2,10 +2,12 @@ package hr.java.production.utility;
 
 import hr.java.production.enumeration.*;
 import hr.java.production.exception.CityNotSupportedException;
+import hr.java.production.exception.IdenticalItemChoiceException;
 import hr.java.production.exception.InvalidStoreTypeException;
 import hr.java.production.genericsi.FoodStore;
 import hr.java.production.genericsi.TechnicalStore;
 import hr.java.production.model.*;
+import hr.java.production.sort.VolumeSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +34,7 @@ public class FileUtils {
                 String name = reader.readLine();
                 String description = reader.readLine();
 
-                getValidCategory(new Category(id, name, description), categories)
-                        .ifPresent(categories::add);
+                getValidCategory(new Category(id, name, description), categories).ifPresent(categories::add);
             }
         } catch (FileNotFoundException e) {
             String msg = "File not found at the specified location: " + FilePath.CATEGORIES.getPath() + ". Please check the file path and ensure the file exists.";
@@ -89,6 +90,8 @@ public class FileUtils {
                     newItemOptional = Optional.of(new Item(id, name, categoryOptional.get(), width, height, length, productionCost, sellingPrice, discount));
                 }
                 newItemOptional.ifPresent(items::add);
+
+
             }
         } catch (FileNotFoundException e) {
             String msg = "File not found at the specified location: " + FilePath.ITEMS.getPath() + ". Please check the file path and ensure the file exists.";
@@ -97,6 +100,13 @@ public class FileUtils {
             String msg = "An IO Exception occurred while reading the file: " + FilePath.ITEMS.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
             logger.error(msg, e);
         }
+
+        items.forEach(item -> {
+            if (item instanceof Edible e) {
+                logger.info("Kilocalories in " + item.getName() + ": " + e.calculateKilocalories());
+                logger.info("Price (with " + item.getDiscount().discountAmount() + "% discount) for " + item.getName() + ": " + e.calculatePrice());
+            }
+        });
 
 
         return items;
@@ -153,7 +163,8 @@ public class FileUtils {
 
                 Optional<String> itemChoicesOptional = Optional.ofNullable(reader.readLine());
 
-                Set<Item> storeItems = itemChoicesOptional.map(itemChoices -> processItemChoices(itemChoices, items)).orElse(new HashSet<>());
+                Set<Item> storeItems = new TreeSet<>(new VolumeSorter());
+                storeItems.addAll(itemChoicesOptional.map(itemChoices -> processItemChoices(itemChoices, items)).orElse(new TreeSet<>()));
 
                 try {
                     Integer storeType = Integer.parseInt(reader.readLine());
@@ -209,38 +220,50 @@ public class FileUtils {
 
     private static Set<Item> processItemChoices(String itemChoices, List<Item> items) {
         Set<Item> chosenItems = new HashSet<>();
+        Set<Long> addedItemIds = new HashSet<>();
 
         Arrays.stream(itemChoices.split(",")).map(String::trim).filter(str -> !str.isEmpty()).forEach(itemIdStr -> {
             try {
                 Long itemId = Long.parseLong(itemIdStr);
-                items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(chosenItems::add);
+                checkForIdenticalItemIds(itemId, addedItemIds);  // Check for duplicates
+                items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(item -> {
+                    chosenItems.add(item);
+                    addedItemIds.add(itemId);
+                });
             } catch (NumberFormatException e) {
                 logger.error("Invalid item ID format: {}", itemIdStr, e);
+            } catch (IdenticalItemChoiceException e) {
+                logger.warn(e.getMessage());
             }
         });
 
         return chosenItems;
     }
 
+    private static void checkForIdenticalItemIds(Long itemId, Set<Long> addedItemIds) throws IdenticalItemChoiceException {
+        if (addedItemIds.contains(itemId)) {
+            throw new IdenticalItemChoiceException("Chosen item ID [" + itemId + "] has already been added. Input ignored.");
+        }
+    }
+
     private static Store createStoreBasedOnType(Integer storeType, Long id, String name, String webAddress, Set<Item> storeItems) throws InvalidStoreTypeException {
         StoreType type = StoreType.values()[storeType - 1];
 
-        switch (type) {
-            case TECHNICAL_STORE:
+        return switch (type) {
+            case TECHNICAL_STORE -> {
                 if (storeItems.stream().noneMatch(item -> item instanceof Technical)) {
                     throw new InvalidStoreTypeException("Cannot choose Technical Store if there are no Technical items.");
                 }
-                return (new TechnicalStore<>(id, name, webAddress, storeItems, new ArrayList<>()));
-
-            case FOOD_STORE:
+                yield (new TechnicalStore<>(id, name, webAddress, storeItems, new ArrayList<>()));
+            }
+            case FOOD_STORE -> {
                 if (storeItems.stream().noneMatch(item -> item instanceof Edible)) {
                     throw new InvalidStoreTypeException("Cannot choose Food Store if there are no Edible items.");
                 }
-                return (new FoodStore<>(id, name, webAddress, storeItems, new ArrayList<>()));
-
-            default:
-                return (new Store(id, name, webAddress, storeItems));
-        }
+                yield (new FoodStore<>(id, name, webAddress, storeItems, new ArrayList<>()));
+            }
+            default -> (new Store(id, name, webAddress, storeItems));  //Ovo je potrebno, ne micati
+        };
     }
 
     private static List<Address> inputAddresses() {
@@ -290,8 +313,7 @@ public class FileUtils {
     }
 
     private static Optional<Category> getValidCategory(Category categoryInput, List<Category> categories) {
-        boolean isDuplicate = categories.stream()
-                .anyMatch(c -> c.equals(categoryInput));
+        boolean isDuplicate = categories.stream().anyMatch(c -> c.equals(categoryInput));
 
         if (isDuplicate) {
             logger.warn("Entered category [" + categoryInput.getName() + "] has already been added. Input ignored.");

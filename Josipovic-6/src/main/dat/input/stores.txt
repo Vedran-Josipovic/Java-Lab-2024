@@ -1,7 +1,7 @@
 1
 Mali Izbor
 mali-izbor.hr
-1,2,16,17,18,19,20
+1,2,16,17,18,19,20,20
 2
 2
 Sveta Domenika

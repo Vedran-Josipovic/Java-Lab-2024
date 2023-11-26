@@ -1,7 +1,7 @@
 1
 Shenzhen Electronics Ltd.
 1
-1,2,3,6,8,10,12,14
+1,2,3,6,8,2,10,12,14
 2
 Cekin d.o.o.
 2

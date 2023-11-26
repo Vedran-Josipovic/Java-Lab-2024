@@ -45,9 +45,11 @@ public class Main {
 
 
         Map<Category, List<Item>> itemsPerCategoryMap = InventoryAnalyzer.mapItemsByCategory(items);
+        System.out.println("Cheapest and most expensive items by category:");
         InventoryReportPrinter.printCheapestAndPriciestItemsByKey(itemsPerCategoryMap);
 
         Map<String, List<Item>> itemsPerInterfaceMap = InventoryAnalyzer.mapItemsByInterfaceType(items);
+        System.out.println("Cheapest and most expensive items by interface:");
         InventoryReportPrinter.printCheapestAndPriciestItemsByKey(itemsPerInterfaceMap);
 
         //Sortiranje store artikala ScannerInputProcessor.chooseItems
@@ -89,7 +91,12 @@ public class Main {
         FileUtils.serializeList(filteredStores, FilePath.SERIALIZED_STORES);
 
         List<Factory> deserializedFactories = FileUtils.deserializeList(FilePath.SERIALIZED_FACTORIES);
+        System.out.print("Deserialized factories: ");
+        InventoryReportPrinter.printNames(deserializedFactories);
+
         List<Store> deserializedStores = FileUtils.deserializeList(FilePath.SERIALIZED_STORES);
+        System.out.print("Deserialized stores: ");
+        InventoryReportPrinter.printNames(deserializedStores);
         // LAB-6 Na kraju programa serijalizirati sve objekte klasa „Factory“i „Store“ koja imaju barem pet artikala.
 
 

@@ -1,0 +1,24 @@
+2023-11-26 21:53:17,702 INFO [main] h.j.p.m.Main [Main.java:20] Aplikacija započela s radom.
+2023-11-26 21:53:17,712 WARN [main] h.j.p.u.FileUtils [FileUtils.java:319] Entered category [Technical equipment] has already been added. Input ignored.
+2023-11-26 21:53:17,719 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Pizza: 880
+2023-11-26 21:53:17,722 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 20% discount) for Pizza: 3.52
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Pileći medaljon: 2228
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 10% discount) for Pileći medaljon: 3.38
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Hawaiian Pizza: 1430
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 15% discount) for Hawaiian Pizza: 6.63
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Buffalo Chicken Wings: 1782
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 12% discount) for Buffalo Chicken Wings: 3.70
+2023-11-26 21:53:17,723 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Supreme Pizza: 1760
+2023-11-26 21:53:17,724 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 10% discount) for Supreme Pizza: 10.08
+2023-11-26 21:53:17,724 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Barbecue Chicken Pizza: 1540
+2023-11-26 21:53:17,724 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 20% discount) for Barbecue Chicken Pizza: 6.16
+2023-11-26 21:53:17,724 INFO [main] h.j.p.u.FileUtils [FileUtils.java:106] Kilocalories in Spicy Pepperoni Pizza: 1210
+2023-11-26 21:53:17,724 INFO [main] h.j.p.u.FileUtils [FileUtils.java:107] Price (with 18% discount) for Spicy Pepperoni Pizza: 5.86
+2023-11-26 21:53:17,730 WARN [main] h.j.p.u.FileUtils [FileUtils.java:236] Chosen item ID [2] has already been added. Input ignored.
+2023-11-26 21:53:17,732 WARN [main] h.j.p.u.FileUtils [FileUtils.java:236] Chosen item ID [20] has already been added. Input ignored.
+2023-11-26 21:53:17,742 DEBUG [main] h.j.p.u.InventoryReportPrinter [InventoryReportPrinter.java:97] Key = [Food]: Most expensive: Supreme Pizza [12.60], Least expensive: Pileći medaljon [4.50]
+2023-11-26 21:53:17,743 DEBUG [main] h.j.p.u.InventoryReportPrinter [InventoryReportPrinter.java:97] Key = [Literature]: Most expensive: Magic Mountain [297.49], Least expensive: The Great Gatsby [85.00]
+2023-11-26 21:53:17,743 DEBUG [main] h.j.p.u.InventoryReportPrinter [InventoryReportPrinter.java:97] Key = [Technical equipment]: Most expensive: Asus ROG Zephyrus G14 [2375.00], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-26 21:53:17,744 DEBUG [main] h.j.p.u.InventoryReportPrinter [InventoryReportPrinter.java:97] Key = [Edible]: Most expensive: Supreme Pizza [12.60], Least expensive: Pileći medaljon [4.50]
+2023-11-26 21:53:17,744 DEBUG [main] h.j.p.u.InventoryReportPrinter [InventoryReportPrinter.java:97] Key = [Technical]: Most expensive: Asus ROG Zephyrus G14 [2375.00], Least expensive: Macbook Pro M2 13 inch [1424.05]
+2023-11-26 21:53:17,854 INFO [main] h.j.p.m.Main [Main.java:103] Aplikacija završila.

@@ -19,10 +19,6 @@ public class FileUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
 
-    /**
-     * Za razliku od ScannerInputProcessor.inputCategories ne provjeravaju se duplikati.
-     * Možda uvesti to po ID-u idk.
-     */
     public static List<Category> inputCategories() {
         List<Category> categories = new ArrayList<>();
         File file = new File(FilePath.CATEGORIES.getPath());
@@ -30,14 +26,14 @@ public class FileUtils {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Optional<String> idOptional;
             while ((idOptional = Optional.ofNullable(reader.readLine())).isPresent()) {
-                Optional<Category> newCategoryOptional;
+
 
                 Long id = Long.parseLong(idOptional.get());
                 String name = reader.readLine();
                 String description = reader.readLine();
 
-                newCategoryOptional = Optional.of(new Category(id, name, description));
-                newCategoryOptional.ifPresent(categories::add);
+                getValidCategory(new Category(id, name, description), categories)
+                        .ifPresent(categories::add);
             }
         } catch (FileNotFoundException e) {
             String msg = "File not found at the specified location: " + FilePath.CATEGORIES.getPath() + ". Please check the file path and ensure the file exists.";
@@ -292,5 +288,18 @@ public class FileUtils {
                     throw new CityNotSupportedException("City not in the database: [" + cityName + "]. Cities in enums: [" + Arrays.stream(Cities.values()).map(Cities::getName).collect(Collectors.joining(", ")) + "]");
         };
     }
+
+    private static Optional<Category> getValidCategory(Category categoryInput, List<Category> categories) {
+        boolean isDuplicate = categories.stream()
+                .anyMatch(c -> c.equals(categoryInput));
+
+        if (isDuplicate) {
+            logger.warn("Entered category [" + categoryInput.getName() + "] has already been added. Input ignored.");
+            return Optional.empty();
+        } else {
+            return Optional.of(categoryInput);
+        }
+    }
+
 
 }

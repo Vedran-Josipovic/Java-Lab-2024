@@ -48,7 +48,7 @@ public class Main {
         InventoryReportPrinter.printCheapestAndPriciestItemsByKey(itemsPerCategoryMap);
 
         Map<String, List<Item>> itemsPerInterfaceMap = InventoryAnalyzer.mapItemsByInterfaceType(items);
-        InventoryReportPrinter. printCheapestAndPriciestItemsByKey(itemsPerInterfaceMap);
+        InventoryReportPrinter.printCheapestAndPriciestItemsByKey(itemsPerInterfaceMap);
 
         //Sortiranje store artikala ScannerInputProcessor.chooseItems
         System.out.println("\n\nStore item volumes [Sorted with TreeSet - Descending]:");
@@ -69,7 +69,6 @@ public class Main {
         System.out.println();
         InventoryReportPrinter.printContainersWithAboveAverageItemCount(stores);
         //Trgovine s natprosječnim brojem artikala
-
 
 
         //Filtriranje itemova po tome koji ima popust veći od nula
@@ -96,12 +95,6 @@ public class Main {
 
         logger.info("Aplikacija završila.");
     }
-
-
-
-
-
-
 
 
 }

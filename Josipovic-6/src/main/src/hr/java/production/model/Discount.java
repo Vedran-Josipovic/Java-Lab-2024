@@ -1,12 +1,13 @@
 package hr.java.production.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
  * Represents a discount amount in percentages for an item in a production system.
  */
-public record Discount(BigDecimal discountAmount) {
+public record Discount(BigDecimal discountAmount) implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

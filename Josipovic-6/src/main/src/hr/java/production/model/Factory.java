@@ -12,6 +12,8 @@ public class Factory extends NamedEntity implements Serializable {
     private Address address;
     private Set<Item> items;
 
+
+
     /**
      * Constructs a new Factory with the specified name, address, and items.
      *

@@ -2,13 +2,14 @@ package hr.java.production.model;
 
 import hr.java.production.enumeration.Cities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Represents an address with a street, house number, city, and postal code.
  * This class uses the Builder pattern to create instances.
  */
-public class Address {
+public class Address implements Serializable {
     private String street, houseNumber;
     private Cities city;
 

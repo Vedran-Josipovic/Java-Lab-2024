@@ -1,9 +1,6 @@
 package hr.java.production.utility;
 
-import hr.java.production.enumeration.CategoryTypeChoice;
-import hr.java.production.enumeration.Cities;
-import hr.java.production.enumeration.FoodType;
-import hr.java.production.enumeration.StoreType;
+import hr.java.production.enumeration.*;
 import hr.java.production.exception.CityNotSupportedException;
 import hr.java.production.exception.InvalidStoreTypeException;
 import hr.java.production.genericsi.FoodStore;
@@ -20,11 +17,7 @@ import java.util.stream.Collectors;
 
 public class FileUtils {
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-    private static final String CATEGORIES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/categories.txt";
-    private static final String ITEMS_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/items.txt";
-    private static final String ADDRESSES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/addresses.txt";
-    private static final String FACTORIES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/factories.txt";
-    private static final String STORES_TEXT_FILE_NAME = "Josipovic-6/src/main/dat/stores.txt";
+
 
     /**
      * Za razliku od ScannerInputProcessor.inputCategories ne provjeravaju se duplikati.
@@ -32,7 +25,7 @@ public class FileUtils {
      */
     public static List<Category> inputCategories() {
         List<Category> categories = new ArrayList<>();
-        File file = new File(CATEGORIES_TEXT_FILE_NAME);
+        File file = new File(FilePath.CATEGORIES.getPath());
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Optional<String> idOptional;
@@ -47,20 +40,19 @@ public class FileUtils {
                 newCategoryOptional.ifPresent(categories::add);
             }
         } catch (FileNotFoundException e) {
-            String msg = "File not found at the specified location: " + CATEGORIES_TEXT_FILE_NAME + ". Please check the file path and ensure the file exists.";
+            String msg = "File not found at the specified location: " + FilePath.CATEGORIES.getPath() + ". Please check the file path and ensure the file exists.";
             logger.error(msg, e);
         } catch (IOException e) {
-            String msg = "An IO Exception occurred while reading the file: " + CATEGORIES_TEXT_FILE_NAME + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            String msg = "An IO Exception occurred while reading the file: " + FilePath.CATEGORIES.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
             logger.error(msg, e);
         }
 
         return categories;
     }
 
-
     public static List<Item> inputItems(List<Category> categories) {
         List<Item> items = new ArrayList<>();
-        File file = new File(ITEMS_TEXT_FILE_NAME);
+        File file = new File(FilePath.ITEMS.getPath());
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Optional<String> idOptional;
@@ -103,10 +95,10 @@ public class FileUtils {
                 newItemOptional.ifPresent(items::add);
             }
         } catch (FileNotFoundException e) {
-            String msg = "File not found at the specified location: " + ITEMS_TEXT_FILE_NAME + ". Please check the file path and ensure the file exists.";
+            String msg = "File not found at the specified location: " + FilePath.ITEMS.getPath() + ". Please check the file path and ensure the file exists.";
             logger.error(msg, e);
         } catch (IOException e) {
-            String msg = "An IO Exception occurred while reading the file: " + ITEMS_TEXT_FILE_NAME + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            String msg = "An IO Exception occurred while reading the file: " + FilePath.ITEMS.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
             logger.error(msg, e);
         }
 
@@ -114,10 +106,9 @@ public class FileUtils {
         return items;
     }
 
-
     public static List<Factory> inputFactories(List<Item> items) {
         List<Factory> factories = new ArrayList<>();
-        File file = new File(FACTORIES_TEXT_FILE_NAME);
+        File file = new File(FilePath.FACTORIES.getPath());
 
         List<Address> addresses = inputAddresses();
 
@@ -141,35 +132,19 @@ public class FileUtils {
                 newFactoryOptional.ifPresent(factories::add);
             }
         } catch (FileNotFoundException e) {
-            String msg = "File not found at the specified location: " + FACTORIES_TEXT_FILE_NAME + ". Please check the file path and ensure the file exists.";
+            String msg = "File not found at the specified location: " + FilePath.FACTORIES.getPath() + ". Please check the file path and ensure the file exists.";
             logger.error(msg, e);
         } catch (IOException e) {
-            String msg = "An IO Exception occurred while reading the file: " + FACTORIES_TEXT_FILE_NAME + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            String msg = "An IO Exception occurred while reading the file: " + FilePath.FACTORIES.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
             logger.error(msg, e);
         }
 
         return factories;
     }
 
-    private static Set<Item> processItemChoices(String itemChoices, List<Item> items) {
-        Set<Item> chosenItems = new HashSet<>();
-
-        Arrays.stream(itemChoices.split(",")).map(String::trim).filter(str -> !str.isEmpty()).forEach(itemIdStr -> {
-            try {
-                Long itemId = Long.parseLong(itemIdStr);
-                items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(chosenItems::add);
-            } catch (NumberFormatException e) {
-                logger.error("Invalid item ID format: {}", itemIdStr, e);
-            }
-        });
-
-        return chosenItems;
-    }
-
-
     public static List<Store> inputStores(List<Item> items) {
         List<Store> stores = new ArrayList<>();
-        File file = new File(STORES_TEXT_FILE_NAME);
+        File file = new File(FilePath.STORES.getPath());
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Optional<String> idOptional;
@@ -184,9 +159,9 @@ public class FileUtils {
 
                 Set<Item> storeItems = itemChoicesOptional.map(itemChoices -> processItemChoices(itemChoices, items)).orElse(new HashSet<>());
 
-                try{
+                try {
                     Integer storeType = Integer.parseInt(reader.readLine());
-                    newStore = createStoreBasedOnType(storeType,id, name, webAddress, storeItems);
+                    newStore = createStoreBasedOnType(storeType, id, name, webAddress, storeItems);
                     if (newStore instanceof TechnicalStore) {
                         storeItems.stream().filter(item -> item instanceof Technical).forEach(item -> ((TechnicalStore<Technical>) newStore).addTechnicalStoreItem((Technical) item));
                     } else if (newStore instanceof FoodStore) {
@@ -198,14 +173,57 @@ public class FileUtils {
                 }
             }
         } catch (FileNotFoundException e) {
-            String msg = "File not found at the specified location: " + STORES_TEXT_FILE_NAME + ". Please check the file path and ensure the file exists.";
+            String msg = "File not found at the specified location: " + FilePath.STORES.getPath() + ". Please check the file path and ensure the file exists.";
             logger.error(msg, e);
         } catch (IOException e) {
-            String msg = "An IO Exception occurred while reading the file: " + STORES_TEXT_FILE_NAME + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            String msg = "An IO Exception occurred while reading the file: " + FilePath.STORES.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
             logger.error(msg, e);
         }
 
         return stores;
+    }
+
+
+    public static <T extends Serializable> void serializeList(List<T> objectsList, FilePath path) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path.getPath()))) {
+            oos.writeObject(objectsList);
+        } catch (IOException e) {
+            String msg = "SERIALIZATION ERROR: An IO Exception occurred while writing to the file: " + path.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            logger.error(msg, e);
+        }
+    }
+
+    public static <T extends Serializable> List<T> deserializeList(FilePath path) {
+        List<T> deserializedList = new ArrayList<>();
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path.getPath()))) {
+            deserializedList.addAll((List<T>) ois.readObject());
+        } catch (FileNotFoundException e) {
+            String msg = "File not found at the specified location: " + path.getPath() + ". Please check the file path and ensure the file exists.";
+            logger.error(msg, e);
+        } catch (IOException e) {
+            String msg = "SERIALIZATION ERROR: An IO Exception occurred while reading from the file: " + path.getPath() + ". This might be due to issues with file permissions, file being in use, or other IO related problems.";
+            logger.error(msg, e);
+        } catch (ClassNotFoundException e) {
+            logger.error("Class not found during deserialization", e);
+        }
+        return deserializedList;
+    }
+
+
+    private static Set<Item> processItemChoices(String itemChoices, List<Item> items) {
+        Set<Item> chosenItems = new HashSet<>();
+
+        Arrays.stream(itemChoices.split(",")).map(String::trim).filter(str -> !str.isEmpty()).forEach(itemIdStr -> {
+            try {
+                Long itemId = Long.parseLong(itemIdStr);
+                items.stream().filter(item -> item.getId().equals(itemId)).findFirst().ifPresent(chosenItems::add);
+            } catch (NumberFormatException e) {
+                logger.error("Invalid item ID format: {}", itemIdStr, e);
+            }
+        });
+
+        return chosenItems;
     }
 
     private static Store createStoreBasedOnType(Integer storeType, Long id, String name, String webAddress, Set<Item> storeItems) throws InvalidStoreTypeException {
@@ -229,12 +247,9 @@ public class FileUtils {
         }
     }
 
-
-
-
     private static List<Address> inputAddresses() {
         List<Address> addresses = new ArrayList<>();
-        File file = new File(ADDRESSES_TEXT_FILE_NAME);
+        File file = new File(FilePath.ADDRESSES.getPath());
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Optional<String> streetOptional;
@@ -254,10 +269,10 @@ public class FileUtils {
                 }
             }
         } catch (FileNotFoundException e) {
-            String msg = "File not found at the specified location: " + ADDRESSES_TEXT_FILE_NAME;
+            String msg = "File not found at the specified location: " + FilePath.ADDRESSES.getPath();
             logger.error(msg, e);
         } catch (IOException e) {
-            String msg = "An IO Exception occurred while reading the file: " + ADDRESSES_TEXT_FILE_NAME;
+            String msg = "An IO Exception occurred while reading the file: " + FilePath.ADDRESSES.getPath();
             logger.error(msg, e);
         }
 
@@ -277,6 +292,5 @@ public class FileUtils {
                     throw new CityNotSupportedException("City not in the database: [" + cityName + "]. Cities in enums: [" + Arrays.stream(Cities.values()).map(Cities::getName).collect(Collectors.joining(", ")) + "]");
         };
     }
-
 
 }

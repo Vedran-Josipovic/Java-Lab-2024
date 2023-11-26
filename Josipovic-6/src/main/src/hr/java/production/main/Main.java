@@ -1,5 +1,6 @@
 package hr.java.production.main;
 
+import hr.java.production.enumeration.FilePath;
 import hr.java.production.model.*;
 import hr.java.production.sort.ProductionSorter;
 import hr.java.production.utility.FileUtils;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -100,30 +102,13 @@ public class Main {
 
         //Srednja cijena svih artikala koji imaju natprosječni volumen
         System.out.println();
-        BigDecimal averageItemPrice = items.stream()
-                .map(Item::getSellingPrice)
-                .reduce(BigDecimal::add)
-                .map(total -> total.divide(BigDecimal.valueOf(items.size()), 2))
-                .orElse(BigDecimal.ZERO);
+        BigDecimal averageItemPrice = items.stream().map(Item::getSellingPrice).reduce(BigDecimal::add).map(total -> total.divide(BigDecimal.valueOf(items.size()), RoundingMode.CEILING)).orElse(BigDecimal.ZERO);
         System.out.println("Average price of all items: " + averageItemPrice);
 
-        BigDecimal averageItemVolume = items.stream()
-                .map(Item::calculateVolume)
-                .reduce(BigDecimal::add)
-                .map(total -> total.divide(BigDecimal.valueOf(items.size()), 2))
-                .orElse(BigDecimal.ZERO);
+        BigDecimal averageItemVolume = items.stream().map(Item::calculateVolume).reduce(BigDecimal::add).map(total -> total.divide(BigDecimal.valueOf(items.size()), RoundingMode.CEILING)).orElse(BigDecimal.ZERO);
         System.out.println("Average volume of all items: " + averageItemVolume);
 
-        BigDecimal averagePriceForItemsWithAboveAverageVolume =
-                items.stream()
-                        .filter(item -> item.calculateVolume().compareTo(averageItemVolume) > 0)
-                        .map(Item::getSellingPrice)
-                        .reduce(BigDecimal::add)
-                        .map(total -> total.divide(BigDecimal.valueOf(
-                                items.stream()
-                                        .filter(item -> item.calculateVolume().compareTo(averageItemVolume) > 0)
-                                        .count()), 2))
-                        .orElse(BigDecimal.ZERO);
+        BigDecimal averagePriceForItemsWithAboveAverageVolume = items.stream().filter(item -> item.calculateVolume().compareTo(averageItemVolume) > 0).map(Item::getSellingPrice).reduce(BigDecimal::add).map(total -> total.divide(BigDecimal.valueOf(items.stream().filter(item -> item.calculateVolume().compareTo(averageItemVolume) > 0).count()), RoundingMode.CEILING)).orElse(BigDecimal.ZERO);
 
         System.out.println("Average price of all items with above average volume: " + averagePriceForItemsWithAboveAverageVolume);
         //Srednja cijena svih artikala koji imaju natprosječni volumen
@@ -156,15 +141,9 @@ public class Main {
 
         //Filtriranje itemova po tome koji ima popust veći od nula
         System.out.print("\nDiscounted items: ");
-        Optional<List<Item>> discountedItemsOptional = Optional.of(
-                        items.stream()
-                                .filter(i -> i.getDiscount().discountAmount().compareTo(BigDecimal.ZERO) > 0)
-                                .collect(Collectors.toList()))
-                .filter(list -> !list.isEmpty());
+        Optional<List<Item>> discountedItemsOptional = Optional.of(items.stream().filter(i -> i.getDiscount().discountAmount().compareTo(BigDecimal.ZERO) > 0).collect(Collectors.toList())).filter(list -> !list.isEmpty());
         if (discountedItemsOptional.isPresent()) {
-            String itemNames = discountedItemsOptional.get().stream()
-                    .map(Item::getName)
-                    .collect(Collectors.joining(", "));
+            String itemNames = discountedItemsOptional.get().stream().map(Item::getName).collect(Collectors.joining(", "));
             System.out.println(itemNames);
         } else {
             System.out.println("No discounted items found");
@@ -173,34 +152,40 @@ public class Main {
 
         //Korištenjem .map ispisati broj artikala u svakoj od trgovina i ispisati itemove sa tostringom
         System.out.println();
-        stores.stream()
-                .map(store -> store.getName() + " has " + store.getItems().size() + " items: " + store.getItems())
-                .forEach(System.out::println);
+        stores.stream().map(store -> store.getName() + " has " + store.getItems().size() + " items: " + store.getItems()).forEach(System.out::println);
         //Korištenjem .map ispisati broj artikala u svakoj od trgovina i ispisati itemove sa tostringom
+
+
+        // LAB-6 Na kraju programa serijalizirati sve objekte klasa „Factory“i „Store“ koja imaju barem pet artikala.
+        List<Factory> filteredFactories = factories.stream().filter(f -> f.getItems().size() >= 5).collect(Collectors.toList());
+        FileUtils.serializeList(filteredFactories, FilePath.SERIALIZED_FACTORIES);
+
+        List<Store> filteredStores = stores.stream().filter(s -> s.getItems().size() >= 5).collect(Collectors.toList());
+        FileUtils.serializeList(filteredStores, FilePath.SERIALIZED_STORES);
+
+
+        List<Factory> deserializedFactories = FileUtils.deserializeList(FilePath.SERIALIZED_FACTORIES);
+        List<Store> deserializedStores = FileUtils.deserializeList(FilePath.SERIALIZED_STORES);
+        // LAB-6 Na kraju programa serijalizirati sve objekte klasa „Factory“i „Store“ koja imaju barem pet artikala.
+
 
         logger.info("Aplikacija završila.");
     }
 
 
     private static void findStoresWithAboveAverageItems(List<Store> stores) {
-        double averageNumberOfItems = stores.stream()
-                .mapToInt(store -> store.getItems().size())
-                .average()
-                .orElse(0);
+        double averageNumberOfItems = stores.stream().mapToInt(store -> store.getItems().size()).average().orElse(0);
 
         System.out.println("Average number of items per store: " + averageNumberOfItems);
 
-        List<Store> storesWithAboveAverageItems = stores.stream()
-                .filter(store -> store.getItems().size() > averageNumberOfItems)
-                .collect(Collectors.toList());
+        List<Store> storesWithAboveAverageItems = stores.stream().filter(store -> store.getItems().size() > averageNumberOfItems).collect(Collectors.toList());
 
         System.out.println("Stores with above-average number of items:");
         if (storesWithAboveAverageItems.isEmpty()) {
             System.out.println("There are no stores with an above-average number of items.");
             logger.info("There are no stores with an above-average number of items.");
         } else {
-            storesWithAboveAverageItems.forEach(store ->
-                    System.out.println(store.getName() + " - Number of Items: " + store.getItems().size()));
+            storesWithAboveAverageItems.forEach(store -> System.out.println(store.getName() + " - Number of Items: " + store.getItems().size()));
         }
 
     }
